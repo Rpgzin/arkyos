@@ -5,7 +5,9 @@ import os
 import time
 import random
 from utilitarios import(
-    limpar_tela
+    limpar_tela,
+    loading,
+    intervalo
 )
 
 ######### Setup do jogador ########
@@ -76,6 +78,7 @@ def ajuda_menu():
             limpar_tela()
             ajuda_menu()
         main_game_loop()
+        print_local()
     print("voltar ao MENU? [s/n]")
     voltar_menu = input('>>').lower()
     if voltar_menu != 's':
@@ -190,9 +193,9 @@ def print_local():
     print(f"# {local_desc} #")
     print('#' * (4 + len(local_nome)))
     if mapa[meu_jogador.local]['MONSTRO'] != '':
-        print(f"há um {monstro_exemplo.nome} na sala. O que deseja fazer?\n[atacar / fugir / falar]")
+        print(f"há um {monstro_exemplo.nome} na sala. O que deseja fazer?\n[lutar / fugir / falar]")
         escolha = input(">>").lower()
-        if escolha not in ['atacar', 'fugir', 'falar']:
+        if escolha not in ['lutar', 'fugir', 'falar']:
             print_local()
         acao_luta(escolha, mapa[meu_jogador.local]['MONSTRO'])
 
@@ -220,15 +223,15 @@ def prompt():
         jogador_dormir()
 
 def acao_luta(escolha, monstro):
-    if escolha == 'atacar':
+    if escolha == 'lutar':
         luta(monstro)
     elif escolha == 'fugir':
-        if meu_jogador.local == 'a2':
-            print('você voltou para a sala anterior')
-            meu_jogador.local = 'a1'
+        fugir()
         print_local()
     elif escolha == 'falar':
+        loading()
         print(f'O {monstro.nome} não te entende e te ataca')
+        intervalo()
         meu_jogador.vida -= monstro_exemplo.atk
         luta(monstro)
 
@@ -237,8 +240,7 @@ def luta(monstro):
     print(f'\n{monstro.nome} #{monstro.nivel}')
     print(f'vida: {monstro.vida}/{monstro.vida_max} ATK: {monstro.atk}')
     print('-'*50)
-    print(f'{meu_jogador.nome} #{meu_jogador.nivel}')
-    print(f'vida: {meu_jogador.vida}/{meu_jogador.vida_max} ATK: {meu_jogador.atk}')
+    mostrar_status()
     print('atacar / magia / fugir')
     acao = input(">>").lower()
     if acao not in ['atacar', 'magia', 'fugir']:
@@ -248,41 +250,56 @@ def luta(monstro):
     if acao == 'atacar':
         monstro.vida -= meu_jogador.atk
         print(f"você ataca {monstro.nome}\n")
-        for i in range(0, 5):
-            sys.stdout.write('. ')
-            sys.stdout.flush()
-            time.sleep(0.2)
-        time.sleep(0.3)
+        loading()
+        intervalo()
 
-        meu_jogador.vida -= monstro.atk
-        if monstro.vida > 0:
-            print(f'\no {monstro.nome} te ataca\n')
-            for i in range(0, 5):
-                sys.stdout.write('. ')
-                sys.stdout.flush()
-                time.sleep(0.2)
-        time.sleep(0.3)
-        if meu_jogador.vida > 0 and monstro.vida > 0:
-            luta(monstro)
         
-        if meu_jogador.vida <= 0:
-            meu_jogador.local = 'a1'
-            meu_jogador.vida = meu_jogador.vida_max
-            limpar_tela()
-            print('Você morreu e acorda na sala inicial')
-        elif monstro.vida <= 0:
-            limpar_tela()
-            print(f'VOCÊ DERROTOU {monstro.nome}')
-            mapa[meu_jogador.local]['MONSTRO'] = ''
-            print_local()
+        if monstro.vida > 0:
+            meu_jogador.vida -= monstro.atk
+            print(f'\no {monstro.nome} te ataca\n')
+            loading()
+        intervalo()
+        
     elif acao == 'magia':
         print('Você ainda não sabe magias')
-        for i in range(0, 5):
-            sys.stdout.write('. ')
-            sys.stdout.flush()
-            time.sleep(0.2)
-        print(f'o {monstro.nome}')
+        loading()
+        meu_jogador.vida -= monstro.atk
+        print(f'o {monstro.nome} te ataca')
+        intervalo()
+    elif acao == 'fugir':
+        pass
+    
+    if meu_jogador.vida > 0 and monstro.vida > 0:
+        luta(monstro)
+        
+    if meu_jogador.vida <= 0:
+        meu_jogador.local = 'a1'
+        meu_jogador.vida = meu_jogador.vida_max
+        limpar_tela()
+        print('Você morreu e acorda na sala inicial')
+    elif monstro.vida <= 0:
+        limpar_tela()
+        print(f'VOCÊ DERROTOU {monstro.nome}')
+        mapa[meu_jogador.local]['MONSTRO'] = ''
+        print_local()
 
+def fugir():
+    if meu_jogador.local == 'a2':
+        meu_jogador.local = 'a1'
+    elif meu_jogador.local == 'b1':
+        meu_jogador.local = 'a2'
+    elif meu_jogador.local == 'b2':
+        meu_jogador.local = 'b1'
+    elif meu_jogador.local == 'c1':
+        meu_jogador.local = 'b2'
+    elif meu_jogador.local == 'c2':
+        meu_jogador.local = 'c1'
+    print('você voltou para a sala anterior')
+    print_local()
+
+def mostrar_status():
+    print(f'{meu_jogador.nome} #{meu_jogador.nivel}')
+    print(f'vida: {meu_jogador.vida}/{meu_jogador.vida_max} ATK: {meu_jogador.atk}')
 
 def jogador_dormir():
     print("Dormindo...")
@@ -353,14 +370,18 @@ def setup_jogo():
         meu_jogador.vida = 120
         meu_jogador.vida_max = meu_jogador.vida
         meu_jogador.mana = 20
+        meu_jogador.mana_max = meu_jogador.mana
+        
     elif meu_jogador.classe == 'mago':
         meu_jogador.vida = 40
         meu_jogador.vida_max = meu_jogador.vida
         meu_jogador.mana = 120
+        meu_jogador.mana_max = meu_jogador.mana
     elif meu_jogador.classe == 'despojado':
         meu_jogador.vida = 60
         meu_jogador.vida_max = meu_jogador.vida
         meu_jogador.mana = 60
+        meu_jogador.mana_max = meu_jogador.mana
 
     fala1 = f"Bem-vindo, {meu_jogador.nome} o {meu_jogador.classe.capitalize()}!\n"
     fala2 = "Espero que se divirta nessa incrível aventura!\n"
