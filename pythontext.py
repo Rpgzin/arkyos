@@ -22,9 +22,13 @@ class Player:
         self.mana = 0
         self.mana_max = self.mana
         self.atk = 5
+        self.mochila = []
         self.efeitos_status = []
         self.local = 'começo'
         self.game_over = False
+    
+    def add_item(self, item):
+        self.mochila.append(item)
 
 class Monstro:
     def __init__(self):
@@ -34,6 +38,27 @@ class Monstro:
         self.nivel = 1
         self.atk = 2
         self.xp = 20
+        self.item = arma_aleatoria()
+
+class Arma:
+    def __init__(self):
+        self.nome = None
+        self.atk = None
+        self.desc = None
+
+lista_armas = [
+    {'nome': 'Adaga enferrujada', 'atk': 3, 'desc': 'Parece ser bem antiga'},
+    {'nome': 'Varinha capenga', 'atk': 3, 'desc': 'É nova, mas bem barata'},
+]
+
+def arma_aleatoria():
+    chances = [10, 30]
+    arma_random = random.choices(lista_armas, weights=chances, k=1)[0]
+    arma = Arma()
+    arma.nome = arma_random['nome']
+    arma.atk = arma_random['atk']
+    arma.desc = arma_random['desc']
+    return arma
 
 monstro_exemplo = Monstro()
 meu_jogador = Player()
@@ -203,7 +228,7 @@ def prompt():
     print("\n" + "=====================================")
     print("O que deseja fazer?")
     acao = input("-> ").lower()
-    acoes_aceitas = ['examinar', 'mover', 'sair', 'ajuda', 'olhar', 'pegar', 'inspecionar', 'ir', 'usar', 'teleportar', 'dormir']
+    acoes_aceitas = ['examinar', 'mover', 'sair', 'ajuda', 'olhar', 'inspecionar', 'ir', 'usar', 'teleportar', 'dormir', 'mochila']
     while acao not in acoes_aceitas:
         print("Ação inválida, tente novamente.\n")
         acao = input("-> ").lower()
@@ -215,12 +240,14 @@ def prompt():
         ajuda_menu()
     elif acao in ['examinar', 'olhar', 'inspecionar']:
         jogador_examinar()
-    elif acao == 'pegar':
-        jogador_pegar()
+    # elif acao == 'pegar':
+    #     jogador_pegar()
     elif acao == 'usar':
         jogador_usar()
     elif acao == 'dormir':
         jogador_dormir()
+    elif acao == 'mochila':
+        abrir_mochila()
 
 def acao_luta(escolha, monstro):
     if escolha == 'lutar':
@@ -235,6 +262,12 @@ def acao_luta(escolha, monstro):
         meu_jogador.vida -= monstro_exemplo.atk
         luta(monstro)
 
+def abrir_mochila():
+    if meu_jogador.mochila:
+        for i in range(len(meu_jogador.mochila)):
+            print(f'{i+1}. {meu_jogador.mochila[i].nome} ATK: {meu_jogador.mochila[i].atk} desc: {meu_jogador.mochila[i].desc}')
+    else:
+        print("Mochila vazia")
 
 def luta(monstro):
     print(f'\n{monstro.nome} #{monstro.nivel}')
@@ -252,7 +285,6 @@ def luta(monstro):
         print(f"você ataca {monstro.nome}\n")
         loading()
         intervalo()
-
         
         if monstro.vida > 0:
             meu_jogador.vida -= monstro.atk
@@ -280,9 +312,27 @@ def luta(monstro):
     elif monstro.vida <= 0:
         limpar_tela()
         print(f'VOCÊ DERROTOU {monstro.nome}')
-        mapa[meu_jogador.local]['MONSTRO'] = ''
-        print_local()
+        drop(monstro)
 
+def drop(monstro):
+    print(f'o {monstro.nome} dropou {monstro.item.nome}')
+    print('[pegar / ignorar]')
+    acao = input('>>')
+    if acao not in ['pegar', 'ignorar']:
+        print('\ncomando inválido')
+        drop(monstro)
+    
+    if acao == 'pegar':
+        mapa[meu_jogador.local]['MONSTRO'] = ''
+        meu_jogador.add_item(monstro.item)
+        print_local()
+        main_game_loop()
+    elif acao == 'ignorar':
+        mapa[meu_jogador.local]['MONSTRO'] = ''
+        print('você ignora o item e segue viagem')
+        print_local()
+        main_game_loop()
+    
 def fugir():
     if meu_jogador.local == 'a2':
         meu_jogador.local = 'a1'
@@ -413,6 +463,7 @@ def setup_jogo():
         time.sleep(0.01)
 
     start_game()
+    print_local()
     main_game_loop()
 
 ##### Executar #####
