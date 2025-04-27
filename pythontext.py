@@ -22,6 +22,8 @@ class Player:
         self.mana = 0
         self.mana_max = self.mana
         self.atk = 5
+        self.atk_final = self.atk
+        self.item_equipado = None
         self.mochila = []
         self.efeitos_status = []
         self.local = 'começo'
@@ -217,6 +219,7 @@ def print_local():
     print(f"# {local_nome.upper()} #")
     print(f"# {local_desc} #")
     print('#' * (4 + len(local_nome)))
+    mostrar_status()
     if mapa[meu_jogador.local]['MONSTRO'] != '':
         print(f"há um {monstro_exemplo.nome} na sala. O que deseja fazer?\n[lutar / fugir / falar]")
         escolha = input(">>").lower()
@@ -228,7 +231,7 @@ def prompt():
     print("\n" + "=====================================")
     print("O que deseja fazer?")
     acao = input("-> ").lower()
-    acoes_aceitas = ['examinar', 'mover', 'sair', 'ajuda', 'olhar', 'inspecionar', 'ir', 'usar', 'teleportar', 'dormir', 'mochila']
+    acoes_aceitas = ['examinar', 'mover', 'sair', 'ajuda', 'olhar', 'inspecionar', 'ir', 'usar', 'teleportar', 'dormir', 'mochila', 'mapa']
     while acao not in acoes_aceitas:
         print("Ação inválida, tente novamente.\n")
         acao = input("-> ").lower()
@@ -266,6 +269,29 @@ def abrir_mochila():
     if meu_jogador.mochila:
         for i in range(len(meu_jogador.mochila)):
             print(f'{i+1}. {meu_jogador.mochila[i].nome} ATK: {meu_jogador.mochila[i].atk} desc: {meu_jogador.mochila[i].desc}')
+        print('--> Use números para selecionar os itens')
+        escolha = input(">>")
+        try:
+            escolha = int(escolha)-1
+            if escolha not in range(0, len(meu_jogador.mochila)):
+                abrir_mochila()
+            print(f'item: {meu_jogador.mochila[escolha].nome} ATK: {meu_jogador.mochila[escolha].atk}')
+            if meu_jogador.item_equipado:
+                pass
+            else:
+                print('[equipar / remover / sair]')
+                acao = input('>>')
+                if acao not in ['equipar', 'remover', 'sair']:
+                    print('\ncomando inválido')
+                    abrir_mochila()
+                
+                if acao == 'equipar':
+                    meu_jogador.item_equipado = meu_jogador.mochila[escolha]
+                    meu_jogador.atk_final = meu_jogador.item_equipado.atk + meu_jogador.atk
+                    print_local()
+                    main_game_loop()
+        except:
+            abrir_mochila()
     else:
         print("Mochila vazia")
 
@@ -281,7 +307,7 @@ def luta(monstro):
         print("comando invádido".upper())
         luta(monstro)
     if acao == 'atacar':
-        monstro.vida -= meu_jogador.atk
+        monstro.vida -= meu_jogador.atk_final
         print(f"você ataca {monstro.nome}\n")
         loading()
         intervalo()
@@ -350,6 +376,8 @@ def fugir():
 def mostrar_status():
     print(f'{meu_jogador.nome} #{meu_jogador.nivel}')
     print(f'vida: {meu_jogador.vida}/{meu_jogador.vida_max} ATK: {meu_jogador.atk}')
+    if meu_jogador.item_equipado:
+        print(f'arma: {meu_jogador.item_equipado.nome} ATK: {meu_jogador.item_equipado.atk}')
 
 def jogador_dormir():
     print("Dormindo...")
