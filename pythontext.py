@@ -40,13 +40,13 @@ class Player:
         self.mochila.append(item)
 
 class Monstro:
-    def __init__(self):
-        self.nome = 'slime'
-        self.vida = 10
-        self.vida_max = self.vida
-        self.nivel = 1
-        self.atk = 2
-        self.xp = 20
+    def __init__(self, nome, vida, nivel, atk, xp):
+        self.nome = nome
+        self.vida = vida*nivel
+        self.vida_max = vida*nivel
+        self.nivel = nivel
+        self.atk = atk
+        self.xp = xp
         self.item = arma_aleatoria()
 
 class Arma:
@@ -61,6 +61,19 @@ lista_armas = [
     {'nome': 'Varinha capenga', 'atk': 3, 'desc': 'É nova, mas bem barata', 'equipado': False},
 ]
 
+lista_monstros_normais = [
+    {'nome': 'slime', 'vida': 10, 'nivel': 1, 'atk': 2, 'xp': 5},
+    {'nome': 'goblin', 'vida': 20, 'nivel': 2, 'atk': 4, 'xp': 10},
+    {'nome': 'lobo selvagem', 'vida': 25, 'nivel': 3, 'atk': 5, 'xp': 15},
+    {'nome': 'esqueleto', 'vida': 30, 'nivel': 4, 'atk': 6, 'xp': 20},
+    {'nome': 'zumbi', 'vida': 35, 'nivel': 4, 'atk': 4, 'xp': 18},
+    {'nome': 'morcego gigante', 'vida': 28, 'nivel': 3, 'atk': 6, 'xp': 12},
+    {'nome': 'aranha venenosa', 'vida': 22, 'nivel': 2, 'atk': 7, 'xp': 14},
+    {'nome': 'orc', 'vida': 40, 'nivel': 5, 'atk': 8, 'xp': 25},
+    {'nome': 'troll da caverna', 'vida': 50, 'nivel': 6, 'atk': 10, 'xp': 30},
+    {'nome': 'gárgula', 'vida': 45, 'nivel': 5, 'atk': 9, 'xp': 28}
+]
+
 def arma_aleatoria():
     chances = [10, 30]
     arma_random = random.choices(lista_armas, weights=chances, k=1)[0]
@@ -70,7 +83,10 @@ def arma_aleatoria():
     arma.desc = arma_random['desc']
     return arma
 
-monstro_exemplo = Monstro()
+monstro = lista_monstros_normais[0]
+monstro2 = lista_monstros_normais[1]
+monstro_exemplo = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'])
+monstro_exemplo2 = Monstro(monstro2['nome'], monstro2['vida'], monstro2['nivel'], monstro2['atk'], monstro2['xp'])
 meu_jogador = Player()
 
 ######### Tela de título #########
@@ -113,8 +129,8 @@ def ajuda_menu():
         if voltar_game != 's':
             limpar_tela()
             ajuda_menu()
-        main_game_loop()
         print_local()
+        main_game_loop()
     print("voltar ao MENU? [s/n]")
     voltar_menu = input('>>').lower()
     if voltar_menu != 's':
@@ -176,7 +192,7 @@ mapa = {
         'BAIXO': '',
         'ESQUERDA': 'b2',
         'DIREITA': '',
-        'MONSTRO': ''
+        'MONSTRO': monstro_exemplo2
     },
     'b2': {
         'NOME_LOCAL': "Sala2 Segundo andar",
@@ -230,7 +246,7 @@ def print_local():
     print('#' * (4 + len(local_nome)))
     mostrar_status()
     if mapa[meu_jogador.local]['MONSTRO'] != '':
-        print(f"há um {monstro_exemplo.nome} na sala. O que deseja fazer?\n[lutar / fugir / falar]")
+        print(f"há um {mapa[meu_jogador.local]['MONSTRO'].nome} na sala. O que deseja fazer?\n[lutar / fugir / falar]")
         escolha = input(">>").lower()
         if escolha not in ['lutar', 'fugir', 'falar']:
             print_local()
@@ -277,6 +293,9 @@ def acao_luta(escolha, monstro):
 def abrir_mochila():
     if meu_jogador.mochila:
         for i in range(len(meu_jogador.mochila)):
+            if meu_jogador.mochila[i].equipado == True:
+                print(f'{i+1}. {meu_jogador.mochila[i].nome} ATK: {meu_jogador.mochila[i].atk} desc: {meu_jogador.mochila[i].desc} (EQUIPADO)')
+                continue
             print(f'{i+1}. {meu_jogador.mochila[i].nome} ATK: {meu_jogador.mochila[i].atk} desc: {meu_jogador.mochila[i].desc}')
         print('--> Use números para selecionar os itens ou [sair]')
         escolha = input(">>")
@@ -291,7 +310,7 @@ def abrir_mochila():
             # jogador selecionou com item equipao
             if meu_jogador.item_equipado:
                 # jogador selecionou item equipado
-                if meu_jogador.item_equipado.equipado == True:
+                if meu_jogador.mochila[escolha].equipado == True:
                     print('[desequipar / remover / sair]')
                     acao = input('>>').lower()
                     if acao not in ['desequipar', 'remover', 'sair']:
@@ -323,20 +342,18 @@ def abrir_mochila():
 
                     if acao == 'equipar':
                         print(f'**VOCÊ DESEQUIPOU {meu_jogador.item_equipado.nome}**')
-                        for item in meu_jogador.mochila:
-                            if item.equipado == True:
-                                item.equipao == False
+                        for i in range(len(meu_jogador.mochila)):
+                            if meu_jogador.mochila[i].equipado == True:
+                                meu_jogador.mochila[i].equipado = False
                                 break
                         meu_jogador.item_equipado = meu_jogador.mochila[escolha]
                         meu_jogador.mochila[escolha].equipado = True
                         meu_jogador.atk_final = meu_jogador.atk + meu_jogador.item_equipado.atk
                         print(f'**VOCÊ EQUIPOU {meu_jogador.item_equipado.nome}**')
+                        abrir_mochila()
                     elif acao == 'remover':
-                        print(f'**VOCÊ DROPOU {meu_jogador.mochila[escolha]}')
-                        meu_jogador.mochila[escolha].equipado = False
+                        print(f'**VOCÊ DROPOU {meu_jogador.mochila[escolha].nome}')
                         meu_jogador.mochila.pop(escolha)
-                        meu_jogador.item_equipado = None
-                        meu_jogador.atk_final = meu_jogador.atk
                         abrir_mochila()
                     elif acao == 'sair':
                         print_local()
@@ -397,7 +414,7 @@ def luta(monstro):
         print(f'o {monstro.nome} te ataca')
         intervalo()
     elif acao == 'fugir':
-        pass
+        fugir()
     
     if meu_jogador.vida > 0 and monstro.vida > 0:
         luta(monstro)
@@ -443,7 +460,7 @@ def fugir():
     elif meu_jogador.local == 'c2':
         meu_jogador.local = 'c1'
     print('você voltou para a sala anterior')
-    print_local()
+    main_game_loop()
 
 def mostrar_status():
     print(f'{meu_jogador.nome} #{meu_jogador.nivel}')
