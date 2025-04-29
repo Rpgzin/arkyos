@@ -10,6 +10,13 @@ from utilitarios import(
     intervalo
 )
 
+#TO-DO:
+'''
+sistema de EQUIPAR, DESEQUIPAR, REMOVER
+sistema de GANHAR XP, SUBIR NIVEL
+sistema de SPAWNAR MOSNTRO POR SALA
+comando de ver MAPA
+'''
 ######### Setup do jogador ########
 
 class Player:
@@ -47,10 +54,11 @@ class Arma:
         self.nome = None
         self.atk = None
         self.desc = None
+        self.equipado = False
 
 lista_armas = [
-    {'nome': 'Adaga enferrujada', 'atk': 3, 'desc': 'Parece ser bem antiga'},
-    {'nome': 'Varinha capenga', 'atk': 3, 'desc': 'É nova, mas bem barata'},
+    {'nome': 'Adaga enferrujada', 'atk': 3, 'desc': 'Parece ser bem antiga', 'equipado': False},
+    {'nome': 'Varinha capenga', 'atk': 3, 'desc': 'É nova, mas bem barata', 'equipado': False},
 ]
 
 def arma_aleatoria():
@@ -94,6 +102,7 @@ def ajuda_menu():
     print('#########################')
     print('# >Bem vindo ao ARKYOS! #')
     print('#########################' "\n")
+    print('principais comandos: [mover / olhar / mochila]')
     print('- Digite mover para se movimentar')
     print('- Digite seus comandos para executá-los')
     print('- Use o comando "inspecionar ou olhar" para examinar algo')
@@ -269,25 +278,88 @@ def abrir_mochila():
     if meu_jogador.mochila:
         for i in range(len(meu_jogador.mochila)):
             print(f'{i+1}. {meu_jogador.mochila[i].nome} ATK: {meu_jogador.mochila[i].atk} desc: {meu_jogador.mochila[i].desc}')
-        print('--> Use números para selecionar os itens')
+        print('--> Use números para selecionar os itens ou [sair]')
         escolha = input(">>")
+        if escolha == 'sair':
+            print_local()
+            main_game_loop()
         try:
             escolha = int(escolha)-1
             if escolha not in range(0, len(meu_jogador.mochila)):
                 abrir_mochila()
             print(f'item: {meu_jogador.mochila[escolha].nome} ATK: {meu_jogador.mochila[escolha].atk}')
+            # jogador selecionou com item equipao
             if meu_jogador.item_equipado:
-                pass
+                # jogador selecionou item equipado
+                if meu_jogador.item_equipado.equipado == True:
+                    print('[desequipar / remover / sair]')
+                    acao = input('>>').lower()
+                    if acao not in ['desequipar', 'remover', 'sair']:
+                        print('\ncomando inválido')
+                        abrir_mochila()
+                    
+                    if acao == 'desequipar':
+                        print(f'**VOCÊ DESEQUIPOU {meu_jogador.item_equipado.nome}**')
+                        meu_jogador.item_equipado = False
+                        meu_jogador.mochila[escolha].equipado = False
+                        meu_jogador.atk_final = meu_jogador.atk
+                        abrir_mochila()
+                    elif acao == 'remover':
+                        print(f'**VOCÊ DROPOU {meu_jogador.item_equipado.nome}**')
+                        meu_jogador.item_equipado = None
+                        meu_jogador.mochila.pop(escolha)
+                        meu_jogador.atk_final = meu_jogador.atk
+                        abrir_mochila()
+                    elif acao == 'sair':
+                        print_local()
+                        main_game_loop()
+                # jogador selecionou item NÂO equipado
+                else:
+                    print('[equipar / remover / sair]')
+                    acao = input('>>').lower()
+                    if acao not in ['equipar', 'remover', 'sair']:
+                        print('\ncomando inválido')
+                        abrir_mochila()
+
+                    if acao == 'equipar':
+                        print(f'**VOCÊ DESEQUIPOU {meu_jogador.item_equipado.nome}**')
+                        for item in meu_jogador.mochila:
+                            if item.equipado == True:
+                                item.equipao == False
+                                break
+                        meu_jogador.item_equipado = meu_jogador.mochila[escolha]
+                        meu_jogador.mochila[escolha].equipado = True
+                        meu_jogador.atk_final = meu_jogador.atk + meu_jogador.item_equipado.atk
+                        print(f'**VOCÊ EQUIPOU {meu_jogador.item_equipado.nome}**')
+                    elif acao == 'remover':
+                        print(f'**VOCÊ DROPOU {meu_jogador.mochila[escolha]}')
+                        meu_jogador.mochila[escolha].equipado = False
+                        meu_jogador.mochila.pop(escolha)
+                        meu_jogador.item_equipado = None
+                        meu_jogador.atk_final = meu_jogador.atk
+                        abrir_mochila()
+                    elif acao == 'sair':
+                        print_local()
+                        main_game_loop()
+            # jogador selecionou sem item equipado
             else:
                 print('[equipar / remover / sair]')
-                acao = input('>>')
+                acao = input('>>').lower()
                 if acao not in ['equipar', 'remover', 'sair']:
                     print('\ncomando inválido')
                     abrir_mochila()
                 
                 if acao == 'equipar':
+                    meu_jogador.mochila[escolha].equipado = True
                     meu_jogador.item_equipado = meu_jogador.mochila[escolha]
                     meu_jogador.atk_final = meu_jogador.item_equipado.atk + meu_jogador.atk
+                    print(F'**VOCÊ EQUIPOU {meu_jogador.item_equipado.nome}**')
+                    abrir_mochila()
+                elif acao == 'remover':
+                    print(f'**VOCÊ DROPOU {meu_jogador.mochila[escolha].nome}')
+                    meu_jogador.mochila.pop(escolha)
+                    abrir_mochila()
+                elif acao == 'sair':
                     print_local()
                     main_game_loop()
         except:
@@ -343,7 +415,7 @@ def luta(monstro):
 def drop(monstro):
     print(f'o {monstro.nome} dropou {monstro.item.nome}')
     print('[pegar / ignorar]')
-    acao = input('>>')
+    acao = input('>>').lower()
     if acao not in ['pegar', 'ignorar']:
         print('\ncomando inválido')
         drop(monstro)
@@ -484,7 +556,7 @@ def setup_jogo():
         sys.stdout.write(introducao)
         sys.stdout.flush()
         time.sleep(0.01)
-    ajuda = 'Lista de comandos: (examinar, mover, sair, ajuda, pegar, usar, ir, teleportar, dormir)\n'
+    ajuda = 'principais comandos: [mover / olhar / mochila]\n'
     for ajuda in ajuda:
         sys.stdout.write(ajuda)
         sys.stdout.flush()
