@@ -7,7 +7,7 @@ def loading():
     for i in range(0, 5):
         sys.stdout.write('. ')
         sys.stdout.flush()
-        time.sleep(0.2)
+        time.sleep(0.1)
     print('')
     
 def intervalo():

@@ -251,6 +251,8 @@ mapa = {
 ##### Interações em jogo #####
 
 def print_local():
+    if meu_jogador.local != 'a1':
+        limpar_tela()
     local_nome = mapa[meu_jogador.local]['NOME_LOCAL']
     local_desc = mapa[meu_jogador.local]['DESCRICAO']
     print('\n' + ('#' * (4 + len(local_nome))))
@@ -306,12 +308,11 @@ def acao_luta(escolha, monstro):
         luta(monstro)
     elif escolha == 'fugir':
         fugir()
-        print_local()
     elif escolha == 'falar':
         loading()
         print(f'O {monstro.nome} não te entende e te ataca')
         intervalo()
-        meu_jogador.vida -= monstro_exemplo.atk
+        meu_jogador.vida -= monstro.atk
         luta(monstro)
 
 def abrir_mochila():
@@ -435,7 +436,32 @@ def luta(monstro):
             for i in range(len(meu_jogador.magias)):
                 magia = meu_jogador.magias[i]
                 print(f'{i+1}. {magia.nome} | DANO: {magia.dano} | custo de mana: {magia.mana_gasta} | desc: {magia.desc}')
-                input(">>")
+            print("Use números para escolher as magias")
+            escolha = input(">>")
+            try:
+                escolha = int(escolha)-1
+                if escolha not in range(0, len(meu_jogador.magias)):
+                    print('Magia inválida')
+                    luta(monstro)
+
+                if meu_jogador.mana < meu_jogador.magias[escolha].mana_gasta:
+                    print('**MANA INSUFICIENTE**')
+                    luta(monstro)
+
+                monstro.vida -= meu_jogador.magias[escolha].dano
+                meu_jogador.mana -= meu_jogador.magias[escolha].mana_gasta
+                print(f'Você lança {meu_jogador.magias[escolha].nome} em {monstro.nome}')
+                loading()
+                intervalo()
+
+                if monstro.vida > 0:
+                    meu_jogador.vida -= monstro.atk
+                    print(f'\no {monstro.nome} te ataca\n')
+                    loading()
+                intervalo()
+            except:
+                print('\nComando inválido')
+                luta(monstro)
         else:
             print('Você ainda não sabe magias')
             loading()
@@ -493,7 +519,7 @@ def fugir():
 
 def mostrar_status():
     print(f'{meu_jogador.nome} #{meu_jogador.nivel}')
-    print(f'vida: {meu_jogador.vida}/{meu_jogador.vida_max} ATK: {meu_jogador.atk}')
+    print(f'vida: {meu_jogador.vida}/{meu_jogador.vida_max} ATK: {meu_jogador.atk} MANA: {meu_jogador.mana}/{meu_jogador.mana_max}')
     if meu_jogador.item_equipado:
         print(f'arma: {meu_jogador.item_equipado.nome} ATK: {meu_jogador.item_equipado.atk}')
 
@@ -509,7 +535,6 @@ def jogador_dormir():
     else:
         print('Você não pode dormir aqui.')
     
-
 def jogador_mover():
     if meu_jogador.local == 'a1':
         pergunta = "Para onde deseja se mover? (avançar)\n"
