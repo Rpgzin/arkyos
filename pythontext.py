@@ -12,6 +12,7 @@ from utilitarios import(
 
 #TO-DO:
 '''
+bug: abrir mochila -> equipar/desequipar item -> fechar mochila -> sair(fechar jogo) -> abre mochila, mas quando sair de novo vai sair
 sistema de EQUIPAR, DESEQUIPAR, REMOVER
 sistema de GANHAR XP, SUBIR NIVEL
 sistema de SPAWNAR MOSNTRO POR SALA
@@ -90,7 +91,7 @@ lista_monstros_normais = [
 ]
 
 def arma_aleatoria():
-    chances = [10, 30, 40, 50]
+    chances = [30, 30, 20, 20]
     arma_random = random.choices(lista_armas, weights=chances, k=1)[0]
     arma = Arma(arma_random['nome'], arma_random['atk'], arma_random['desc'], arma_random['equipado'])
     return arma
@@ -113,7 +114,7 @@ def navegação_tela_titulo():
     elif opção == "ajuda":
         ajuda_menu()
     elif opção == "sair":
-        sys.exit()
+        sair()
 
 def tela_titulo():
     limpar_tela()
@@ -263,31 +264,42 @@ def print_local():
         if escolha not in ['lutar', 'fugir', 'falar']:
             print_local()
         acao_luta(escolha, mapa[meu_jogador.local]['MONSTRO'])
+    main_game_loop()
 
 def prompt():
     print("\n" + "=====================================")
     print("O que deseja fazer?")
-    acao = input("-> ").lower()
-    acoes_aceitas = ['examinar', 'mover', 'sair', 'ajuda', 'olhar', 'inspecionar', 'ir', 'usar', 'teleportar', 'dormir', 'mochila', 'mapa']
+    acao = input("->").lower()
+    acoes_aceitas = ['examinar', 'mover', 'sair', 'ajuda', 'olhar', 'inspecionar', 'ir', 'teleportar', 'dormir', 'mochila', 'mapa']
     while acao not in acoes_aceitas:
         print("Ação inválida, tente novamente.\n")
         acao = input("-> ").lower()
     if acao == 'sair':
-        sys.exit()
-    elif acao in ['mover', 'ir', 'teleportar']:
+        sair()
+    if acao in ['mover', 'ir', 'teleportar']:
         jogador_mover()
     elif acao == 'ajuda':
         ajuda_menu()
     elif acao in ['examinar', 'olhar', 'inspecionar']:
         jogador_examinar()
-    # elif acao == 'pegar':
-    #     jogador_pegar()
-    #elif acao == 'usar':
-    #    jogador_usar()
     elif acao == 'dormir':
         jogador_dormir()
-    elif acao == 'mochila':
+    elif acao == 'mochila' and acao != 'sair':
         abrir_mochila()
+
+def sair():
+    print("Tem certeza que deseja sair? [s/n] ")
+    confirmar = input('>>').lower()
+    if confirmar not in ['s', 'n']:
+        print('\ncomando inválido')
+        sair()
+    if confirmar == 's':
+        meu_jogador.game_over = True
+        main_game_loop()
+    else:
+        if meu_jogador.nome == '':
+            tela_titulo()
+        main_game_loop()
 
 def acao_luta(escolha, monstro):
     if escolha == 'lutar':
@@ -303,6 +315,8 @@ def acao_luta(escolha, monstro):
         luta(monstro)
 
 def abrir_mochila():
+    if meu_jogador.game_over:
+        main_game_loop()
     if meu_jogador.mochila:
         for i in range(len(meu_jogador.mochila)):
             if meu_jogador.mochila[i].equipado == True:
@@ -313,7 +327,6 @@ def abrir_mochila():
         escolha = input(">>")
         if escolha == 'fechar':
             print_local()
-            main_game_loop()
         try:
             escolha = int(escolha)-1
             if escolha not in range(0, len(meu_jogador.mochila)):
@@ -336,6 +349,7 @@ def abrir_mochila():
                         meu_jogador.atk_final = meu_jogador.atk
                         abrir_mochila()
                     elif acao == 'remover':
+                        print(f'**VOCÊ DESEQUIPOU {meu_jogador.item_equipado.nome}**')
                         print(f'**VOCÊ DROPOU {meu_jogador.item_equipado.nome}**')
                         meu_jogador.item_equipado = None
                         meu_jogador.mochila.pop(escolha)
@@ -343,7 +357,6 @@ def abrir_mochila():
                         abrir_mochila()
                     elif acao == 'fechar':
                         print_local()
-                        main_game_loop()
                 # jogador selecionou item NÂO equipado
                 else:
                     print('[equipar / remover / fechar]')
@@ -369,7 +382,6 @@ def abrir_mochila():
                         abrir_mochila()
                     elif acao == 'fechar':
                         print_local()
-                        main_game_loop()
             # jogador selecionou sem item equipado
             else:
                 print('[equipar / remover / fechar]')
@@ -390,7 +402,6 @@ def abrir_mochila():
                     abrir_mochila()
                 elif acao == 'fechar':
                     print_local()
-                    main_game_loop()
         except:
             abrir_mochila()
     else:
@@ -536,6 +547,10 @@ def main_game_loop():
     while not meu_jogador.game_over:
         prompt()
         # Aqui tratar se os enigmas foram resolvidos, chefe derrotado, tudo explorado, etc.
+    limpar_tela()
+    print("\n\n**FIM DE JOGO**")
+    sys.exit()
+    exit()
 
 def setup_jogo():
     os.system('clear' if os.name != 'nt' else 'cls')
@@ -544,14 +559,14 @@ def setup_jogo():
     for caractere in pergunta1:
         sys.stdout.write(caractere)
         sys.stdout.flush()
-        time.sleep(0.04)
+        time.sleep(0.001)
     meu_jogador.nome = input("-> ")
 
     pergunta2 = "Qual sua classe?\n(Escolha: guerreiro, mago ou despojado)\n"
     for caractere in pergunta2:
         sys.stdout.write(caractere)
         sys.stdout.flush()
-        time.sleep(0.04)
+        time.sleep(0.001)
 
     classes_validas = ['guerreiro', 'mago', 'despojado']
     jogador_classe = input("-> ").lower()
@@ -590,7 +605,7 @@ def setup_jogo():
         for caractere in fala:
             sys.stdout.write(caractere)
             sys.stdout.flush()
-            time.sleep(0.03)
+            time.sleep(0.001)
     time.sleep(2)
 
     os.system('clear' if os.name != 'nt' else 'cls')
@@ -599,21 +614,20 @@ def setup_jogo():
     for introducao in introducao1:
         sys.stdout.write(introducao)
         sys.stdout.flush()
-        time.sleep(0.02)
+        time.sleep(0.001)
     introducao2 = 'Você acordou naquele quarto escuro, aparentemente sua luz acabou e você não sabe o por que. \n Você vivia pacificamente em seu quarto e nunca precisou sair pois um cara sempre trazia tudo que você precisa mas aparentemente essa pessoa sumiu.\n Agora é com você o encontrar.\n'
     for introducao in introducao2:
         sys.stdout.write(introducao)
         sys.stdout.flush()
-        time.sleep(0.01)
+        time.sleep(0.001)
     ajuda = 'principais comandos: [mover / olhar / mochila]\n'
     for ajuda in ajuda:
         sys.stdout.write(ajuda)
         sys.stdout.flush()
-        time.sleep(0.01)
+        time.sleep(0.001)
 
     start_game()
     print_local()
-    main_game_loop()
 
 ##### Executar #####
 tela_titulo()
