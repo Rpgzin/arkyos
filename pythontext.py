@@ -12,14 +12,12 @@ from utilitarios import(
 
 #TO-DO:
 '''
-bug: abrir mochila -> equipar/desequipar item -> fechar mochila -> sair(fechar jogo) -> abre mochila, mas quando sair de novo vai sair
-sistema de EQUIPAR, DESEQUIPAR, REMOVER
 sistema de GANHAR XP, SUBIR NIVEL
 sistema de SPAWNAR MOSNTRO POR SALA
-sistema de magias
 comando de ver MAPA
 '''
 ######### Setup do jogador ########
+#ainda to vendo os arquivos
 
 class Player:
     def __init__(self):
@@ -31,6 +29,7 @@ class Player:
         self.mana = 0
         self.mana_max = self.mana
         self.atk = 5
+        self.ouro = 0
         self.atk_final = self.atk
         self.item_equipado = None
         self.mochila = []
@@ -43,30 +42,66 @@ class Player:
         self.mochila.append(item)
 
 class Monstro:
-    def __init__(self, nome, vida, nivel, atk, xp):
+    def __init__(self, nome, vida, nivel, atk, xp, ouro):
         self.nome = nome
         self.vida = vida*nivel
         self.vida_max = vida*nivel
         self.nivel = nivel
         self.atk = atk
         self.xp = xp
+        self.ouro = ouro
         self.item = arma_aleatoria()
 
-class Arma:
-    def __init__(self, nome, atk, desc, equipado):
+class Item:
+    def __init__(self, nome, atk, desc, equipado, consumivel):
         self.nome = nome
         self.atk = atk
         self.desc = desc
         self.equipado = equipado
+        self.consumivel = consumivel
 
-lista_armas = [
-    {'nome': 'Adaga enferrujada', 'atk': 3, 'desc': 'Parece ser bem antiga', 'equipado': False},
-    {'nome': 'Varinha capenga', 'atk': 3, 'desc': 'É nova, mas bem barata', 'equipado': False},
-    {'nome': 'Espada longa', 'atk': 4, 'desc': 'A espada de todo guerreiro.', 'equipado': False},
-    {'nome': 'Grimório', 'atk': 2, 'desc': 'O grimório de um mago, o local de sua sabedoria.', 'equipado': False},
+# class Item_loja:
+#     def __init__(self, nome, preco, desc, item):
+#         self.nome = nome
+#         self.preco = preco
+#         self.desc = desc
+#         self.item = item
+#         self.vendido = False
+#         self.comprado = False  
+
+def mostrar_loja():
+        if meu_jogador.local != 'b2':
+            print('NãO HÁ LOJAS POR AQUI')
+            main_game_loop()
+        print('Itens para venda:')
+        for i in range(0, len(lista_itens_loja)):
+            status = '(COMPRADO)' if lista_itens_loja[i]["comprado"] else ''
+            print(f"Nome: {lista_itens_loja[i]['nome']} - Preço: {lista_itens_loja[i]['preco']} - Descricao: {lista_itens_loja[i]['desc']} {status}\n")
+            
+def add_item_comprado(item):
+    if lista_itens_loja[0]['comprado'] == True:
+        meu_jogador.add_item(item)       
+
+lista_itens_loja = [
+    { 'nome': 'Espada de ferro', 'atk': 5, 'preco': 100, 'desc': 'Uma espada de ferro, muito forte.', 'item': 'espada de ferro', 'comprado': False, 'equipado': False, 'consumivel': False},
+    { 'nome': 'Arco longo', 'atk': 4,'preco': 100, 'desc': 'Um arco longo, muito forte.', 'item': 'arco longo', 'comprado': False, 'equipado': False, 'consumivel': False},
+    { 'nome': 'Pocao de vida', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de vida, cura 20 pontos de vida.', 'item': 'pocao de vida', 'comprado': False, 'equipado': False, 'consumivel': True},
+    { 'nome': 'Pocao de mana', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de mana, cura 20 pontos de mana.', 'item': 'pocao de mana', 'comprado': False, 'equipado': False, 'consumivel': True},
 ]
 
-class magias:
+lista_consumiveis = [
+    { 'nome': 'Pocao de vida', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de vida, cura 20 pontos de vida.', 'equipado': False, 'consumivel': True},
+    { 'nome': 'Pocao de mana', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de mana, cura 20 pontos de mana.', 'equipado': False, 'consumivel': True},
+]
+
+lista_armas = [
+    {'nome': 'Adaga enferrujada', 'atk': 3, 'desc': 'Parece ser bem antiga', 'equipado': False, 'consumivel': False},
+    {'nome': 'Varinha capenga', 'atk': 3, 'desc': 'É nova, mas bem barata', 'equipado': False, 'consumivel': False},
+    {'nome': 'Espada longa', 'atk': 4, 'desc': 'A espada de todo guerreiro.', 'equipado': False, 'consumivel': False},
+    {'nome': 'Grimório', 'atk': 2, 'desc': 'O grimório de um mago, o local de sua sabedoria.', 'equipado': False, 'consumivel': False},
+]
+
+class Magia:
     def __init__(self, nome, dano, desc, mana_gasta):
         self.nome = nome
         self.dano = dano
@@ -78,28 +113,28 @@ lista_magias = [
 ]
 
 lista_monstros_normais = [
-    {'nome': 'slime', 'vida': 10, 'nivel': 1, 'atk': 2, 'xp': 5},
-    {'nome': 'goblin', 'vida': 20, 'nivel': 2, 'atk': 4, 'xp': 10},
-    {'nome': 'lobo selvagem', 'vida': 25, 'nivel': 3, 'atk': 5, 'xp': 15},
-    {'nome': 'esqueleto', 'vida': 30, 'nivel': 4, 'atk': 6, 'xp': 20},
-    {'nome': 'zumbi', 'vida': 35, 'nivel': 4, 'atk': 4, 'xp': 18},
-    {'nome': 'morcego gigante', 'vida': 28, 'nivel': 3, 'atk': 6, 'xp': 12},
-    {'nome': 'aranha venenosa', 'vida': 22, 'nivel': 2, 'atk': 7, 'xp': 14},
-    {'nome': 'orc', 'vida': 40, 'nivel': 5, 'atk': 8, 'xp': 25},
-    {'nome': 'troll da caverna', 'vida': 50, 'nivel': 6, 'atk': 10, 'xp': 30},
-    {'nome': 'gárgula', 'vida': 45, 'nivel': 5, 'atk': 9, 'xp': 28}
+    {'nome': 'slime', 'vida': 10, 'nivel': 1, 'atk': 2, 'xp': 5, 'ouro': 100},
+    {'nome': 'goblin', 'vida': 20, 'nivel': 2, 'atk': 4, 'xp': 10, 'ouro': 200},
+    {'nome': 'lobo selvagem', 'vida': 25, 'nivel': 3, 'atk': 5, 'xp': 15, 'ouro': 100},
+    {'nome': 'esqueleto', 'vida': 30, 'nivel': 4, 'atk': 6, 'xp': 20, 'ouro': 200},
+    {'nome': 'zumbi', 'vida': 35, 'nivel': 4, 'atk': 4, 'xp': 18, 'ouro': 100},
+    {'nome': 'morcego gigante', 'vida': 28, 'nivel': 3, 'atk': 6, 'xp': 12, 'ouro': 200},
+    {'nome': 'aranha venenosa', 'vida': 22, 'nivel': 2, 'atk': 7, 'xp': 14, 'ouro': 100},
+    {'nome': 'orc', 'vida': 40, 'nivel': 5, 'atk': 8, 'xp': 25, 'ouro': 200},
+    {'nome': 'troll da caverna', 'vida': 50, 'nivel': 6, 'atk': 10, 'xp': 30, 'ouro': 300},
+    {'nome': 'gárgula', 'vida': 45, 'nivel': 5, 'atk': 9, 'xp': 28, 'ouro': 200}
 ]
 
 def arma_aleatoria():
     chances = [30, 30, 20, 20]
     arma_random = random.choices(lista_armas, weights=chances, k=1)[0]
-    arma = Arma(arma_random['nome'], arma_random['atk'], arma_random['desc'], arma_random['equipado'])
+    arma = Item(arma_random['nome'], arma_random['atk'], arma_random['desc'], arma_random['equipado'], arma_random['consumivel'])
     return arma
 
 monstro = lista_monstros_normais[0]
 monstro2 = lista_monstros_normais[1]
-monstro_exemplo = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'])
-monstro_exemplo2 = Monstro(monstro2['nome'], monstro2['vida'], monstro2['nivel'], monstro2['atk'], monstro2['xp'])
+monstro_exemplo = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'], monstro['ouro'])
+monstro_exemplo2 = Monstro(monstro2['nome'], monstro2['vida'], monstro2['nivel'], monstro2['atk'], monstro2['xp'], monstro2['ouro'])
 meu_jogador = Player()
 
 ######### Tela de título #########
@@ -196,7 +231,7 @@ mapa = {
         'RETORNAR': 'a1',
         'MONSTRO': monstro_exemplo
     },
-    'b1': {
+    'b1': { 
         'NOME_LOCAL': "Sala1 Segundo andar",
         'DESCRICAO': 'Descrição da sala b1.',
         'EXAMINAR': 'Uma escada quebrada e mobília velha.',
@@ -208,7 +243,7 @@ mapa = {
         'MONSTRO': monstro_exemplo2
     },
     'b2': {
-        'NOME_LOCAL': "Sala2 Segundo andar",
+        'NOME_LOCAL': "LOJA",
         'DESCRICAO': 'Descrição da sala b2.',
         'EXAMINAR': 'Rochas espalhadas pelo chão.',
         'SOLVED': False,
@@ -272,7 +307,7 @@ def prompt():
     print("\n" + "=====================================")
     print("O que deseja fazer?")
     acao = input("->").lower()
-    acoes_aceitas = ['examinar', 'mover', 'sair', 'ajuda', 'olhar', 'inspecionar', 'ir', 'teleportar', 'dormir', 'mochila', 'mapa']
+    acoes_aceitas = ['examinar', 'mover', 'loja', 'sair', 'ajuda', 'olhar', 'inspecionar', 'ir', 'teleportar', 'dormir', 'mochila', 'mapa']
     while acao not in acoes_aceitas:
         print("Ação inválida, tente novamente.\n")
         acao = input("-> ").lower()
@@ -288,6 +323,24 @@ def prompt():
         jogador_dormir()
     elif acao == 'mochila' and acao != 'sair':
         abrir_mochila()
+    elif acao == 'loja':
+        mostrar_loja()
+        acao_loja(input('>>').lower())
+    
+def acao_loja(escolha):
+    if escolha == 'comprar':
+        comprar()
+    elif escolha == 'vender':
+        vender()
+
+def comprar():
+        lista_itens_loja[0]['comprado'] = True
+        item = lista_itens_loja[0]
+        item_add = Item(item['nome'], item['atk'], item['desc'], item['equipado'])
+        add_item_comprado(item_add)
+    
+def vender(self):
+    self.vendido = True
 
 def sair():
     print("Tem certeza que deseja sair? [s/n] ")
@@ -317,8 +370,9 @@ def acao_luta(escolha, monstro):
 
 def abrir_mochila():
     if meu_jogador.game_over:
-        main_game_loop()
+        main_game_loop() 
     if meu_jogador.mochila:
+        print (f'Ouro: {meu_jogador.ouro}')
         for i in range(len(meu_jogador.mochila)):
             if meu_jogador.mochila[i].equipado == True:
                 print(f'{i+1}. {meu_jogador.mochila[i].nome} ATK: {meu_jogador.mochila[i].atk} desc: {meu_jogador.mochila[i].desc} (EQUIPADO)')
@@ -485,7 +539,8 @@ def luta(monstro):
         drop(monstro)
 
 def drop(monstro):
-    print(f'o {monstro.nome} dropou {monstro.item.nome}')
+    print(f'Você ganhou {monstro.ouro} e o {monstro.nome} dropou {monstro.item.nome}')
+    meu_jogador.ouro += monstro.ouro
     print('[pegar / ignorar]')
     acao = input('>>').lower()
     if acao not in ['pegar', 'ignorar']:
@@ -540,8 +595,10 @@ def jogador_mover():
         pergunta = "Para onde deseja se mover? (avançar)\n"
     elif meu_jogador.local in ['b1', 'c1']:
         pergunta = "Para onde deseja se mover? (avançar ou subir)\n"
-    elif meu_jogador.local in ['a2', 'b2', 'c2']:
+    elif meu_jogador.local in ['a2', 'c2']:
         pergunta = "para onde deseja se mover? (descer ou retornar)\n"
+    elif meu_jogador.local in ['b2']:
+        pergunta = "Há uma loja no andar. O deseja fazer? (loja, descer ou retornar)\n"
     
     dest = input(pergunta).lower()
     direcoes_validas = ['subir', 'descer', 'avançar', 'retornar']
@@ -602,20 +659,25 @@ def setup_jogo():
     print(f"Classe selecionada: {meu_jogador.classe.capitalize()}\n")
 
     if meu_jogador.classe == 'guerreiro':
+        pocao1 = lista_consumiveis[0]
+        arma_padrao = lista_armas[2]
         meu_jogador.vida = 120
         meu_jogador.vida_max = meu_jogador.vida
         meu_jogador.mana = 20
         meu_jogador.mana_max = meu_jogador.mana
-        meu_jogador.item_equipado = Arma('Espada longa', 4, 'A espada de todo guerreiro.', True)
+        meu_jogador.item_equipado = Item(arma_padrao['nome'], arma_padrao['atk'], arma_padrao['desc'], arma_padrao['equipado'], arma_padrao['consumivel'])
         meu_jogador.add_item(meu_jogador.item_equipado)
-        meu_jogador.atk_final = meu_jogador.atk + meu_jogador.item_equipado.atk     
+        meu_jogador.atk_final = meu_jogador.atk + meu_jogador.item_equipado.atk
+        meu_jogador.add_item(Item(pocao1['nome'], pocao1['atk'], pocao1['desc'], pocao1['equipado'], pocao1['consumivel']))
 
     elif meu_jogador.classe == 'mago':
+        magia_basica = lista_magias[0]
         meu_jogador.vida = 40
         meu_jogador.vida_max = meu_jogador.vida
         meu_jogador.mana = 120
         meu_jogador.mana_max = meu_jogador.mana
-        meu_jogador.magias.append(magias('Bola de fogo', 20, 'A magia mais forte de um mago', 30))
+        meu_jogador.magias.append(Magia(magia_basica['nome'], magia_basica['dano'], magia_basica['desc'], magia_basica['mana_gasta']))
+
     elif meu_jogador.classe == 'despojado':
         meu_jogador.vida = 60
         meu_jogador.vida_max = meu_jogador.vida
