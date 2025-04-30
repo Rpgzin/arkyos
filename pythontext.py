@@ -15,6 +15,7 @@ from utilitarios import(
 sistema de EQUIPAR, DESEQUIPAR, REMOVER
 sistema de GANHAR XP, SUBIR NIVEL
 sistema de SPAWNAR MOSNTRO POR SALA
+sistema de magias
 comando de ver MAPA
 '''
 ######### Setup do jogador ########
@@ -33,6 +34,7 @@ class Player:
         self.item_equipado = None
         self.mochila = []
         self.efeitos_status = []
+        self.magias = []
         self.local = 'começo'
         self.game_over = False
     
@@ -50,15 +52,28 @@ class Monstro:
         self.item = arma_aleatoria()
 
 class Arma:
-    def __init__(self):
-        self.nome = None
-        self.atk = None
-        self.desc = None
-        self.equipado = False
+    def __init__(self, nome, atk, desc, equipado):
+        self.nome = nome
+        self.atk = atk
+        self.desc = desc
+        self.equipado = equipado
 
 lista_armas = [
     {'nome': 'Adaga enferrujada', 'atk': 3, 'desc': 'Parece ser bem antiga', 'equipado': False},
     {'nome': 'Varinha capenga', 'atk': 3, 'desc': 'É nova, mas bem barata', 'equipado': False},
+    {'nome': 'Espada longa', 'atk': 4, 'desc': 'A espada de todo guerreiro.', 'equipado': False},
+    {'nome': 'Grimório', 'atk': 2, 'desc': 'O grimório de um mago, o local de sua sabedoria.', 'equipado': False},
+]
+
+class magias:
+    def __init__(self, nome, dano, desc, mana_gasta):
+        self.nome = nome
+        self.dano = dano
+        self.desc = desc
+        self.mana_gasta = mana_gasta
+
+lista_magias = [
+    {'nome': 'Bola de fogo', 'dano': 20, 'desc':'A magia mais forte de um mago', 'mana_gasta': 30}
 ]
 
 lista_monstros_normais = [
@@ -75,12 +90,9 @@ lista_monstros_normais = [
 ]
 
 def arma_aleatoria():
-    chances = [10, 30]
+    chances = [10, 30, 40, 50]
     arma_random = random.choices(lista_armas, weights=chances, k=1)[0]
-    arma = Arma()
-    arma.nome = arma_random['nome']
-    arma.atk = arma_random['atk']
-    arma.desc = arma_random['desc']
+    arma = Arma(arma_random['nome'], arma_random['atk'], arma_random['desc'], arma_random['equipado'])
     return arma
 
 monstro = lista_monstros_normais[0]
@@ -148,10 +160,10 @@ def start_game():
 DESCRICAO = 'DESCRICAO'
 EXAMINAR = 'EXAMINAR'
 SOLVED = 'SOLVED'
-CIMA = 'CIMA'
-BAIXO = 'BAIXO'
-ESQUERDA = 'ESQUERDA'
-DIREITA = 'DIREITA'
+SUBIR = 'SUBIR'
+DESCER = 'DESCER'
+AVANÇAR = 'AVANÇAR'
+RETORNAR = 'RETORNAR'
 
 lugares_resolvidos = {
     'a1': False, 'a2': False, 'a3': False, 'a4': False,
@@ -166,10 +178,10 @@ mapa = {
         'DESCRICAO': 'Local de início, você começa aqui!',
         'EXAMINAR': 'Você vê duas galinhas.',
         'SOLVED': False,
-        'CIMA': '',
-        'BAIXO': '',
-        'ESQUERDA': 'a2',
-        'DIREITA': '',
+        'SUBIR': '',
+        'DESCER': '',
+        'AVANÇAR': 'a2',
+        'RETORNAR': '',
         'MONSTRO': ''
     },
     'a2': {
@@ -177,10 +189,10 @@ mapa = {
         'DESCRICAO': 'Descrição da sala 2.',
         'EXAMINAR': 'Você observa objetos antigos.',
         'SOLVED': False,
-        'CIMA': '',
-        'BAIXO': 'b1',
-        'ESQUERDA': '',
-        'DIREITA': 'a1',
+        'SUBIR': '',
+        'DESCER': 'b1',
+        'AVANÇAR': '',
+        'RETORNAR': 'a1',
         'MONSTRO': monstro_exemplo
     },
     'b1': {
@@ -188,10 +200,10 @@ mapa = {
         'DESCRICAO': 'Descrição da sala b1.',
         'EXAMINAR': 'Uma escada quebrada e mobília velha.',
         'SOLVED': False,
-        'CIMA': 'a2',
-        'BAIXO': '',
-        'ESQUERDA': 'b2',
-        'DIREITA': '',
+        'SUBIR': 'a2',
+        'DESCER': '',
+        'AVANÇAR': 'b2',
+        'RETORNAR': '',
         'MONSTRO': monstro_exemplo2
     },
     'b2': {
@@ -199,10 +211,10 @@ mapa = {
         'DESCRICAO': 'Descrição da sala b2.',
         'EXAMINAR': 'Rochas espalhadas pelo chão.',
         'SOLVED': False,
-        'CIMA': '',
-        'BAIXO': 'c1',
-        'ESQUERDA': '',
-        'DIREITA': 'b1',
+        'SUBIR': '',
+        'DESCER': 'c1',
+        'AVANÇAR': '',
+        'RETORNAR': 'b1',
         'MONSTRO': ''
     },
     'c1': {
@@ -210,10 +222,10 @@ mapa = {
         'DESCRICAO': 'Descrição da sala c1.',
         'EXAMINAR': 'Velhas tapeçarias nas paredes.',
         'SOLVED': False,
-        'CIMA': 'b2',
-        'BAIXO': '',
-        'ESQUERDA': 'c2',
-        'DIREITA': '',
+        'SUBIR': 'b2',
+        'DESCER': '',
+        'AVANÇAR': 'c2',
+        'RETORNAR': '',
         'MONSTRO': ''
     },
     'c2': {
@@ -221,10 +233,10 @@ mapa = {
         'DESCRICAO': 'Descrição da sala c2.',
         'EXAMINAR': 'Eco assustador.',
         'SOLVED': False,
-        'CIMA': '',
-        'BAIXO': '',
-        'ESQUERDA': '',
-        'DIREITA': 'c1',
+        'SUBIR': '',
+        'DESCER': '',
+        'AVANÇAR': '',
+        'RETORNAR': 'c1',
         'MONSTRO': ''
     },
 }
@@ -270,8 +282,8 @@ def prompt():
         jogador_examinar()
     # elif acao == 'pegar':
     #     jogador_pegar()
-    elif acao == 'usar':
-        jogador_usar()
+    #elif acao == 'usar':
+    #    jogador_usar()
     elif acao == 'dormir':
         jogador_dormir()
     elif acao == 'mochila':
@@ -297,9 +309,9 @@ def abrir_mochila():
                 print(f'{i+1}. {meu_jogador.mochila[i].nome} ATK: {meu_jogador.mochila[i].atk} desc: {meu_jogador.mochila[i].desc} (EQUIPADO)')
                 continue
             print(f'{i+1}. {meu_jogador.mochila[i].nome} ATK: {meu_jogador.mochila[i].atk} desc: {meu_jogador.mochila[i].desc}')
-        print('--> Use números para selecionar os itens ou [sair]')
+        print('--> Use números para selecionar os itens ou [fechar]')
         escolha = input(">>")
-        if escolha == 'sair':
+        if escolha == 'fechar':
             print_local()
             main_game_loop()
         try:
@@ -311,9 +323,9 @@ def abrir_mochila():
             if meu_jogador.item_equipado:
                 # jogador selecionou item equipado
                 if meu_jogador.mochila[escolha].equipado == True:
-                    print('[desequipar / remover / sair]')
+                    print('[desequipar / remover / fechar]')
                     acao = input('>>').lower()
-                    if acao not in ['desequipar', 'remover', 'sair']:
+                    if acao not in ['desequipar', 'remover', 'fechar']:
                         print('\ncomando inválido')
                         abrir_mochila()
                     
@@ -329,14 +341,14 @@ def abrir_mochila():
                         meu_jogador.mochila.pop(escolha)
                         meu_jogador.atk_final = meu_jogador.atk
                         abrir_mochila()
-                    elif acao == 'sair':
+                    elif acao == 'fechar':
                         print_local()
                         main_game_loop()
                 # jogador selecionou item NÂO equipado
                 else:
-                    print('[equipar / remover / sair]')
+                    print('[equipar / remover / fechar]')
                     acao = input('>>').lower()
-                    if acao not in ['equipar', 'remover', 'sair']:
+                    if acao not in ['equipar', 'remover', 'fechar']:
                         print('\ncomando inválido')
                         abrir_mochila()
 
@@ -355,14 +367,14 @@ def abrir_mochila():
                         print(f'**VOCÊ DROPOU {meu_jogador.mochila[escolha].nome}')
                         meu_jogador.mochila.pop(escolha)
                         abrir_mochila()
-                    elif acao == 'sair':
+                    elif acao == 'fechar':
                         print_local()
                         main_game_loop()
             # jogador selecionou sem item equipado
             else:
-                print('[equipar / remover / sair]')
+                print('[equipar / remover / fechar]')
                 acao = input('>>').lower()
-                if acao not in ['equipar', 'remover', 'sair']:
+                if acao not in ['equipar', 'remover', 'fechar']:
                     print('\ncomando inválido')
                     abrir_mochila()
                 
@@ -376,7 +388,7 @@ def abrir_mochila():
                     print(f'**VOCÊ DROPOU {meu_jogador.mochila[escolha].nome}')
                     meu_jogador.mochila.pop(escolha)
                     abrir_mochila()
-                elif acao == 'sair':
+                elif acao == 'fechar':
                     print_local()
                     main_game_loop()
         except:
@@ -408,11 +420,17 @@ def luta(monstro):
         intervalo()
         
     elif acao == 'magia':
-        print('Você ainda não sabe magias')
-        loading()
-        meu_jogador.vida -= monstro.atk
-        print(f'o {monstro.nome} te ataca')
-        intervalo()
+        if meu_jogador.magias:
+            for i in range(len(meu_jogador.magias)):
+                magia = meu_jogador.magias[i]
+                print(f'{i+1}. {magia.nome} | DANO: {magia.dano} | custo de mana: {magia.mana_gasta} | desc: {magia.desc}')
+                input(">>")
+        else:
+            print('Você ainda não sabe magias')
+            loading()
+            meu_jogador.vida -= monstro.atk
+            print(f'o {monstro.nome} te ataca')
+            intervalo()
     elif acao == 'fugir':
         fugir()
     
@@ -469,12 +487,28 @@ def mostrar_status():
         print(f'arma: {meu_jogador.item_equipado.nome} ATK: {meu_jogador.item_equipado.atk}')
 
 def jogador_dormir():
-    print("Dormindo...")
+    if meu_jogador.local in ['a1', 'c1']:
+        if meu_jogador.vida == meu_jogador.vida_max:
+            print("Dormindo... mas não recupegou vida (hp cheio)")
+        elif meu_jogador.vida < meu_jogador.vida_max:
+            print("dormindo... Você recuperou vida!!")
+            meu_jogador.vida += 5
+            if meu_jogador.vida > meu_jogador.vida_max:
+                meu_jogador.vida = meu_jogador.vida_max
+    else:
+        print('Você não pode dormir aqui.')
+    
 
 def jogador_mover():
-    pergunta = "Para onde deseja se mover? (cima, baixo, esquerda, direita)\n"
+    if meu_jogador.local == 'a1':
+        pergunta = "Para onde deseja se mover? (avançar)\n"
+    elif meu_jogador.local in ['b1', 'c1']:
+        pergunta = "Para onde deseja se mover? (avançar ou subir)\n"
+    elif meu_jogador.local in ['a2', 'b2', 'c2']:
+        pergunta = "para onde deseja se mover? (descer ou retornar)\n"
+    
     dest = input(pergunta).lower()
-    direcoes_validas = ['cima', 'baixo', 'esquerda', 'direita']
+    direcoes_validas = ['subir', 'descer', 'avançar', 'retornar']
     if dest in direcoes_validas:
         destino = mapa[meu_jogador.local][dest.upper()]
         if destino:
@@ -483,12 +517,6 @@ def jogador_mover():
             print("Você não pode se mover nessa direção.")
     else:
         print("Direção inválida.")
-
-def jogador_usar():
-    print("Você usou um item, mas essa função ainda será detalhada.")
-
-def jogador_pegar():
-    print("Você pegou um item, mas essa função ainda será detalhada.")
 
 def movimento_manipulado(destino):
     print(f"\nVocê se moveu para {destino}.")
@@ -538,12 +566,16 @@ def setup_jogo():
         meu_jogador.vida_max = meu_jogador.vida
         meu_jogador.mana = 20
         meu_jogador.mana_max = meu_jogador.mana
-        
+        meu_jogador.item_equipado = Arma('Espada longa', 4, 'A espada de todo guerreiro.', True)
+        meu_jogador.add_item(meu_jogador.item_equipado)
+        meu_jogador.atk_final = meu_jogador.atk + meu_jogador.item_equipado.atk     
+
     elif meu_jogador.classe == 'mago':
         meu_jogador.vida = 40
         meu_jogador.vida_max = meu_jogador.vida
         meu_jogador.mana = 120
         meu_jogador.mana_max = meu_jogador.mana
+        meu_jogador.magias.append(magias('Bola de fogo', 20, 'A magia mais forte de um mago', 30))
     elif meu_jogador.classe == 'despojado':
         meu_jogador.vida = 60
         meu_jogador.vida_max = meu_jogador.vida
