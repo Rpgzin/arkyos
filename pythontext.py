@@ -80,7 +80,19 @@ def mostrar_loja():
             
 def add_item_comprado(item):
     if lista_itens_loja[0]['comprado'] == True:
-        meu_jogador.add_item(item)       
+        meu_jogador.add_item(item)
+
+def pocao_vida():
+    meu_jogador.vida += 15
+    if meu_jogador.vida > meu_jogador.vida_max:
+        meu_jogador.vida = meu_jogador.vida_max
+    print ("Você bebeu a poção!!!")
+
+def pocao_mana():
+    meu_jogador.mana += 15
+    if meu_jogador.mana > meu_jogador.mana_max:
+        meu_jogador.mana = meu_jogador.mana_max
+    print ("Você bebeu a poção!!!")
 
 lista_itens_loja = [
     { 'nome': 'Espada de ferro', 'atk': 5, 'preco': 100, 'desc': 'Uma espada de ferro, muito forte.', 'item': 'espada de ferro', 'comprado': False, 'equipado': False, 'consumivel': False},
@@ -336,7 +348,7 @@ def acao_loja(escolha):
 def comprar():
         lista_itens_loja[0]['comprado'] = True
         item = lista_itens_loja[0]
-        item_add = Item(item['nome'], item['atk'], item['desc'], item['equipado'])
+        item_add = Item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'])
         add_item_comprado(item_add)
     
 def vender(self):
@@ -414,7 +426,23 @@ def abrir_mochila():
                         print_local()
                 # jogador selecionou item NÂO equipado
                 else:
+                    if meu_jogador.mochila[escolha].consumivel:
+                        print( '[usar / remover / fechar]')
+                        acao = input('>>').lower()
+                        if acao not in ['usar', 'remover', 'fechar']:
+                            print('\ncomando inválido')
+                            abrir_mochila()
+                        if acao == 'usar':
+                            if meu_jogador.mochila[escolha].nome == 'Pocao de vida':
+                                pocao_vida()
+                                meu_jogador.mochila.pop(escolha)
+                                main_game_loop()
+                            elif meu_jogador.mochila[escolha].nome == 'Pocao de mana':
+                                pocao_mana()
+                                meu_jogador.mochila.pop(escolha)
+                                main_game_loop()
                     print('[equipar / remover / fechar]')
+                    
                     acao = input('>>').lower()
                     if acao not in ['equipar', 'remover', 'fechar']:
                         print('\ncomando inválido')
@@ -439,6 +467,21 @@ def abrir_mochila():
                         print_local()
             # jogador selecionou sem item equipado
             else:
+                if meu_jogador.mochila[escolha].consumivel:
+                        print( '[usar / remover / fechar]')
+                        acao = input('>>').lower()
+                        if acao not in ['usar', 'remover', 'fechar']:
+                            print('\ncomando inválido')
+                            abrir_mochila()
+                        if acao == 'usar':
+                            if meu_jogador.mochila[escolha].nome == 'Pocao de vida':
+                                pocao_vida()
+                                meu_jogador.mochila.pop(escolha)
+                                main_game_loop()
+                            elif meu_jogador.mochila[escolha].nome == 'Pocao de mana':
+                                pocao_mana()
+                                meu_jogador.mochila.pop(escolha)
+                                main_game_loop()
                 print('[equipar / remover / fechar]')
                 acao = input('>>').lower()
                 if acao not in ['equipar', 'remover', 'fechar']:
@@ -661,27 +704,29 @@ def setup_jogo():
     if meu_jogador.classe == 'guerreiro':
         pocao1 = lista_consumiveis[0]
         arma_padrao = lista_armas[2]
-        meu_jogador.vida = 120
+        meu_jogador.vida = 100
         meu_jogador.vida_max = meu_jogador.vida
-        meu_jogador.mana = 20
+        meu_jogador.mana = 50
         meu_jogador.mana_max = meu_jogador.mana
-        meu_jogador.item_equipado = Item(arma_padrao['nome'], arma_padrao['atk'], arma_padrao['desc'], arma_padrao['equipado'], arma_padrao['consumivel'])
+        meu_jogador.item_equipado = Item(arma_padrao['nome'], arma_padrao['atk'], arma_padrao['desc'], True, arma_padrao['consumivel'])
         meu_jogador.add_item(meu_jogador.item_equipado)
         meu_jogador.atk_final = meu_jogador.atk + meu_jogador.item_equipado.atk
         meu_jogador.add_item(Item(pocao1['nome'], pocao1['atk'], pocao1['desc'], pocao1['equipado'], pocao1['consumivel']))
 
     elif meu_jogador.classe == 'mago':
+        pocao2 = lista_consumiveis[1]
         magia_basica = lista_magias[0]
-        meu_jogador.vida = 40
+        meu_jogador.vida = 50
         meu_jogador.vida_max = meu_jogador.vida
-        meu_jogador.mana = 120
+        meu_jogador.mana = 100
         meu_jogador.mana_max = meu_jogador.mana
         meu_jogador.magias.append(Magia(magia_basica['nome'], magia_basica['dano'], magia_basica['desc'], magia_basica['mana_gasta']))
+        meu_jogador.add_item(Item(pocao2['nome'], pocao2['atk'], pocao2['desc'], pocao2['equipado'], pocao2['consumivel']))
 
-    elif meu_jogador.classe == 'despojado':
-        meu_jogador.vida = 60
+    elif meu_jogador.classe == 'monge':
+        meu_jogador.vida = 150
         meu_jogador.vida_max = meu_jogador.vida
-        meu_jogador.mana = 60
+        meu_jogador.mana = 00
         meu_jogador.mana_max = meu_jogador.mana
 
     fala1 = f"Bem-vindo, {meu_jogador.nome} o {meu_jogador.classe.capitalize()}!\n"
