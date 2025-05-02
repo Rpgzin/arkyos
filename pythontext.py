@@ -24,18 +24,21 @@ class Player:
         self.nome = ''
         self.classe = ''
         self.nivel = 1
-        self.exp = 0
-        self.exp_max = 100
+        self.xp = 0
+        self.xp_max = 100
+        self.vida_base = 0
         self.vida = 0
         self.vida_max = 0
+        self.mana_base = 0
         self.mana = 0
         self.mana_max = 0
         self.forca = 1
         self.fortitude = 1
         self.inteligencia = 1
+        self.atk_base = 0
         self.atk = 0
         self.dano_magico = 0
-        self.ouro = 0
+        self.ouro = 500
         self.atk_final = self.atk
         self.item_equipado = None
         self.mochila = []
@@ -48,48 +51,50 @@ class Player:
         self.mochila.append(item)
 meu_jogador = Player()
 
-def calcular_atributos(self):
-    self.vida_max = self.vida_max + (self.fortitude * 10)
-    self.vida = self.vida_max
-    self.mana_max = self.mana_max + (self.inteligencia * 8)
-    self.mana = self.mana_max
-    self.atk = self.atk + (self.forca * 2)
-    self.atk_final = self.atk
-    self.dano_magico = self.inteligencia * 2
+def calcular_atributos(jogador):
+    jogador.vida_max = jogador.vida_base + (jogador.fortitude * 10)
+    jogador.vida = jogador.vida_max
+    jogador.mana_max = jogador.mana_base + (jogador.inteligencia * 8)
+    jogador.mana = jogador.mana_max
+    jogador.atk = jogador.atk_base + (jogador.forca * 2)
+    jogador.atk_final = jogador.atk
+    if jogador.item_equipado:
+        jogador.atk_final += jogador.item_equipado.atk
+    jogador.dano_magico = jogador.inteligencia * 2
 
-def subi_nivel(self):
-    self.nivel += 1
-    print(f'{self.nome} subiu de nivel para #{self.nivel}!!!')
+def subi_nivel(jogador):
+    jogador.nivel += 1
+    print(f'{jogador.nome} subiu de nivel para #{jogador.nivel}!!!')
     pontos = 1
     while pontos > 0:
         print(f'Pontos restantes: {pontos}')
         escolha = input("Aumentar Forca (for), Fortitude (fort) ou Inteligência (int): ").lower()
         if escolha == 'for':
-            self.forca += 1
-            print(f'for: {self.forca}')
+            jogador.forca += 1
+            print(f'for: {jogador.forca}')
         elif escolha == 'fort':
-            self.fortitude += 1
-            print(f'fortitude: {self.fortitude}')
+            jogador.fortitude += 1
+            print(f'fortitude: {jogador.fortitude}')
         elif escolha == 'int':
-            self.inteligencia += 1
-            print(f'inteligência: {self.inteligencia}')
+            jogador.inteligencia += 1
+            print(f'inteligência: {jogador.inteligencia}')
         else:
             print('Comando invádido')
             continue
         pontos -= 1
     calcular_atributos(meu_jogador)
 
-def exibir_status(self):
+def exibir_status(jogador):
     limpar_tela()
     print('='*60)
     print('STATUS'.upper())
-    print(f'{self.nome} LVL:{self.nivel}')
-    print(f'vida: {self.vida}/{self.vida_max} ATK: {self.atk}/MAG.ATK: {self.dano_magico}/ MANA: {self.mana}/{self.mana_max}')
-    if self.item_equipado:
-        print(f'arma: {self.item_equipado.nome} ATK: {self.item_equipado.atk}')
+    print(f'{jogador.nome} LVL:{jogador.nivel} XP: {jogador.xp}/{jogador.xp_max}')
+    print(f'vida: {jogador.vida}/{jogador.vida_max} ATK: {jogador.atk}/MAG.ATK: {jogador.dano_magico}/ MANA: {jogador.mana}/{jogador.mana_max}')
+    if jogador.item_equipado:
+        print(f'arma: {jogador.item_equipado.nome} ATK: {jogador.item_equipado.atk}')
     else:
         print('arma: sem arma equipada')
-    print(f'forca: {self.forca} fortitude: {self.fortitude} inteligência: {self.inteligencia}')
+    print(f'forca: {jogador.forca} fortitude: {jogador.fortitude} inteligência: {jogador.inteligencia}')
 
 
 class Monstro:
@@ -104,8 +109,8 @@ class Monstro:
         self.item = arma_aleatoria()
 
 def experiencia(monstro):
-    meu_jogador.exp += monstro.xp
-    if meu_jogador.exp >= meu_jogador.exp_max:
+    meu_jogador.xp += monstro.xp
+    if meu_jogador.xp >= meu_jogador.xp_max:
         subi_nivel(meu_jogador)
 
 class Item:
@@ -124,14 +129,45 @@ class Magia:
         self.mana_gasta = mana_gasta 
 
 def mostrar_loja():
-        if meu_jogador.local != 'b2':
-            print('NãO HÁ LOJAS POR AQUI')
-            main_game_loop()
+        # if meu_jogador.local != 'b2':
+        #     print('NãO HÁ LOJAS POR AQUI')
+        #     main_game_loop()
         print('Itens para venda:')
-        for i in range(0, len(lista_itens_loja)):
+        for i in range(len(lista_itens_loja)):
             status = '(COMPRADO)' if lista_itens_loja[i]["comprado"] else ''
-            print(f"Nome: {lista_itens_loja[i]['nome']} - Preço: {lista_itens_loja[i]['preco']} - Descricao: {lista_itens_loja[i]['desc']} {status}\n")
+            if not lista_itens_loja[i]['consumivel']:
+                print(f"{i+1} Nome: {lista_itens_loja[i]['nome']} | ATK: {lista_itens_loja[i]['atk']} | Preço: {lista_itens_loja[i]['preco']} - Descricao: {lista_itens_loja[i]['desc']} {status}\n")
+                continue
+            print(f"{i+1} Nome: {lista_itens_loja[i]['nome']} | Preço: {lista_itens_loja[i]['preco']} | Descricao: {lista_itens_loja[i]['desc']} {status}\n")
+        print('-> USE NÚMEROS PARA SELECIONAR O ITEM OU [sair]')
+        escolha = input('>>')
+        try:
+            escolha = int(escolha)-1
+            if escolha not in range(0, len(lista_itens_loja)):
+                print('**ITEM INVÁLIDO**')
+                mostrar_loja()
             
+            if lista_itens_loja[escolha]['consumivel']:
+                print(f"Nome: {lista_itens_loja[escolha]['nome']} | Preço: {lista_itens_loja[escolha]['preco']} | Descricao: {lista_itens_loja[escolha]['desc']} {status}\n")
+            else:
+                print(f"Nome: {lista_itens_loja[escolha]['nome']} | ATK: {lista_itens_loja[escolha]['atk']} | Preço: {lista_itens_loja[escolha]['preco']} | Descricao: {lista_itens_loja[escolha]['desc']} {status}\n")
+            
+            print['[compra | voltar | sair]']
+            acao = input('>>')
+            if acao not in ['comprar', 'voltar']:
+                print('**COMANDO INVÁLIDO**')
+                mostrar_loja()
+            if acao == 'comprar':
+                comprar(escolha)
+            elif acao == 'voltar':
+                mostrar_loja()
+            elif acao == 'sair':
+                print_local()
+
+        except:
+            print('**ITEM INVÁLIDO**')
+            mostrar_loja()
+
 def add_item_comprado(item):
     if lista_itens_loja[0]['comprado'] == True:
         meu_jogador.add_item(item)
@@ -477,11 +513,13 @@ def acao_loja(escolha):
     elif escolha == 'vender':
         vender()
 
-def comprar():
-        lista_itens_loja[0]['comprado'] = True
-        item = lista_itens_loja[0]
+def comprar(escolha):
+        lista_itens_loja[escolha]['comprado'] = True
+        item = lista_itens_loja[escolha]
         item_add = Item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'])
-        add_item_comprado(item_add)
+        print(f'**VOCE COMPROU {item_add.nome}**')
+        meu_jogador.add_item(item_add)
+        mostrar_loja()
     
 def vender(self):
     self.vendido = True
@@ -518,6 +556,9 @@ def abrir_mochila():
     if meu_jogador.mochila:
         print (f'Ouro: {meu_jogador.ouro}')
         for i in range(len(meu_jogador.mochila)):
+            if meu_jogador.mochila[i].consumivel:
+                print(f'{i+1}. {meu_jogador.mochila[i].nome} desc: {meu_jogador.mochila[i].desc}')
+                continue
             if meu_jogador.mochila[i].equipado == True:
                 print(f'{i+1}. {meu_jogador.mochila[i].nome} ATK: {meu_jogador.mochila[i].atk} desc: {meu_jogador.mochila[i].desc} (EQUIPADO)')
                 continue
@@ -784,7 +825,7 @@ def fugir():
 
 def mostrar_status(self):
     print('='*60)
-    print(f'{self.nome} LVL:{self.nivel}')
+    print(f'{self.nome} LVL:{self.nivel} XP: {self.xp}/{self.xp_max}')
     print(f'vida: {self.vida}/{self.vida_max} ATK: {self.atk} MANA: {self.mana}/{self.mana_max}')
     if self.item_equipado:
         print(f'arma: {self.item_equipado.nome} ATK: {self.item_equipado.atk}')
@@ -811,11 +852,13 @@ def jogador_mover():
     elif meu_jogador.local in ['a2', 'c2']:
         pergunta = "para onde deseja se mover? (descer ou retornar)\n"
     elif meu_jogador.local in ['b2']:
-        pergunta = "Há uma loja no andar. O deseja fazer? (loja, descer ou retornar)\n"
+        pergunta = "Há uma loja no andar. para onde deseja se mover? (loja, descer ou retornar)\n"
     
     dest = input(pergunta).lower()
-    direcoes_validas = ['subir', 'descer', 'avançar', 'retornar']
+    direcoes_validas = ['subir', 'descer', 'avançar', 'retornar', 'loja']
     if dest in direcoes_validas:
+        if dest == 'loja':
+            mostrar_loja()
         destino = mapa[meu_jogador.local][dest.upper()]
         if destino:
             movimento_manipulado(destino)
@@ -876,10 +919,14 @@ def setup_jogo():
         pocao_vida_media = lista_consumiveis[1]
         pocao_vida_alta = lista_consumiveis[2]
         arma_padrao = lista_armas[2]
-        meu_jogador.vida = 100
+        meu_jogador.vida_base = 100
+        meu_jogador.vida = meu_jogador.vida_base
         meu_jogador.vida_max = meu_jogador.vida
-        meu_jogador.mana = 50
+        meu_jogador.mana_base = 30
+        meu_jogador.mana = meu_jogador.mana_base
         meu_jogador.mana_max = meu_jogador.mana
+        meu_jogador.atk_base = 6
+        meu_jogador.atk = meu_jogador.atk_base
         meu_jogador.item_equipado = Item(arma_padrao['nome'], arma_padrao['atk'], arma_padrao['desc'], True, arma_padrao['consumivel'])
         meu_jogador.add_item(meu_jogador.item_equipado)
         meu_jogador.atk_final = meu_jogador.atk + meu_jogador.item_equipado.atk
@@ -893,10 +940,14 @@ def setup_jogo():
         pocao_mana_media = lista_consumiveis[4]
         pocao_mana_alta = lista_consumiveis[5]
         magia_basica = lista_magias[0]
-        meu_jogador.vida = 50
+        meu_jogador.vida_base = 50
+        meu_jogador.vida = meu_jogador.vida_base
         meu_jogador.vida_max = meu_jogador.vida
-        meu_jogador.mana = 100
+        meu_jogador.mana_base = 100
+        meu_jogador.mana = meu_jogador.mana_base
         meu_jogador.mana_max = meu_jogador.mana
+        meu_jogador.atk_base = 5
+        meu_jogador.atk = meu_jogador.atk_base
         meu_jogador.magias.append(Magia(magia_basica['nome'], magia_basica['dano'], magia_basica['desc'], magia_basica['mana_gasta']))
         meu_jogador.add_item(Item(pocao_mana_baixa['nome'], pocao_mana_baixa['atk'], pocao_mana_baixa['desc'], pocao_mana_baixa['equipado'], pocao_mana_baixa['consumivel']))
         meu_jogador.add_item(Item(pocao_mana_media['nome'], pocao_mana_media['atk'], pocao_mana_media['desc'], pocao_mana_media['equipado'], pocao_mana_media['consumivel']))
@@ -904,10 +955,14 @@ def setup_jogo():
         calcular_atributos(meu_jogador)
 
     elif meu_jogador.classe == 'monge':
-        meu_jogador.vida = 150
+        meu_jogador.vida_base = 150
+        meu_jogador.vida = meu_jogador.vida_base
         meu_jogador.vida_max = meu_jogador.vida
-        meu_jogador.mana = 00
+        meu_jogador.mana_base = 0
+        meu_jogador.mana = meu_jogador.mana_base
         meu_jogador.mana_max = meu_jogador.mana
+        meu_jogador.atk_base = 9
+        meu_jogador.atk = meu_jogador.atk_base
         calcular_atributos(meu_jogador)
 
     fala1 = f"Bem-vindo, {meu_jogador.nome} o {meu_jogador.classe.capitalize()}!\n"
