@@ -24,10 +24,12 @@ class Player:
         self.nome = ''
         self.classe = ''
         self.nivel = 1
+        self.exp = 0
+        self.exp_max = 100
         self.vida = 0
-        self.vida_max = self.vida
+        self.vida_max = 0
         self.mana = 0
-        self.mana_max = self.mana
+        self.mana_max = 0
         self.forca = 1
         self.fortitude = 1
         self.inteligencia = 1
@@ -44,34 +46,38 @@ class Player:
     
     def add_item(self, item):
         self.mochila.append(item)
+meu_jogador = Player()
 
 def calcular_atributos(self):
-    self.vida_max = self.vida + (self.fortitude * 10)
+    self.vida_max = self.vida_max + (self.fortitude * 10)
     self.vida = self.vida_max
-    self.mana_max = self.mana + (self.inteligencia * 8)
+    self.mana_max = self.mana_max + (self.inteligencia * 8)
     self.mana = self.mana_max
-    self.atk = 5 + (self.forca * 2)
+    self.atk = self.atk + (self.forca * 2)
     self.atk_final = self.atk
     self.dano_magico = self.inteligencia * 2
 
 def subi_nivel(self):
     self.nivel += 1
     print(f'{self.nome} subiu de nivel para #{self.nivel}!!!')
-    pontos = 4
+    pontos = 1
     while pontos > 0:
         print(f'Pontos restantes: {pontos}')
-        escolha = input("Aumentar (Forca, Fortitude ou Inteligência): ").lower()
-        if escolha == 'forca':
+        escolha = input("Aumentar Forca (for), Fortitude (fort) ou Inteligência (int): ").lower()
+        if escolha == 'for':
             self.forca += 1
-        elif escolha == 'fortitude':
+            print(f'for: {self.forca}')
+        elif escolha == 'fort':
             self.fortitude += 1
-        elif escolha == 'inteligência':
+            print(f'fortitude: {self.fortitude}')
+        elif escolha == 'int':
             self.inteligencia += 1
+            print(f'inteligência: {self.inteligencia}')
         else:
             print('Comando invádido')
             continue
         pontos -= 1
-    self.calcular_atributos()
+    calcular_atributos(meu_jogador)
 
 def exibir_status(self):
     limpar_tela()
@@ -85,6 +91,7 @@ def exibir_status(self):
         print('arma: sem arma equipada')
     print(f'forca: {self.forca} fortitude: {self.fortitude} inteligência: {self.inteligencia}')
 
+
 class Monstro:
     def __init__(self, nome, vida, nivel, atk, xp, ouro):
         self.nome = nome
@@ -95,6 +102,11 @@ class Monstro:
         self.xp = xp
         self.ouro = ouro
         self.item = arma_aleatoria()
+
+def experiencia(monstro):
+    meu_jogador.exp += monstro.xp
+    if meu_jogador.exp >= meu_jogador.exp_max:
+        subi_nivel(meu_jogador)
 
 class Item:
     def __init__(self, nome, atk, desc, equipado, consumivel):
@@ -188,8 +200,8 @@ lista_magias = [
 ]
 
 lista_monstros_normais = [
-    {'nome': 'slime', 'vida': 10, 'nivel': 1, 'atk': 2, 'xp': 5, 'ouro': 100},
-    {'nome': 'goblin', 'vida': 20, 'nivel': 2, 'atk': 4, 'xp': 10, 'ouro': 200},
+    {'nome': 'slime', 'vida': 10, 'nivel': 1, 'atk': 2, 'xp': 100, 'ouro': 100},
+    {'nome': 'goblin', 'vida': 20, 'nivel': 2, 'atk': 4, 'xp': 100, 'ouro': 200},
     {'nome': 'lobo selvagem', 'vida': 25, 'nivel': 3, 'atk': 5, 'xp': 15, 'ouro': 100},
     {'nome': 'esqueleto', 'vida': 30, 'nivel': 4, 'atk': 6, 'xp': 20, 'ouro': 200},
     {'nome': 'zumbi', 'vida': 35, 'nivel': 4, 'atk': 4, 'xp': 18, 'ouro': 100},
@@ -210,7 +222,7 @@ monstro = lista_monstros_normais[0]
 monstro2 = lista_monstros_normais[1]
 monstro_exemplo = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'], monstro['ouro'])
 monstro_exemplo2 = Monstro(monstro2['nome'], monstro2['vida'], monstro2['nivel'], monstro2['atk'], monstro2['xp'], monstro2['ouro'])
-meu_jogador = Player()
+
 
 ######### Tela de título #########
 
@@ -733,6 +745,7 @@ def luta(monstro, meu_jogador):
     elif monstro.vida <= 0:
         limpar_tela()
         print(f'VOCÊ DERROTOU {monstro.nome}')
+        experiencia(monstro)
         drop(monstro)
 
 def drop(monstro):
