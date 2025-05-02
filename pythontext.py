@@ -28,7 +28,11 @@ class Player:
         self.vida_max = self.vida
         self.mana = 0
         self.mana_max = self.mana
-        self.atk = 5
+        self.forca = 1
+        self.fortitude = 1
+        self.inteligencia = 1
+        self.atk = 0
+        self.dano_magico = 0
         self.ouro = 0
         self.atk_final = self.atk
         self.item_equipado = None
@@ -40,6 +44,46 @@ class Player:
     
     def add_item(self, item):
         self.mochila.append(item)
+
+def calcular_atributos(self):
+    self.vida_max = self.vida + (self.fortitude * 10)
+    self.vida = self.vida_max
+    self.mana_max = self.mana + (self.inteligencia * 8)
+    self.mana = self.mana_max
+    self.atk = 5 + (self.forca * 2)
+    self.atk_final = self.atk
+    self.dano_magico = self.inteligencia * 2
+
+def subi_nivel(self):
+    self.nivel += 1
+    print(f'{self.nome} subiu de nivel para #{self.nivel}!!!')
+    pontos = 4
+    while pontos > 0:
+        print(f'Pontos restantes: {pontos}')
+        escolha = input("Aumentar (Forca, Fortitude ou Inteligência): ").lower()
+        if escolha == 'forca':
+            self.forca += 1
+        elif escolha == 'fortitude':
+            self.fortitude += 1
+        elif escolha == 'inteligência':
+            self.inteligencia += 1
+        else:
+            print('Comando invádido')
+            continue
+        pontos -= 1
+    self.calcular_atributos()
+
+def exibir_status(self):
+    limpar_tela()
+    print('='*60)
+    print('STATUS'.upper())
+    print(f'{self.nome} LVL:{self.nivel}')
+    print(f'vida: {self.vida}/{self.vida_max} ATK: {self.atk}/MAG.ATK: {self.dano_magico}/ MANA: {self.mana}/{self.mana_max}')
+    if self.item_equipado:
+        print(f'arma: {self.item_equipado.nome} ATK: {self.item_equipado.atk}')
+    else:
+        print('arma: sem arma equipada')
+    print(f'forca: {self.forca} fortitude: {self.fortitude} inteligência: {self.inteligencia}')
 
 class Monstro:
     def __init__(self, nome, vida, nivel, atk, xp, ouro):
@@ -65,16 +109,7 @@ class Magia:
         self.nome = nome
         self.dano = dano
         self.desc = desc
-        self.mana_gasta = mana_gasta
-
-# class Item_loja:
-#     def __init__(self, nome, preco, desc, item):
-#         self.nome = nome
-#         self.preco = preco
-#         self.desc = desc
-#         self.item = item
-#         self.vendido = False
-#         self.comprado = False  
+        self.mana_gasta = mana_gasta 
 
 def mostrar_loja():
         if meu_jogador.local != 'b2':
@@ -317,6 +352,59 @@ mapa = {
     },
 }
 
+def mostrar_mapa():
+    if meu_jogador.local == 'a1':
+        limpar_tela()
+        print('='*60)
+        print('Mapa:')
+        print('''
+                |x| |
+                | | |
+                | | |
+    ''')
+    elif meu_jogador.local == 'a2':
+        limpar_tela()
+        print('Mapa:')
+        print('''
+                | |x|
+                | | |
+                | | |
+    ''')
+    elif meu_jogador.local == 'b1':
+        limpar_tela()
+        print('Mapa:')
+        print('''
+                | | |
+                |x| |
+                | | |
+    ''')
+    elif meu_jogador.local == 'b2':
+        limpar_tela()
+        print('Mapa:')
+        print('''
+                | | |
+                | |x|
+                | | |
+    ''')
+    elif meu_jogador.local == 'c1':
+        limpar_tela()
+        print('Mapa:')
+        print('''
+                | | |
+                | | |
+                |x| |
+    ''')
+    elif meu_jogador.local == 'c2':
+        limpar_tela()
+        print('Mapa:')
+        print('''
+                | | |
+                | | |
+                | |x|
+    ''')
+    
+
+
 #mapa mental dos andares:
 #|a1|a2|
 #|b1|b2|
@@ -334,7 +422,7 @@ def print_local():
     print(f"# {local_nome.upper()} #")
     print(f"# {local_desc} #")
     print('#' * (4 + len(local_nome)))
-    mostrar_status()
+    mostrar_status(meu_jogador)
     if mapa[meu_jogador.local]['MONSTRO'] != '':
         print(f"há um {mapa[meu_jogador.local]['MONSTRO'].nome} na sala. O que deseja fazer?\n[lutar / fugir / falar]")
         escolha = input(">>").lower()
@@ -344,20 +432,20 @@ def print_local():
     main_game_loop()
 
 def prompt():
-    print("\n" + "=====================================")
+    print("\n" + "="*60)
     print("O que deseja fazer?")
     acao = input("->").lower()
-    acoes_aceitas = ['examinar', 'mover', 'loja', 'sair', 'ajuda', 'olhar', 'inspecionar', 'ir', 'teleportar', 'dormir', 'mochila', 'mapa']
+    acoes_aceitas = ['status', 'mover', 'loja', 'sair', 'ajuda', 'olhar', 'inspecionar', 'teleportar', 'dormir', 'mochila', 'mapa']
     while acao not in acoes_aceitas:
         print("Ação inválida, tente novamente.\n")
         acao = input("-> ").lower()
     if acao == 'sair':
         sair()
-    if acao in ['mover', 'ir', 'teleportar']:
+    if acao in ['mover', 'teleportar']:
         jogador_mover()
     elif acao == 'ajuda':
         ajuda_menu()
-    elif acao in ['examinar', 'olhar', 'inspecionar']:
+    elif acao in ['olhar', 'inspecionar']:
         jogador_examinar()
     elif acao == 'dormir':
         jogador_dormir()
@@ -366,6 +454,10 @@ def prompt():
     elif acao == 'loja':
         mostrar_loja()
         acao_loja(input('>>').lower())
+    elif acao == 'status':
+        exibir_status(meu_jogador)
+    elif acao == 'mapa':
+        mostrar_mapa()
     
 def acao_loja(escolha):
     if escolha == 'comprar':
@@ -398,7 +490,7 @@ def sair():
 
 def acao_luta(escolha, monstro):
     if escolha == 'lutar':
-        luta(monstro)
+        luta(monstro, meu_jogador)
     elif escolha == 'fugir':
         fugir()
     elif escolha == 'falar':
@@ -406,7 +498,7 @@ def acao_luta(escolha, monstro):
         print(f'O {monstro.nome} não te entende e te ataca')
         intervalo()
         meu_jogador.vida -= monstro.atk
-        luta(monstro)
+        luta(monstro, meu_jogador)
 
 def abrir_mochila():
     if meu_jogador.game_over:
@@ -567,17 +659,17 @@ def abrir_mochila():
     else:
         print("Mochila vazia")
 
-def luta(monstro):
+def luta(monstro, meu_jogador):
     print(f'\n{monstro.nome} #{monstro.nivel}')
     print(f'vida: {monstro.vida}/{monstro.vida_max} ATK: {monstro.atk}')
     print('-'*50)
-    mostrar_status()
+    mostrar_status(meu_jogador)
     print('atacar / magia / fugir')
     acao = input(">>").lower()
     if acao not in ['atacar', 'magia', 'fugir']:
         limpar_tela()
         print("comando invádido".upper())
-        luta(monstro)
+        luta(monstro, meu_jogador)
     if acao == 'atacar':
         monstro.vida -= meu_jogador.atk_final
         print(f"você ataca {monstro.nome}\n")
@@ -594,20 +686,20 @@ def luta(monstro):
         if meu_jogador.magias:
             for i in range(len(meu_jogador.magias)):
                 magia = meu_jogador.magias[i]
-                print(f'{i+1}. {magia.nome} | DANO: {magia.dano} | custo de mana: {magia.mana_gasta} | desc: {magia.desc}')
+                print(f'{i+1}. {magia.nome} | DANO: {magia.dano} + DANO ADICIONAL: {meu_jogador.dano_magico} | custo de mana: {magia.mana_gasta} | desc: {magia.desc}')
             print("Use números para escolher as magias")
             escolha = input(">>")
             try:
                 escolha = int(escolha)-1
                 if escolha not in range(0, len(meu_jogador.magias)):
                     print('Magia inválida')
-                    luta(monstro)
+                    luta(monstro, meu_jogador)
 
                 if meu_jogador.mana < meu_jogador.magias[escolha].mana_gasta:
                     print('**MANA INSUFICIENTE**')
-                    luta(monstro)
+                    luta(monstro, meu_jogador)
 
-                monstro.vida -= meu_jogador.magias[escolha].dano
+                monstro.vida -= (meu_jogador.magias[escolha].dano + meu_jogador.dano_magico)
                 meu_jogador.mana -= meu_jogador.magias[escolha].mana_gasta
                 print(f'Você lança {meu_jogador.magias[escolha].nome} em {monstro.nome}')
                 loading()
@@ -620,7 +712,7 @@ def luta(monstro):
                 intervalo()
             except:
                 print('\nComando inválido')
-                luta(monstro)
+                luta(monstro, meu_jogador)
         else:
             print('Você ainda não sabe magias')
             loading()
@@ -631,7 +723,7 @@ def luta(monstro):
         fugir()
     
     if meu_jogador.vida > 0 and monstro.vida > 0:
-        luta(monstro)
+        luta(monstro, meu_jogador)
         
     if meu_jogador.vida <= 0:
         meu_jogador.local = 'a1'
@@ -677,11 +769,14 @@ def fugir():
     print('você voltou para a sala anterior')
     main_game_loop()
 
-def mostrar_status():
-    print(f'{meu_jogador.nome} #{meu_jogador.nivel}')
-    print(f'vida: {meu_jogador.vida}/{meu_jogador.vida_max} ATK: {meu_jogador.atk} MANA: {meu_jogador.mana}/{meu_jogador.mana_max}')
-    if meu_jogador.item_equipado:
-        print(f'arma: {meu_jogador.item_equipado.nome} ATK: {meu_jogador.item_equipado.atk}')
+def mostrar_status(self):
+    print('='*60)
+    print(f'{self.nome} LVL:{self.nivel}')
+    print(f'vida: {self.vida}/{self.vida_max} ATK: {self.atk} MANA: {self.mana}/{self.mana_max}')
+    if self.item_equipado:
+        print(f'arma: {self.item_equipado.nome} ATK: {self.item_equipado.atk}')
+    else:
+        print('arma: sem arma equipada')
 
 def jogador_dormir():
     if meu_jogador.local in ['a1', 'c1']:
@@ -749,13 +844,13 @@ def setup_jogo():
         time.sleep(0.001)
     meu_jogador.nome = input("-> ")
 
-    pergunta2 = "Qual sua classe?\n(Escolha: guerreiro, mago ou despojado)\n"
+    pergunta2 = "Qual sua classe?\n(Escolha: guerreiro, mago ou monge)\n"
     for caractere in pergunta2:
         sys.stdout.write(caractere)
         sys.stdout.flush()
         time.sleep(0.001)
 
-    classes_validas = ['guerreiro', 'mago', 'despojado']
+    classes_validas = ['guerreiro', 'mago', 'monge']
     jogador_classe = input("-> ").lower()
     while jogador_classe not in classes_validas:
         print("Classe inválida, tente novamente.")
@@ -778,6 +873,7 @@ def setup_jogo():
         meu_jogador.add_item(Item(pocao_vida_baixa['nome'], pocao_vida_baixa['atk'], pocao_vida_baixa['desc'], pocao_vida_baixa['equipado'], pocao_vida_baixa['consumivel']))
         meu_jogador.add_item(Item(pocao_vida_media['nome'], pocao_vida_media['atk'], pocao_vida_media['desc'], pocao_vida_media['equipado'], pocao_vida_media['consumivel']))
         meu_jogador.add_item(Item(pocao_vida_alta['nome'], pocao_vida_alta['atk'], pocao_vida_alta['desc'], pocao_vida_alta['equipado'], pocao_vida_alta['consumivel']))
+        calcular_atributos(meu_jogador)
 
     elif meu_jogador.classe == 'mago':
         pocao_mana_baixa = lista_consumiveis[3]
@@ -792,12 +888,14 @@ def setup_jogo():
         meu_jogador.add_item(Item(pocao_mana_baixa['nome'], pocao_mana_baixa['atk'], pocao_mana_baixa['desc'], pocao_mana_baixa['equipado'], pocao_mana_baixa['consumivel']))
         meu_jogador.add_item(Item(pocao_mana_media['nome'], pocao_mana_media['atk'], pocao_mana_media['desc'], pocao_mana_media['equipado'], pocao_mana_media['consumivel']))
         meu_jogador.add_item(Item(pocao_mana_alta['nome'], pocao_mana_alta['atk'], pocao_mana_alta['desc'], pocao_mana_alta['equipado'], pocao_mana_alta['consumivel']))
+        calcular_atributos(meu_jogador)
 
     elif meu_jogador.classe == 'monge':
         meu_jogador.vida = 150
         meu_jogador.vida_max = meu_jogador.vida
         meu_jogador.mana = 00
         meu_jogador.mana_max = meu_jogador.mana
+        calcular_atributos(meu_jogador)
 
     fala1 = f"Bem-vindo, {meu_jogador.nome} o {meu_jogador.classe.capitalize()}!\n"
     fala2 = "Espero que se divirta nessa incrível aventura!\n"
