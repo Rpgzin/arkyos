@@ -136,11 +136,14 @@ def mostrar_loja():
         for i in range(len(lista_itens_loja)):
             status = '(COMPRADO)' if lista_itens_loja[i]["comprado"] else ''
             if not lista_itens_loja[i]['consumivel']:
-                print(f"{i+1} Nome: {lista_itens_loja[i]['nome']} | ATK: {lista_itens_loja[i]['atk']} | Preço: {lista_itens_loja[i]['preco']} - Descricao: {lista_itens_loja[i]['desc']} {status}\n")
+                print(f"{i+1}. {lista_itens_loja[i]['nome']} | ATK: {lista_itens_loja[i]['atk']} | Preço: {lista_itens_loja[i]['preco']} - Descricao: {lista_itens_loja[i]['desc']} {status}\n")
                 continue
-            print(f"{i+1} Nome: {lista_itens_loja[i]['nome']} | Preço: {lista_itens_loja[i]['preco']} | Descricao: {lista_itens_loja[i]['desc']} {status}\n")
-        print('-> USE NÚMEROS PARA SELECIONAR O ITEM OU [sair]')
-        escolha = input('>>')
+            print(f"{i+1}. {lista_itens_loja[i]['nome']} | Preço: {lista_itens_loja[i]['preco']} | Descricao: {lista_itens_loja[i]['desc']} {status}\n")
+        print(f'Ouro: {meu_jogador.ouro}')
+        print('-> USE NÚMEROS PARA SELECIONAR O ITEM OU [fechar]')
+        escolha = input('>>').lower()
+        if escolha == 'fechar':
+            print_local()
         try:
             escolha = int(escolha)-1
             if escolha not in range(0, len(lista_itens_loja)):
@@ -148,11 +151,10 @@ def mostrar_loja():
                 mostrar_loja()
             
             if lista_itens_loja[escolha]['consumivel']:
-                print(f"Nome: {lista_itens_loja[escolha]['nome']} | Preço: {lista_itens_loja[escolha]['preco']} | Descricao: {lista_itens_loja[escolha]['desc']} {status}\n")
+                print(f"{lista_itens_loja[escolha]['nome']} | Preço: {lista_itens_loja[escolha]['preco']} | Descricao: {lista_itens_loja[escolha]['desc']} {status}\n")
             else:
-                print(f"Nome: {lista_itens_loja[escolha]['nome']} | ATK: {lista_itens_loja[escolha]['atk']} | Preço: {lista_itens_loja[escolha]['preco']} | Descricao: {lista_itens_loja[escolha]['desc']} {status}\n")
-            
-            print['[compra | voltar | sair]']
+                print(f"{lista_itens_loja[escolha]['nome']} | ATK: {lista_itens_loja[escolha]['atk']} | Preço: {lista_itens_loja[escolha]['preco']} | Descricao: {lista_itens_loja[escolha]['desc']} {status}\n")
+            print('[compra | voltar | fechar]')
             acao = input('>>')
             if acao not in ['comprar', 'voltar']:
                 print('**COMANDO INVÁLIDO**')
@@ -161,13 +163,13 @@ def mostrar_loja():
                 comprar(escolha)
             elif acao == 'voltar':
                 mostrar_loja()
-            elif acao == 'sair':
+            elif acao == 'fechar':
                 print_local()
 
         except:
             print('**ITEM INVÁLIDO**')
             mostrar_loja()
-
+            
 def add_item_comprado(item):
     if lista_itens_loja[0]['comprado'] == True:
         meu_jogador.add_item(item)
@@ -519,6 +521,7 @@ def comprar(escolha):
         item_add = Item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'])
         print(f'**VOCE COMPROU {item_add.nome}**')
         meu_jogador.add_item(item_add)
+        meu_jogador.ouro -= lista_itens_loja[escolha]['preco']
         mostrar_loja()
     
 def vender(self):
