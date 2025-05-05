@@ -65,7 +65,12 @@ def calcular_atributos(jogador):
 def subi_nivel(jogador):
     jogador.nivel += 1
     print(f'{jogador.nome} subiu de nivel para #{jogador.nivel}!!!')
-    pontos = 1
+    pontos = 0
+    while jogador.xp >= jogador.xp_max:
+        pontos += 3
+        resto_xp = jogador.xp - jogador.xp_max
+        jogador.xp = resto_xp
+        jogador.xp_max +=50
     while pontos > 0:
         print(f'Pontos restantes: {pontos}')
         escolha = input("Aumentar Forca (for), Fortitude (fort) ou Inteligência (int): ").lower()
@@ -238,7 +243,7 @@ lista_magias = [
 ]
 
 lista_monstros_normais = [
-    {'nome': 'slime', 'vida': 10, 'nivel': 1, 'atk': 2, 'xp': 100, 'ouro': 100},
+    {'nome': 'slime', 'vida': 10, 'nivel': 1, 'atk': 2, 'xp': 150, 'ouro': 100},
     {'nome': 'goblin', 'vida': 20, 'nivel': 2, 'atk': 4, 'xp': 100, 'ouro': 200},
     {'nome': 'lobo selvagem', 'vida': 25, 'nivel': 3, 'atk': 5, 'xp': 15, 'ouro': 100},
     {'nome': 'esqueleto', 'vida': 30, 'nivel': 4, 'atk': 6, 'xp': 20, 'ouro': 200},
