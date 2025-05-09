@@ -12,9 +12,8 @@ from utilitarios import(
 
 #TO-DO:
 '''
-sistema de GANHAR XP, SUBIR NIVEL
 sistema de SPAWNAR MOSNTRO POR SALA
-comando de ver MAPA
+sistema de VENDA DE ITENS DA MOCHILA
 '''
 ######### Setup do jogador ########
 #ainda to vendo os arquivos
@@ -283,24 +282,42 @@ def navegação_tela_titulo():
 
 def tela_titulo():
     limpar_tela()
-    print('#########################')
-    print('# >Bem vindo ao ARKYOS! #')
-    print('#########################')
-    print('        - Jogar -        ')
-    print('        - Ajuda -        ')
-    print('        - Sair  -        ')
+    titulo ='''
+            #########################
+            # >Bem vindo ao ARKYOS! #
+            #########################
+ '''
+    opcoes = '''
+                   - Jogar -        
+                   - Ajuda -        
+                   - Sair  -      
+            
+          '''
+    for titulo1 in titulo:
+        sys.stdout.write(titulo1)
+        sys.stdout.flush()
+        time.sleep(0.01)
+    for opcao in opcoes:
+        sys.stdout.write(opcao)
+        sys.stdout.flush()
+        time.sleep(0.01)
+
     navegação_tela_titulo()
 
 def ajuda_menu():
     limpar_tela()
-    print('#########################')
-    print('# >Bem vindo ao ARKYOS! #')
-    print('#########################' "\n")
-    print('principais comandos: [mover / olhar / mochila]')
-    print('- Digite mover para se movimentar')
-    print('- Digite seus comandos para executá-los')
-    print('- Use o comando "inspecionar ou olhar" para examinar algo')
-    print('- Boa sorte e não morra :p')
+    print('''
+          #########################
+          # >Bem vindo ao ARKYOS! #
+          #########################'
+          
+  principais comandos: [mover / olhar / mochila / status / mapa]
+          
+    - Digite mover para se movimentar
+    - Digite seus comandos para executá-los
+    - Use o comando "olhar" para examinar a área algo
+    - Boa sorte e não morra :p
+          ''')
     if meu_jogador.nome != '':
         print('Voltar ao game? [s/n]')
         voltar_game = input('>>').lower()
@@ -309,7 +326,7 @@ def ajuda_menu():
             ajuda_menu()
         print_local()
         main_game_loop()
-    print("voltar ao MENU? [s/n]")
+    print("- voltar ao MENU? [s/n]")
     voltar_menu = input('>>').lower()
     if voltar_menu != 's':
         limpar_tela()
@@ -795,7 +812,11 @@ def luta(monstro, meu_jogador):
         limpar_tela()
         print(f'VOCÊ DERROTOU {monstro.nome}')
         experiencia(monstro)
-        drop(monstro)
+        if random.random() < 0.3:
+            drop(monstro)
+        mapa[meu_jogador.local]['MONSTRO'] = ''
+        print_local()
+        main_game_loop()
 
 def drop(monstro):
     print(f'Você ganhou {monstro.ouro} e o {monstro.nome} dropou {monstro.item.nome}')
@@ -854,11 +875,11 @@ def jogador_dormir():
     
 def jogador_mover():
     if meu_jogador.local == 'a1':
-        pergunta = "Para onde deseja se mover? (avançar)\n"
+        pergunta = "Avançar para a próxima sala? (escreva avançar)\n"
     elif meu_jogador.local in ['b1', 'c1']:
-        pergunta = "Para onde deseja se mover? (avançar ou subir)\n"
+        pergunta = "Avançar para a próxima sala ou subir as escadas e voltar a sala anterior? (escreva avançar ou subir)\n"
     elif meu_jogador.local in ['a2', 'c2']:
-        pergunta = "para onde deseja se mover? (descer ou retornar)\n"
+        pergunta = "Descer as escadas ou retornar a sala anterior? (escreva descer ou retornar)\n"
     elif meu_jogador.local in ['b2']:
         pergunta = "Há uma loja no andar. para onde deseja se mover? (loja, descer ou retornar)\n"
     
