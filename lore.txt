@@ -31,14 +31,11 @@ Mas você não se lembra. Do Porque esta aqui ou o Que aconteceu nesse local.
 
 Ao Examinar o Local: Tudo ao seu redor parece morto. Porem voce nota um brilho fraco vindo de frente de um trono destruido
 
-Voce deseja Pegar o Anel Misterioso?
-
-Se Sim:
 Ao tocá-lo, um frio intenso percorre seu braço. Seu dedo o aceita sem resistência, como se ele sentisse que voce era o seu Dono.
-============================================================================================================================================
+=====================================================================================================================================
 > [Anel Desconhecido Equipado]
 Efeito: ???
-============================================================================================================================================
+=====================================================================================================================================
 
 
 Ao Equipar o Anel O chão começa a tremer.
@@ -58,59 +55,116 @@ Perigos Desconhecidos à Frente
 
 
 Ao Abrir o portão, Uma nuvem de poeira antiga Cobre o Local. Uma voz, baixa e arrastada, sussurra em sua mente:
-
 "O herdeiro da ruína caminha outra vez... mas será que lembrará antes de se perder?"
 
 
-Ao Atravessar Para o Proximo comodo, a cada passo a dentro o ambiente é iluminado por tochas azuis que você sente que não deviam acender.
-
+Ao Atravessar Para o Proximo comodo, 
+a cada passo a dentro o ambiente é iluminado por tochas azuis que você sente que não deviam acender.
+====================================================================================================================================
 2º Sala 'Sala do Guardião Enraizado'
-
-Um odor de terra úmida e carne podre invade seus sentidos. A sala adiante parece uma antiga estufa esquecida, 
+Descrição:Um odor de terra úmida e carne podre invade seus sentidos. A sala adiante parece uma antiga estufa esquecida, 
 onde raízes negras tomaram os pilares de pedra.
-No centro, uma árvore retorcida cresce a partir de um altar quebrado. Seus galhos têm formas humanoides penduradas, 
+
+No centro do local, uma árvore retorcida cresce a partir de um altar quebrado. Seus galhos têm formas humanoides penduradas, 
 como se absorvessem ecos de vida.
 Uma criatura — metade carne, metade madeira — jaz ajoelhada, presa por correntes de prata, seus olhos fechados.
 Quando você se aproxima… ela desperta.
 
-ao derrotar a criatura hedionda ele dropa uma bolsa, e dentro dela tem pocões de mana, vida e uma sacola de dormir.
+Ao derrotar a criatura hedionda ele dropa uma bolsa, e dentro dela tem pocões de mana, vida e uma sacola de dormir.
 é como se a torre estivesse te preparando para o que esta por vir.
 
 O proximo portão se ilumina revelando ser uma escada que leva para os andares inferiores A torre está viva, Observando, Esperando.
 E você sente que o verdadeiro inferno... não ficou para trás.
 
 (daqui para frente pode colocar monstros, vou deixar com voces essa parte aonde querem por ASS:Paulo)
-
+===================================================================================================================================
 Andar 9 — O Sussurro dos Esquecidos
 Sala 1: O Salão das Vozes Vazias
+
 Descrição:Ao entrar, o som desaparece. Nenhum eco. Nenhuma respiração. No lugar, apenas sussurros em sua mente — 
 vozes que carregam seu nome, mas ditas por pessoas que você não lembra.
 As paredes são cobertas por máscaras penduradas, cada uma diferente — raiva, medo, alegria, loucura.
 Quando você se aproxima, uma delas vira lentamente... te observando.
-
-Evento:
-
-Você deve escolher uma máscara para tocar.
-
+====================================================================================================================================
+Evento:Você deve escolher uma máscara para tocar.
 Cada uma te concede um benefício e um fardo (Ex: Máscara da Ira = bônus em combate, mas reduz autocontrole).
-
 Tocar mais de uma... atrai as almas contidas nelas para dentro de você.
-
+====================================================================================================================================
 Sala 2: O Poço das Memórias Afundadas
 Descrição:No centro de um salão de pedra úmida, há um poço negro como breu. 
 Correntes quebradas o rodeiam, e marcas de garras riscam o chão como se algo tivesse sido arrastado para fora.
-Ao se aproximar, imagens distorcidas começam a surgir na água parada — são lembranças suas, mas... distorcidas, erradas, talvez falsas.
-
-Evento:
-
-O jogador pode mergulhar o braço e tentar "recuperar uma memória".
+Ao se aproximar, imagens distorcidas começam a surgir na água parada — 
+são lembranças suas, mas... distorcidas, erradas, talvez falsas.
+====================================================================================================================================
+Evento:O jogador pode mergulhar o braço e tentar "recuperar uma memória".
 
 Pode adquirir uma Habilidade Adormecida, ou... libertar algo que o havia esquecido propositalmente 
 (criatura amaldiçoada, fragmento sombrio de si mesmo, etc).
 
+====================================================================================================================================
+Ao se Aproximar para o Proximo andar,a torre revela um lado esquecido da sua origem — não apenas magia, 
+mas também artifícios de um tempo anterior à ruína. 
+Aqui, engrenagens rangem como ossos antigos, e o tempo parece... distorcido. 
+====================================================================================================================================
+ 8º Andar — O Eco das Máquinas Quebradas
+Sala 1: A Oficina do Relógio Parado
+Descrição:A porta range e revela uma vasta oficina abandonada, 
+tomada por engrenagens enferrujadas que ainda giram lentamente, como se lutassem contra o tempo.
+Pêndulos partidos oscilam no teto, e no centro há uma grande máquina quebrada com um rosto esculpido nela — 
+uma máscara de dor esculpida no metal.
+O som das engrenagens forma palavras quase humanas. Um relógio gigante ao fundo gira... ao contrário.
+====================================================================================================================================
+Evento e Interação:Um constructo mecânico semi-consciente te observa. Ele não ataca — ainda.
+Se o jogador tentar consertar a máquina, poderá obter:
 
+Uma Armadura mecanica(Passiva da armadura: Escudo de vida com Base na Sua Mana Maxima)
 
+Se o jogador falhar no reparo, o Robo ativara uma defesa: um combate contra múltiplos pequenos autômatos instáveis.
+(POR FAVOR COLOCAR PROPORÇÃO DE 80/20 PRA FALHAR)
+==================================================================================================================================== 
+Andar 7 — O Sangue da Criação
+Sala 1: Laboratório dos Deformados
+Descrição:Frascos, fórmulas e instrumentos cirúrgicos cobrem as mesas. 
+No fundo da sala, tanques de vidro contêm corpos em decomposição. Alguns... ainda se movem.
+Um grimório aberto repousa sobre uma mesa, com um aviso escrito em sangue: “NÃO DESPERTE O PRIMEIRO”.
+====================================================================================================================================
+Evento:O jogador pode tentar extrair poções experimentais (alto risco e alta recompensa).
+Pode também aprender alquimia rudimentar.
+Se explorar demais… o "Primeiro" é despertado — um homúnculo grotesco, feito à imagem do protagonista, mas completamente insano.
+====================================================================================================================================
+Sala 2: Câmara do Nascimento Invertido
+Descrição:Uma gigantesca placenta fossilizada ocupa o centro. 
+Cordões umbilicais petrificados se ligam a pequenos altares dispostos em círculo.
+Um círculo de sangue fresco é visível no chão, como se alguém tivesse realizado um ritual há pouco tempo.
 
+Evento:O jogador pode completar ou desfazer o ritual.
+Completar: voce perde 5% da vida atual mas ganha um fragmento de vida(Aumenta o Hp Maximo), mas perde parte da humanidade.
+Desfazer: desperta a fúria da torre, fazendo o próximo andar ficar mais hostil.
+====================================================================================================================================
+6º Andar — O Nervo da Torre
+A descida até aqui parece ter atravessado carne viva. A torre pulsa. Ela sangra. E ela se lembra de você.
+===================================================================================================================================
+Sala 1: A Coluna Espinhal
+Descrição:Um salão estreito e vertical. No centro, uma espinha dorsal monumental flutua no ar, 
+sustentada por fios etéreos que se ligam às paredes como nervos.
+A cada pulsação, imagens cruzam sua mente — campos em chamas, gritos, um rosto... familiar demais para ser estranho.
+Mas tudo passa em segundos. A dor fica.
+===================================================================================================================================
+Evento:Tocar a coluna:Restaura uma habilidade antiga (nome obscuro) 
+
+Inicia combate contra o Sentinela Cordado, um ser que arrasta vértebras atrás de si e fala frases que você não lembra ter dito.
+====================================================================================================================================
+Sala 2: O Tumor Lúcido
+Descrição:Um globo carnoso e pulsante, acorrentado ao teto por ganchos de prata. Ele murmura em uma voz múltipla — 
+às vezes sussurrando, às vezes gritando.
+"Você não devia ter voltado."
+As paredes mostram símbolos pintados com sangue antigo. Você os reconhece… mas não sabe de onde.
+====================================================================================================================================
+Evento:
+Interação com o Tumor:Recebe uma espada de sangue(passiva:cura o personagem 10% do dano causado)
+Em troca, perde parte da sanidade (descrições visuais e auditivas distorcidas nos próximos andares).
+
+Destruí-lo:O próximo andar se torna mais hostil — a torre reage como se você tivesse tocado algo íntimo.
 
 
 
