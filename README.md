@@ -1,1 +1,2 @@
 # arkyos
+projeto pensamento computacional
