@@ -61,14 +61,52 @@ Ao Abrir o portão, Uma nuvem de poeira antiga Cobre o Local. Uma voz, baixa e a
 
 "O herdeiro da ruína caminha outra vez... mas será que lembrará antes de se perder?"
 
-Você para. Olha ao redor. Ninguém.
 
-Ao Atravessar Para o Proximo comodo, o ambiente é iluminado por tochas azuis que não deviam estar acesas. A torre está viva. 
-Observando. Esperando.
+Ao Atravessar Para o Proximo comodo, a cada passo a dentro o ambiente é iluminado por tochas azuis que você sente que não deviam acender.
 
+2º Sala 'Sala do Guardião Enraizado'
+
+Um odor de terra úmida e carne podre invade seus sentidos. A sala adiante parece uma antiga estufa esquecida, 
+onde raízes negras tomaram os pilares de pedra.
+No centro, uma árvore retorcida cresce a partir de um altar quebrado. Seus galhos têm formas humanoides penduradas, 
+como se absorvessem ecos de vida.
+Uma criatura — metade carne, metade madeira — jaz ajoelhada, presa por correntes de prata, seus olhos fechados.
+Quando você se aproxima… ela desperta.
+
+ao derrotar a criatura hedionda ele dropa uma bolsa, e dentro dela tem pocões de mana, vida e uma sacola de dormir.
+é como se a torre estivesse te preparando para o que esta por vir.
+
+O proximo portão se ilumina revelando ser uma escada que leva para os andares inferiores A torre está viva, Observando, Esperando.
 E você sente que o verdadeiro inferno... não ficou para trás.
 
+(daqui para frente pode colocar monstros, vou deixar com voces essa parte aonde querem por ASS:Paulo)
 
+Andar 9 — O Sussurro dos Esquecidos
+Sala 1: O Salão das Vozes Vazias
+Descrição:Ao entrar, o som desaparece. Nenhum eco. Nenhuma respiração. No lugar, apenas sussurros em sua mente — 
+vozes que carregam seu nome, mas ditas por pessoas que você não lembra.
+As paredes são cobertas por máscaras penduradas, cada uma diferente — raiva, medo, alegria, loucura.
+Quando você se aproxima, uma delas vira lentamente... te observando.
+
+Evento:
+
+Você deve escolher uma máscara para tocar.
+
+Cada uma te concede um benefício e um fardo (Ex: Máscara da Ira = bônus em combate, mas reduz autocontrole).
+
+Tocar mais de uma... atrai as almas contidas nelas para dentro de você.
+
+Sala 2: O Poço das Memórias Afundadas
+Descrição:No centro de um salão de pedra úmida, há um poço negro como breu. 
+Correntes quebradas o rodeiam, e marcas de garras riscam o chão como se algo tivesse sido arrastado para fora.
+Ao se aproximar, imagens distorcidas começam a surgir na água parada — são lembranças suas, mas... distorcidas, erradas, talvez falsas.
+
+Evento:
+
+O jogador pode mergulhar o braço e tentar "recuperar uma memória".
+
+Pode adquirir uma Habilidade Adormecida, ou... libertar algo que o havia esquecido propositalmente 
+(criatura amaldiçoada, fragmento sombrio de si mesmo, etc).
 
 
 
