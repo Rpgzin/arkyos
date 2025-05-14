@@ -1,0 +1,108 @@
+Título: A Torre de Arkyos
+============================================================================================================================================
+                                                 Sinopse – A Torre de Arkyos
+============================================================================================================================================
+No topo de uma torre esquecida pelos deuses, alguém desperta entre ruínas e cinzas. Sem memória, e com o corpo à beira do colapso, 
+essa figura solitária encontra-se cercada por vestígios de uma batalha apocalíptica – e por um silêncio que pesa como um túmulo.
+
+Algo terrível aconteceu ali, mas não há ninguém para contar a história.
+
+Com apenas fragmentos de poder e ecos de um passado perdido, 
+o protagonista precisa descer os andares de uma Torre Misteriosa colossal – 
+uma estrutura viva, repleta de criaturas corrompidas, armadilhas letais e segredos antigos.
+
+A cada passo, a torre muda. A cada inimigo derrotado, algo esquecido retorna.
+Mas algumas verdades talvez devam permanecer enterradas.
+
+A jornada para escapar é também uma jornada para descobrir quem você é...
+E por que o mundo parecia ter parado de girar no exato momento em que você caiu.
+
+============================================================================================================================================
+                                                  Capitulo 1 = O Despertar                                                  
+============================================================================================================================================
+
+O frio das pedras toca sua pele como agulhas. O ar está pesado, carregado de uma magia que pulsa devagar, 
+como um coração moribundo. Ao abrir os olhos, tudo é cinza e vermelho: 
+cinza das cinzas no chão e vermelho do sangue seco pintado em padrões esquecidos no mármore.
+
+Você se senta com dificuldade. O corpo dói, fraco, como se tivesse atravessado mil batalhas — e talvez tenha. 
+Mas você não se lembra. Do Porque esta aqui ou o Que aconteceu nesse local.
+
+
+Ao Examinar o Local: Tudo ao seu redor parece morto. Porem voce nota um brilho fraco vindo de frente de um trono destruido
+
+Voce deseja Pegar o Anel Misterioso?
+
+Se Sim:
+Ao tocá-lo, um frio intenso percorre seu braço. Seu dedo o aceita sem resistência, como se ele sentisse que voce era o seu Dono.
+============================================================================================================================================
+> [Anel Desconhecido Equipado]
+Efeito: ???
+============================================================================================================================================
+
+
+Ao Equipar o Anel O chão começa a tremer.
+
+Atrás de você, o que restou do trono escurece ainda mais, como se a própria sombra tentasse fugir dali. 
+A energia maligna está morrendo... mas algo abaixo desperta.
+
+Você se vira, encarando a única saída: um Portão Negro, que leva a uma proxima sala nas profundezas da torre. 
+A estrutura range como um animal faminto, esperando que você se mova.
+
+Você dá o primeiro passo.
+
+> [Novo Objetivo: Descender à Base da Torre]
+Andar Atual: 10
+Perigos Desconhecidos à Frente
+
+
+
+Ao Abrir o portão, Uma nuvem de poeira antiga Cobre o Local. Uma voz, baixa e arrastada, sussurra em sua mente:
+
+"O herdeiro da ruína caminha outra vez... mas será que lembrará antes de se perder?"
+
+Você para. Olha ao redor. Ninguém.
+
+Ao Atravessar Para o Proximo comodo, o ambiente é iluminado por tochas azuis que não deviam estar acesas. A torre está viva. 
+Observando. Esperando.
+
+E você sente que o verdadeiro inferno... não ficou para trás.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+===========================================================================================================================================
+                                                   PLOT TWIST.....AINDA VOU ELABORAR
+===========================================================================================================================================
+
+O Rei Demônio ARKYOS era o próprio caos encarnado. Temido Pelos titulos de O Conquistador e o Carniceiro, todos temiam pela sua tirania
+A luta foi brutal. Um a um, seus companheiros caíram. 
+
+Sangrando, esgotado,você reune toda sua mana, sua essência e o seu odio em um único golpe e destruiu o Rei Demonio Arkyos.
+
+Porem a vitória teve um preço.
+
+A explosão do golpe foi tao forte que destuiu tudo em volta, Voce acabou sendo acertado junto o que despedaçou sua alma. 
+Sua memória foi varrida como folhas ao vento. Sua força... apagada. E então voce o herói, caiu.
+
+A torre pela morte do Rei Demonio acabou Liberando os Monstros para Fora, trazendo um caos ao mundo.
+sem o Heroi e seu grupo para os proteger, a humanidade até resistiu por um tempo porem a quantidade de monstros os superaram
+todos culpam o Heroi pois ele nao os ajudou porem mal sabiam eles que o heroi apos usar todas as suas forças na luta contra o rei demonio
+acabou entrando em um coma.
+
+
+
+
+Você era o Herói do Mundo. Forjado em batalhas, venerado por reinos e temido pelos Monstros, e mesmo assim apos despertar 5 anos apos
+a morte do rei demonio voce se depara com tudo que voce conhece destruido.
