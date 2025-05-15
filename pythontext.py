@@ -99,7 +99,7 @@ def subi_nivel(jogador):
 
 def exibir_status(jogador):
     limpar_tela()
-    print('='*60)
+    print('▬'*60)
     print('STATUS'.upper())
     print(f'{jogador.nome} LVL:{jogador.nivel} XP: {jogador.xp}/{jogador.xp_max}')
     print(f'vida: {jogador.vida}/{jogador.vida_max} ATK: {jogador.atk}/MAG.ATK: {jogador.dano_magico}/ MANA: {jogador.mana}/{jogador.mana_max}')
@@ -173,7 +173,7 @@ def mostrar_loja():
                 continue
             print(f"{i+1}. {lista_itens_loja[i]['nome']} | Preço: {lista_itens_loja[i]['preco']} | Descricao: {lista_itens_loja[i]['desc']} {status}\n")
         print(f'Ouro: {meu_jogador.ouro}')
-        print('-> USE NÚMEROS PARA SELECIONAR O ITEM OU [vender | fechar]')
+        print('>> USE NÚMEROS PARA SELECIONAR O ITEM OU [vender | fechar]')
         escolha = input('>>').lower()
         if escolha == 'fechar':
             print_local()
@@ -217,7 +217,7 @@ def vender_item():
             print(f'{i+1}. {item.nome} | {item.desc} | valor: {item.preco} | (EQUIPADO)')
             continue
         print(f'{i+1}. {item.nome} | {item.desc} | valor: {item.preco}')
-    print('-> USE NÚMEROS PARA SELECIONAR O ITEM OU [comprar | fechar]')
+    print('>> USE NÚMEROS PARA SELECIONAR O ITEM OU [comprar | fechar]')
     escolha = input('>>').lower()
     if escolha == 'fechar':
         print_local()
@@ -322,6 +322,11 @@ lista_armas = [
     {'nome': 'Grimório', 'atk': 2, 'preco': 100, 'desc': 'O grimório de um mago, o local de sua sabedoria.', 'equipado': False, 'consumivel': False},
 ]
 
+lista_itens_especiais = [
+    {'nome': 'Anel Desconhecido', 'atk': 0, 'preco': 00, 'desc': 'Um anel feito de ouro. Sua origem é desconhecida.', 'equipado': False, 'consumivel': False},
+    
+]
+
 lista_magias = [
     {'nome': 'Bola de fogo', 'dano': 20, 'desc':'A magia mais forte de um mago', 'mana_gasta': 30}
 ]
@@ -339,12 +344,12 @@ lista_monstros_normais = [
     {'nome': 'gárgula', 'vida': 45, 'nivel': 5, 'atk': 9, 'xp': 28, 'ouro': 200}
 ]
 lista_monstros_invocacoes = [
-    {'nome': 'Tieflíngs', 'vida': 130, 'nivel': 5, 'atk': 5, 'xp': 50, 'ouro': 10},
-    {'nome': 'Tieflíngs', 'vida': 150, 'nivel': 6, 'atk': 6, 'xp': 60, 'ouro': 15},
-    {'nome': 'Demônio Inferior', 'vida': 170, 'nivel': 7, 'atk': 7, 'xp': 70, 'ouro': 20},
-    {'nome': 'Demônio Inferior', 'vida': 180, 'nivel': 8, 'atk': 8, 'xp': 80, 'ouro': 25},
-    {'nome': 'Demoníaco', 'vida': 190, 'nivel': 9, 'atk': 9, 'xp': 90, 'ouro': 30},
-    {'nome': 'Demoníaco', 'vida': 200, 'nivel': 10, 'atk': 10, 'xp': 100, 'ouro': 35},
+    {'nome': 'Tieflíngs', 'vida': 50, 'nivel': 5, 'atk': 5, 'xp': 50, 'ouro': 10},
+    {'nome': 'Tieflíngs', 'vida': 50, 'nivel': 6, 'atk': 6, 'xp': 60, 'ouro': 15},
+    {'nome': 'Demônio Inferior', 'vida': 50, 'nivel': 7, 'atk': 7, 'xp': 70, 'ouro': 20},
+    {'nome': 'Demônio Inferior', 'vida': 50, 'nivel': 8, 'atk': 8, 'xp': 80, 'ouro': 25},
+    {'nome': 'Demoníaco', 'vida': 50, 'nivel': 9, 'atk': 9, 'xp': 90, 'ouro': 30},
+    {'nome': 'Demoníaco', 'vida': 50, 'nivel': 10, 'atk': 10, 'xp': 100, 'ouro': 35},
     
 ]
 
@@ -443,23 +448,25 @@ AVANÇAR = 'AVANÇAR'
 RETORNAR = 'RETORNAR'
 
 lugares_resolvidos = {
-    'a1': False, 'a2': False, 'a3': False, 'a4': False,
-    'b1': False, 'b2': False, 'b3': False, 'b4': False,
-    'c1': False, 'c2': False, 'c3': False, 'c4': False,
-    'd1': False, 'd2': False, 'd3': False, 'd4': False,
+    'a1': False, 'a2': False,
+    'b1': False, 'b2': False,
+    'c1': False, 'c2': False,
+    'd1': False, 'd2': False,
 }
 
 mapa = {
     'a1': {
-        'NOME_LOCAL': 'Sala 1',
-        'DESCRICAO': 'Local de início, você começa aqui!',
-        'EXAMINAR': 'Você vê duas galinhas.',
+        'NOME_LOCAL': 'Sala do Trono',
+        'DESCRICAO': 'Uma sala grande e luxuosa, com uma grande mesa em frente ao trono.',
+        'EXAMINAR': 'Tudo ao seu redor parece morto.\n   Porem voce nota um brilho fraco vindo de frente de um trono destruido.\n Digite trono para examinar o trono.',
         'SOLVED': False,
         'SUBIR': '',
         'DESCER': '',
         'AVANÇAR': 'a2',
         'RETORNAR': '',
-        'MONSTRO': ''
+        'MONSTRO': '',
+
+        'LOCAIS': ['trono', 'bau'],
     },
     'a2': {
         'NOME_LOCAL': "Sala2",
@@ -521,7 +528,7 @@ mapa = {
 def mostrar_mapa():
     if meu_jogador.local == 'a1':
         limpar_tela()
-        print('='*60)
+        print('▬'*60)
         print('Mapa:')
         print('''
                 |x| |
@@ -584,10 +591,10 @@ def print_local():
         limpar_tela()
     local_nome = mapa[meu_jogador.local]['NOME_LOCAL']
     local_desc = mapa[meu_jogador.local]['DESCRICAO']
-    print('\n' + ('#' * (4 + len(local_nome))))
-    print(f"# {local_nome.upper()} #")
-    print(f"# {local_desc} #")
-    print('#' * (4 + len(local_nome)))
+    print('\n' + ('▬' * 60), '\n')
+    print(f"{local_nome.upper()}")
+    print(f"{local_desc} \n")
+    print('▬' * 60)
     mostrar_status(meu_jogador)
     if mapa[meu_jogador.local]['MONSTRO'] != '':
         print(f"há um {mapa[meu_jogador.local]['MONSTRO'].nome} na sala. O que deseja fazer?\n[lutar / fugir / falar]")
@@ -598,13 +605,13 @@ def print_local():
     main_game_loop()
 
 def prompt():
-    print("\n" + "="*60)
+    print("\n" + "▬"*60)
     print("O que deseja fazer?")
-    acao = input("->").lower()
+    acao = input(">>").lower()
     acoes_aceitas = ['invocar','status', 'mover', 'loja', 'sair', 'ajuda', 'olhar', 'inspecionar', 'teleportar', 'dormir', 'mochila', 'mapa']
     while acao not in acoes_aceitas:
         print("Ação inválida, tente novamente.\n")
-        acao = input("-> ").lower()
+        acao = input(">> ").lower()
     if acao == 'sair':
         sair()
     if acao in ['mover', 'teleportar']:
@@ -632,6 +639,34 @@ def acao_loja(escolha):
         comprar()
     elif escolha == 'vender':
         vender()
+
+def locais():
+    print('O que deseja fazer?')
+    acao = input('>>').lower()
+    acaoes_aceitas = mapa[meu_jogador.local]['LOCAIS']
+    while acao not in acaoes_aceitas:
+        print('Acao inválida, tente novamente.')
+        acao = input('>>').lower()
+        if acao == 'trono':
+            trono()
+        else:
+            print('Acao inválida, tente novamente.')
+            locais()
+            
+### Objetos interativos dos andares ###
+
+def trono():
+    
+    print('▬'*60)
+    print('Você vai até o brilho e vê um anel dourado.\n  ao toca-lo um frio intenso percorre seu braço.\n  Seu dedo o aceita sem resistência, como se ele sentisse que voce era o seu Dono.\n')
+    item = lista_itens_especiais[0]
+    meu_jogador.add_item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'], item['preco'])
+    print('Anel desconhecido adicionado ao seu inventario!')
+    mapa[meu_jogador.local]['SOLVED'] = True
+    intervalo()
+    main_game_loop()
+
+########################################
 
 def comprar(escolha):
         lista_itens_loja[escolha]['comprado'] = True
@@ -685,7 +720,7 @@ def abrir_mochila():
                 print(f'{i+1}. {meu_jogador.mochila[i].nome} ATK: {meu_jogador.mochila[i].atk} desc: {meu_jogador.mochila[i].desc} (EQUIPADO)')
                 continue
             print(f'{i+1}. {meu_jogador.mochila[i].nome} ATK: {meu_jogador.mochila[i].atk} desc: {meu_jogador.mochila[i].desc}')
-        print('--> Use números para selecionar os itens ou [fechar]')
+        print('>> Use números para selecionar os itens ou [fechar]')
         escolha = input(">>")
         if escolha == 'fechar':
             print_local()
@@ -838,7 +873,6 @@ def abrir_mochila():
 def luta(monstro, meu_jogador):
     print(f'\n{monstro.nome} #{monstro.nivel}')
     print(f'vida: {monstro.vida}/{monstro.vida_max} ATK: {monstro.atk}')
-    print('-'*50)
     mostrar_status(meu_jogador)
     print('atacar / magia / fugir')
     acao = input(">>").lower()
@@ -951,7 +985,7 @@ def fugir():
     main_game_loop()
 
 def mostrar_status(self):
-    print('='*60)
+    print('▬'*60)
     print(f'{self.nome} LVL:{self.nivel} XP: {self.xp}/{self.xp_max}')
     print(f'vida: {self.vida}/{self.vida_max} ATK: {self.atk} MANA: {self.mana}/{self.mana_max}')
     if self.item_equipado:
@@ -972,14 +1006,22 @@ def jogador_dormir():
         print('Você não pode dormir aqui.')
     
 def jogador_mover():
-    if meu_jogador.local == 'a1':
-        pergunta = "Avançar para a próxima sala? (escreva avançar)\n"
+    if mapa[meu_jogador.local]['SOLVED'] == False:
+        fala = 'Você não consegue passar pela porta, alguma energia estranha te impede'
+        for falas in fala:
+            sys.stdout.write(fala)
+            sys.stdout.flush()
+            time.sleep(0.01)
+        time.sleep(1)
+        main_game_loop()
+    elif meu_jogador.local == 'a1':
+        pergunta = "Avançar para a próxima sala? (escreva avançar)\n >>"
     elif meu_jogador.local in ['b1', 'c1']:
-        pergunta = "Avançar para a próxima sala ou subir as escadas e voltar a sala anterior? (escreva: avançar ou subir)\n"
+        pergunta = "Avançar para a próxima sala ou subir as escadas e voltar a sala anterior? (escreva: avançar ou subir)\n>>"
     elif meu_jogador.local in ['a2', 'c2']:
-        pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n"
+        pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
     elif meu_jogador.local in ['b2']:
-        pergunta = "Há uma loja no andar. para onde deseja se mover? (escreva: loja, descer ou retornar)\n"
+        pergunta = "Há uma loja no andar. para onde deseja se mover? (escreva: loja, descer ou retornar)\n>>"
     
     dest = input(pergunta).lower()
     direcoes_validas = ['subir', 'descer', 'avançar', 'retornar', 'loja']
@@ -1000,11 +1042,9 @@ def movimento_manipulado(destino):
     print_local()
 
 def jogador_examinar():
-    if mapa[meu_jogador.local]['SOLVED']:
-        print("Você já examinou aqui.")
-    else:
-        print(mapa[meu_jogador.local]['EXAMINAR'])
-        mapa[meu_jogador.local]['SOLVED'] = True
+    print(mapa[meu_jogador.local]['EXAMINAR'])
+    mapa[meu_jogador.local]['SOLVED'] = True
+    locais()
 
 ##### Fluxo principal #####
 
@@ -1027,7 +1067,7 @@ def setup_jogo():
         sys.stdout.write(caractere)
         sys.stdout.flush()
         time.sleep(0.001)
-    meu_jogador.nome = input("-> ")
+    meu_jogador.nome = input(">> ")
 
     pergunta2 = "Qual sua classe?\n(Escolha: guerreiro, mago ou monge)\n"
     for caractere in pergunta2:
@@ -1036,10 +1076,10 @@ def setup_jogo():
         time.sleep(0.001)
 
     classes_validas = ['guerreiro', 'mago', 'monge']
-    jogador_classe = input("-> ").lower()
+    jogador_classe = input(">> ").lower()
     while jogador_classe not in classes_validas:
         print("Classe inválida, tente novamente.")
-        jogador_classe = input("-> ").lower()
+        jogador_classe = input(">> ").lower()
     meu_jogador.classe = jogador_classe
     print(f"Classe selecionada: {meu_jogador.classe.capitalize()}\n")
 
@@ -1094,11 +1134,24 @@ def setup_jogo():
         meu_jogador.atk = meu_jogador.atk_base
         calcular_atributos(meu_jogador)
 
-    fala1 = f"Bem-vindo, {meu_jogador.nome} o {meu_jogador.classe.capitalize()}!\n"
-    fala2 = "Espero que se divirta nessa incrível aventura!\n"
-    fala3 = "Seu objetivo é descer a Torre de ARKYOS vivo, mas cuidado com os monstros que espreitam por aqui. Boa sorte!\n"
+    fala1 = "Espero que se divirta nessa incrível aventura!\n"
+    fala2 = """
+    No topo de uma torre esquecida pelos deuses, alguém desperta entre ruínas e cinzas. Sem memória, e com o corpo à beira do colapso, 
+    essa figura solitária encontra-se cercada por vestígios de uma batalha apocalíptica – e por um silêncio que pesa como um túmulo.
 
-    for fala in [fala1, fala2, fala3]:
+    Algo terrível aconteceu ali, mas não há ninguém para contar a história.
+
+    Com apenas fragmentos de poder e ecos de um passado perdido, 
+    o protagonista precisa descer os andares de uma Torre Misteriosa colossal – 
+    uma estrutura viva, repleta de criaturas corrompidas, armadilhas letais e segredos antigos.
+
+    A cada passo, a torre muda. A cada inimigo derrotado, algo esquecido retorna.
+    Mas algumas verdades talvez devam permanecer enterradas.
+
+    A jornada para escapar é também uma jornada para descobrir quem você é...
+    E por que o mundo parecia ter parado de girar no exato momento em que você caiu.\n"""
+
+    for fala in [fala1, fala2]:
         for caractere in fala:
             sys.stdout.write(caractere)
             sys.stdout.flush()
@@ -1107,17 +1160,18 @@ def setup_jogo():
 
     os.system('clear' if os.name != 'nt' else 'cls')
     print ("=====================================")
-    introducao1 = f'nome: {meu_jogador.nome} // classe: {meu_jogador.classe} // vida: {meu_jogador.vida} // mana: {meu_jogador.mana} \n'
+    introducao1 = '''
+      O frio das pedras toca sua pele como agulhas. O ar está pesado, carregado de uma magia que pulsa devagar, 
+    como um coração moribundo. Ao abrir os olhos, tudo é cinza e vermelho: 
+    cinza das cinzas no chão e vermelho do sangue seco pintado em padrões esquecidos no mármore.
+
+      Você se senta com dificuldade. O corpo dói, fraco, como se tivesse atravessado mil batalhas — e talvez tenha. 
+      Mas você não se lembra. Do Porque esta aqui ou o Que aconteceu nesse local.\n'''
     for introducao in introducao1:
         sys.stdout.write(introducao)
         sys.stdout.flush()
         time.sleep(0.001)
-    introducao2 = 'Você acordou naquele quarto escuro, aparentemente sua luz acabou e você não sabe o por que. \n Você vivia pacificamente em seu quarto e nunca precisou sair pois um cara sempre trazia tudo que você precisa mas aparentemente essa pessoa sumiu.\n Agora é com você o encontrar.\n'
-    for introducao in introducao2:
-        sys.stdout.write(introducao)
-        sys.stdout.flush()
-        time.sleep(0.001)
-    ajuda = 'principais comandos: [mover / olhar / mochila]\n'
+    ajuda = 'principais comandos: [mover / olhar / mochila / status / mapa]\n'
     for ajuda in ajuda:
         sys.stdout.write(ajuda)
         sys.stdout.flush()
