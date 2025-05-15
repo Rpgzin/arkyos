@@ -1009,7 +1009,7 @@ def jogador_mover():
     if mapa[meu_jogador.local]['SOLVED'] == False:
         fala = 'Você não consegue passar pela porta, alguma energia estranha te impede'
         for falas in fala:
-            sys.stdout.write(fala)
+            sys.stdout.write(falas)
             sys.stdout.flush()
             time.sleep(0.01)
         time.sleep(1)
