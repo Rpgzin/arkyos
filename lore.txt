@@ -87,7 +87,7 @@ As paredes são cobertas por máscaras penduradas, cada uma diferente — raiva,
 Quando você se aproxima, uma delas vira lentamente... te observando.
 ====================================================================================================================================
 Evento:Você deve escolher uma máscara para tocar.
-Cada uma te concede um benefício e um fardo (Ex: Máscara da Ira = bônus em combate, mas reduz autocontrole).
+Cada uma te concede um benefício e um fardo (Ex: Máscara da Raiva = bônus em combate, mas voce recebe mais dano).
 Tocar mais de uma... atrai as almas contidas nelas para dentro de você.
 ====================================================================================================================================
 Sala 2: O Poço das Memórias Afundadas
@@ -129,7 +129,6 @@ No fundo da sala, tanques de vidro contêm corpos em decomposição. Alguns... a
 Um grimório aberto repousa sobre uma mesa, com um aviso escrito em sangue: “NÃO DESPERTE O PRIMEIRO”.
 ====================================================================================================================================
 Evento:O jogador pode tentar extrair poções experimentais (alto risco e alta recompensa).
-Pode também aprender alquimia rudimentar.
 Se explorar demais… o "Primeiro" é despertado — um homúnculo grotesco, feito à imagem do protagonista, mas completamente insano.
 ====================================================================================================================================
 Sala 2: Câmara do Nascimento Invertido
@@ -138,7 +137,7 @@ Cordões umbilicais petrificados se ligam a pequenos altares dispostos em círcu
 Um círculo de sangue fresco é visível no chão, como se alguém tivesse realizado um ritual há pouco tempo.
 
 Evento:O jogador pode completar ou desfazer o ritual.
-Completar: voce perde 5% da vida atual mas ganha um fragmento de vida(Aumenta o Hp Maximo), mas perde parte da humanidade.
+Completar: voce perde 5% da vida atual mas ganha um fragmento de vida(Aumenta o Hp Maximo), mas perde parte da sanidade.
 Desfazer: desperta a fúria da torre, fazendo o próximo andar ficar mais hostil.
 ====================================================================================================================================
 6º Andar — O Nervo da Torre
@@ -150,7 +149,8 @@ sustentada por fios etéreos que se ligam às paredes como nervos.
 A cada pulsação, imagens cruzam sua mente — campos em chamas, gritos, um rosto... familiar demais para ser estranho.
 Mas tudo passa em segundos. A dor fica.
 ===================================================================================================================================
-Evento:Tocar a coluna:Restaura uma habilidade antiga (nome obscuro) 
+Evento:
+Tocar a coluna: Restaura uma habilidade antiga  
 
 Inicia combate contra o Sentinela Cordado, um ser que arrasta vértebras atrás de si e fala frases que você não lembra ter dito.
 ====================================================================================================================================
@@ -165,8 +165,76 @@ Interação com o Tumor:Recebe uma espada de sangue(passiva:cura o personagem 10
 Em troca, perde parte da sanidade (descrições visuais e auditivas distorcidas nos próximos andares).
 
 Destruí-lo:O próximo andar se torna mais hostil — a torre reage como se você tivesse tocado algo íntimo.
+====================================================================================================================================
+5º Andar — O Salão das Sombras Esquecidas
+Sala 1: O Espelho dos Ecos
+Descrição:Você entra em uma sala envolta por neblina espessa. 
+Grandes espelhos, com molduras de ferro enferrujadas, cobrem as paredes. 
+Cada espelho reflete uma imagem diferente, mas nenhuma delas parece familiar. 
+À medida que se aproxima, o reflexo de algo distante ou indefinido começa a mudar.
+====================================================================================================================================
+Evento: O Toque do Espelho
+Ao tocar um espelho, você sente uma onda de frio e uma visão rápida de uma memória distorcida.
 
+Reflexo da Perda: Tocar esse espelho concede "Resiliência" (aumenta resistência), mas uma sensação de tristeza invade você.
 
+Reflexo da Esperança: Tocar este espelho concede "Foco Afiado" (aumenta percepção), mas você sente uma pressão constante.
+
+Reflexo da Identidade Perdida: Tocar esse espelho revela uma habilidade chamada "Fragmento da Alma" (poder adormecido),
+ mas sua clareza mental é afetada.
+(NOTA: ESSES MAS DEPOIS DE PEGAR O ITEM SAO SÓ ENCHEÇÃO DE LINGUIÇA PRA LORE N FAÇA NADA DE CODIGO N)
+====================================================================================================================================
+Sala 2: O Abismo da Voz Silenciosa
+Descrição:Esta sala é profunda e não tem teto visível. 
+No centro, um poço negro como a noite se abre, mas ao olhar para baixo, você não vê nada. 
+Apenas um vazio que parece chamar por você. 
+Ao redor, várias figuras de pedra estão alinhadas, todas com as mãos estendidas para o abismo, como se quisessem cair.
+====================================================================================================================================
+Em uma das paredes, uma inscrição é visível, mas está distorcida, como se estivesse parcialmente apagada. 
+Apenas algumas palavras são legíveis: "A verdadeira queda não é a do corpo, mas a da mente..."
+
+Evento:
+
+A Voz do Abismo: Quando você se aproxima do poço, uma voz suave e distante chama seu nome, mas sem tom, sem forma. 
+A voz diz apenas uma coisa:“O que você procura não está aqui... ou será que já o encontrou?”
+
+Olhar para o abismo: Você pode se aproximar e olhar para o poço. 
+Quando o faz, um momento de clareza se infiltra na sua mente — uma memória fragmentada, 
+talvez de uma decisão difícil que tomou no passado, ou uma escolha entre algo importante.
+
+Resultado: Você ganha um fragmento de uma habilidade passiva perdida (algo como "Mais resistencia" ou "Dano"), 
+mas a memória deixa uma marca persistente, fazendo você questionar se a decisão foi realmente a sua.
+
+Pular no abismo: Você pode tentar pular no poço, em busca de uma verdade oculta, mas ao fazer isso, 
+você é puxado por uma força desconhecida e precisa enfrentar uma visão caótica de seus próprios medos, 
+em forma de um monstro das sombras, feito de fragmentos de suas falhas e arrependimentos.
+====================================================================================================================================
+4º Andar — A Guerra Que Nunca Terminou
+O ar cheira a ferro queimado. As pedras do chão ainda estão aquecidas. As cicatrizes do combate ainda ardem…
+Mesmo que não saiba quem lutou aqui.
+====================================================================================================================================
+Sala 1: O Campo Silenciado
+Descrição:Espadas cravadas em corpos cristalizados. Escudos partidos. Ninguém respira, mas os olhos… alguns olhos ainda seguem seus movimentos.
+Há uma lança dourada quebrada no centro, que brilha fracamente quando você se aproxima. Ela pulsa com sua presença.
+
+Evento:
+Tocar a lança:Libera uma Habilidade Marcada pelo Conflito (pode ser de ataque ou suporte, à escolha do jogador).
+
+Ativa um eco de batalha: combatentes espectrais revivem por alguns minutos, lutando entre si. Você pode observar... ou se envolver.
+====================================================================================================================================
+Sala 2: O Julgamento Silencioso
+Descrição:Uma estátua de obsidiana de tamanho humano, com o rosto encoberto por uma máscara rachada.
+Ao se aproximar, a máscara se parte. Dentro… seu rosto. Mas distorcido. E furioso.
+O reflexo não diz uma palavra, mas se ergue. Em suas mãos: uma réplica de sua arma atual.
+====================================================================================================================================
+Evento:Luta obrigatória contra o Eco do Julgamento (um reflexo do seu estado atual, adaptado ao seu estilo e escolhas,
+ou seja um mimico kk).
+
+Ao vencer, pode escolher absorver ou selar o reflexo:
+
+Ao Absorver: Ganha uma habilidade brutal, mas algo dentro “trinca”.
+
+Ap Selar: Recebe proteção espiritual contra efeitos de corrupção futuros.
 
 
 
