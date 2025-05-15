@@ -121,6 +121,23 @@ class Monstro:
         self.ouro = ouro
         self.item = arma_aleatoria()
 
+def encontro_aleatorio():
+    if meu_jogador.local != 'b1':
+        print('Você não está em um circulo de invocação!')
+        main_game_loop()
+    numero = random.randint(0, 1)
+    if numero == 0:
+        print('Um monstro apareceu!')
+        luta(monstro_aleatorio(), meu_jogador)
+    else:
+        print('Falha na invocação!!! Você recebeu 5 de dano!')
+        meu_jogador.vida -= 5
+        main_game_loop()
+
+def monstro_aleatorio():
+    monstro_invocacao = random.choice(lista_monstros_invocacoes)
+    return Monstro(monstro_invocacao['nome'], monstro_invocacao['vida'], monstro_invocacao['nivel'], monstro_invocacao['atk'], monstro_invocacao['xp'], monstro_invocacao['ouro'])
+
 def experiencia(monstro):
     meu_jogador.xp += monstro.xp
     if meu_jogador.xp >= meu_jogador.xp_max:
@@ -145,9 +162,9 @@ class Magia:
 def mostrar_loja():
         if meu_jogador.game_over:
             main_game_loop() 
-        # if meu_jogador.local != 'b2':
-        #     print('NãO HÁ LOJAS POR AQUI')
-        #     main_game_loop()
+        if meu_jogador.local != 'b2':
+            print('NãO HÁ LOJAS POR AQUI')
+            main_game_loop()
         print('Itens para venda:')
         for i in range(len(lista_itens_loja)):
             status = '(COMPRADO)' if lista_itens_loja[i]["comprado"] else ''
@@ -320,6 +337,15 @@ lista_monstros_normais = [
     {'nome': 'orc', 'vida': 40, 'nivel': 5, 'atk': 8, 'xp': 25, 'ouro': 200},
     {'nome': 'troll da caverna', 'vida': 50, 'nivel': 6, 'atk': 10, 'xp': 30, 'ouro': 300},
     {'nome': 'gárgula', 'vida': 45, 'nivel': 5, 'atk': 9, 'xp': 28, 'ouro': 200}
+]
+lista_monstros_invocacoes = [
+    {'nome': 'Tieflíngs', 'vida': 130, 'nivel': 5, 'atk': 5, 'xp': 50, 'ouro': 10},
+    {'nome': 'Tieflíngs', 'vida': 150, 'nivel': 6, 'atk': 6, 'xp': 60, 'ouro': 15},
+    {'nome': 'Demônio Inferior', 'vida': 170, 'nivel': 7, 'atk': 7, 'xp': 70, 'ouro': 20},
+    {'nome': 'Demônio Inferior', 'vida': 180, 'nivel': 8, 'atk': 8, 'xp': 80, 'ouro': 25},
+    {'nome': 'Demoníaco', 'vida': 190, 'nivel': 9, 'atk': 9, 'xp': 90, 'ouro': 30},
+    {'nome': 'Demoníaco', 'vida': 200, 'nivel': 10, 'atk': 10, 'xp': 100, 'ouro': 35},
+    
 ]
 
 def arma_aleatoria():
@@ -575,7 +601,7 @@ def prompt():
     print("\n" + "="*60)
     print("O que deseja fazer?")
     acao = input("->").lower()
-    acoes_aceitas = ['status', 'mover', 'loja', 'sair', 'ajuda', 'olhar', 'inspecionar', 'teleportar', 'dormir', 'mochila', 'mapa']
+    acoes_aceitas = ['invocar','status', 'mover', 'loja', 'sair', 'ajuda', 'olhar', 'inspecionar', 'teleportar', 'dormir', 'mochila', 'mapa']
     while acao not in acoes_aceitas:
         print("Ação inválida, tente novamente.\n")
         acao = input("-> ").lower()
@@ -598,6 +624,8 @@ def prompt():
         exibir_status(meu_jogador)
     elif acao == 'mapa':
         mostrar_mapa()
+    elif acao == 'invocar':
+        encontro_aleatorio()
     
 def acao_loja(escolha):
     if escolha == 'comprar':
