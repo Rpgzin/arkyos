@@ -459,7 +459,8 @@ mapa = {
         'AVANÇAR': 'a2',
         'RETORNAR': '',
         'MONSTRO': '',
-        'LOCAIS': 'trono'
+        'LOCAIS': 'trono',
+        'contador' : 0
     },
     'a2': {
         'NOME_LOCAL': "Sala2",
@@ -471,7 +472,8 @@ mapa = {
         'AVANÇAR': '',
         'RETORNAR': 'a1',
         'MONSTRO': monstro_exemplo,
-        'LOCAIS': ''
+        'LOCAIS': '',
+        'contador' : 0
     },
     'b1': { 
         'NOME_LOCAL': "Sala1 Segundo andar",
@@ -483,7 +485,8 @@ mapa = {
         'AVANÇAR': 'b2',
         'RETORNAR': '',
         'MONSTRO': monstro_exemplo2,
-        'LOCAIS': ''
+        'LOCAIS': '',
+        'contador' : 0
     },
     'b2': {
         'NOME_LOCAL': "LOJA",
@@ -495,7 +498,8 @@ mapa = {
         'AVANÇAR': '',
         'RETORNAR': 'b1',
         'MONSTRO': '',
-        'LOCAIS': ''
+        'LOCAIS': '',
+        'contador' : 0
     },
     'c1': {
         'NOME_LOCAL': "Sala1 Terceiro andar",
@@ -507,7 +511,8 @@ mapa = {
         'AVANÇAR': 'c2',
         'RETORNAR': '',
         'MONSTRO': '',
-        'LOCAIS': ''
+        'LOCAIS': '',
+        'contador' : 0
     },
     'c2': {
         'NOME_LOCAL': "Sala2 Terceiro andar",
@@ -519,7 +524,8 @@ mapa = {
         'AVANÇAR': '',
         'RETORNAR': 'c1',
         'MONSTRO': '',
-        'LOCAIS': ''
+        'LOCAIS': '',
+        'contador' : 0
     },
 }
 
@@ -1032,7 +1038,7 @@ def jogador_mover():
         time.sleep(1)
         main_game_loop()
     elif meu_jogador.local == 'a1':
-        pergunta = "Avançar para a próxima sala? (escreva avançar)\n >>"
+        pergunta = "Avançar em direção ao portão negro? (escreva avançar)\n >>"
     elif meu_jogador.local in ['b1', 'c1']:
         pergunta = "Avançar para a próxima sala ou subir as escadas e voltar a sala anterior? (escreva: avançar ou subir)\n>>"
     elif meu_jogador.local in ['a2', 'c2']:
@@ -1054,17 +1060,47 @@ def jogador_mover():
         print("Direção inválida.")
 
 def movimento_manipulado(destino):
+    if destino == 'a2':
+        if mapa[meu_jogador.local]['contador'] == 0:      
+            passagem ='''
+Ao Abrir o portão, Uma nuvem de poeira antiga Cobre o Local. Uma voz, baixa e arrastada, sussurra em sua mente:
+"O herdeiro da ruína caminha outra vez... mas será que lembrará antes de se perder?"
+
+.....
+
+Ao Atravessar Para o Proximo comodo, 
+a cada passo a dentro o ambiente é iluminado por tochas azuis que você sente que não deviam acender.
+'''
+            for passa in passagem:
+                sys.stdout.write(passa)
+                sys.stdout.flush()
+                time.sleep(0.01)
+            time.sleep(2)
+        mapa[meu_jogador.local]['contador'] += 1
     print(f"\nVocê se moveu para {destino}.")
     meu_jogador.local = destino
     print_local()
 
 def jogador_examinar():
     examinar = mapa[meu_jogador.local]['EXAMINAR']
-    print('▬'*60)
-    for examina in examinar:
-        sys.stdout.write(examina)
-        sys.stdout.flush()
-        time.sleep(0.01)
+    if mapa[meu_jogador.local][SOLVED] == True:
+        examinar2 = '''
+Atrás de você, o que restou do trono escurece ainda mais, como se a própria sombra tentasse fugir dali. 
+A energia maligna está morrendo... mas algo abaixo desperta.
+
+Você se vira, encarando a única saída: um Portão Negro, que leva a uma proxima sala nas profundezas da torre. 
+A estrutura range como um animal faminto, esperando que você se mova.
+              '''
+        for examina in examinar2:
+            sys.stdout.write(examina)
+            sys.stdout.flush()
+            time.sleep(0.01)
+    else:
+        print('▬')
+        for examina in examinar:
+            sys.stdout.write(examina)
+            sys.stdout.flush()
+            time.sleep(0.01)
     locais()
 
 ##### Fluxo principal #####
