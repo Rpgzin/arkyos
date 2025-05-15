@@ -15,9 +15,8 @@ from utilitarios import(
 sistema de SPAWNAR MOSNTRO POR SALA
 sistema de VENDA DE ITENS DA MOCHILA
 '''
-######### Setup do jogador ########
-#ainda to vendo os arquivos
 
+######### Setup do jogador ########
 class Player:
     def __init__(self):
         self.nome = ''
@@ -48,6 +47,7 @@ class Player:
     
     def add_item(self, item):
         self.mochila.append(item)
+
 meu_jogador = Player()
 
 def calcular_atributos(jogador):
@@ -108,7 +108,6 @@ def exibir_status(jogador):
     else:
         print('arma: sem arma equipada')
     print(f'forca: {jogador.forca} fortitude: {jogador.fortitude} inteligência: {jogador.inteligencia}')
-
 
 class Monstro:
     def __init__(self, nome, vida, nivel, atk, xp, ouro):
@@ -324,7 +323,6 @@ lista_armas = [
 
 lista_itens_especiais = [
     {'nome': 'Anel Desconhecido', 'atk': 0, 'preco': 00, 'desc': 'Um anel feito de ouro. Sua origem é desconhecida.', 'equipado': False, 'consumivel': False},
-    
 ]
 
 lista_magias = [
@@ -343,6 +341,7 @@ lista_monstros_normais = [
     {'nome': 'troll da caverna', 'vida': 50, 'nivel': 6, 'atk': 10, 'xp': 30, 'ouro': 300},
     {'nome': 'gárgula', 'vida': 45, 'nivel': 5, 'atk': 9, 'xp': 28, 'ouro': 200}
 ]
+
 lista_monstros_invocacoes = [
     {'nome': 'Tieflíngs', 'vida': 50, 'nivel': 5, 'atk': 5, 'xp': 50, 'ouro': 10},
     {'nome': 'Tieflíngs', 'vida': 50, 'nivel': 6, 'atk': 6, 'xp': 60, 'ouro': 15},
@@ -350,7 +349,6 @@ lista_monstros_invocacoes = [
     {'nome': 'Demônio Inferior', 'vida': 50, 'nivel': 8, 'atk': 8, 'xp': 80, 'ouro': 25},
     {'nome': 'Demoníaco', 'vida': 50, 'nivel': 9, 'atk': 9, 'xp': 90, 'ouro': 30},
     {'nome': 'Demoníaco', 'vida': 50, 'nivel': 10, 'atk': 10, 'xp': 100, 'ouro': 35},
-    
 ]
 
 def arma_aleatoria():
@@ -364,9 +362,7 @@ monstro2 = lista_monstros_normais[1]
 monstro_exemplo = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'], monstro['ouro'])
 monstro_exemplo2 = Monstro(monstro2['nome'], monstro2['vida'], monstro2['nivel'], monstro2['atk'], monstro2['xp'], monstro2['ouro'])
 
-
 ######### Tela de título #########
-
 def navegação_tela_titulo():
     opção = input(">").lower()
     while opção not in ['jogar', 'ajuda', 'sair']:
@@ -433,12 +429,10 @@ def ajuda_menu():
     tela_titulo()
 
 #### Funções do jogo ####
-
 def start_game():
     meu_jogador.local = 'a1'
 
 #### Mapa #####
-
 DESCRICAO = 'DESCRICAO'
 EXAMINAR = 'EXAMINAR'
 SOLVED = 'SOLVED'
@@ -458,15 +452,14 @@ mapa = {
     'a1': {
         'NOME_LOCAL': 'Sala do Trono',
         'DESCRICAO': 'Uma sala grande e luxuosa, com uma grande mesa em frente ao trono.',
-        'EXAMINAR': 'Tudo ao seu redor parece morto.\n   Porem voce nota um brilho fraco vindo de frente de um trono destruido.\n Digite trono para examinar o trono.',
+        'EXAMINAR': '\nTudo ao seu redor parece morto.\nPorem voce nota um brilho fraco vindo de frente de um trono destruido.\nDigite trono para examinar o trono.\n',
         'SOLVED': False,
         'SUBIR': '',
         'DESCER': '',
         'AVANÇAR': 'a2',
         'RETORNAR': '',
         'MONSTRO': '',
-
-        'LOCAIS': ['trono', 'bau'],
+        'LOCAIS': 'trono'
     },
     'a2': {
         'NOME_LOCAL': "Sala2",
@@ -477,7 +470,8 @@ mapa = {
         'DESCER': 'b1',
         'AVANÇAR': '',
         'RETORNAR': 'a1',
-        'MONSTRO': monstro_exemplo
+        'MONSTRO': monstro_exemplo,
+        'LOCAIS': ''
     },
     'b1': { 
         'NOME_LOCAL': "Sala1 Segundo andar",
@@ -488,7 +482,8 @@ mapa = {
         'DESCER': '',
         'AVANÇAR': 'b2',
         'RETORNAR': '',
-        'MONSTRO': monstro_exemplo2
+        'MONSTRO': monstro_exemplo2,
+        'LOCAIS': ''
     },
     'b2': {
         'NOME_LOCAL': "LOJA",
@@ -499,7 +494,8 @@ mapa = {
         'DESCER': 'c1',
         'AVANÇAR': '',
         'RETORNAR': 'b1',
-        'MONSTRO': ''
+        'MONSTRO': '',
+        'LOCAIS': ''
     },
     'c1': {
         'NOME_LOCAL': "Sala1 Terceiro andar",
@@ -510,7 +506,8 @@ mapa = {
         'DESCER': '',
         'AVANÇAR': 'c2',
         'RETORNAR': '',
-        'MONSTRO': ''
+        'MONSTRO': '',
+        'LOCAIS': ''
     },
     'c2': {
         'NOME_LOCAL': "Sala2 Terceiro andar",
@@ -521,7 +518,8 @@ mapa = {
         'DESCER': '',
         'AVANÇAR': '',
         'RETORNAR': 'c1',
-        'MONSTRO': ''
+        'MONSTRO': '',
+        'LOCAIS': ''
     },
 }
 
@@ -575,17 +573,8 @@ def mostrar_mapa():
                 | | |
                 | |x|
     ''')
-    
-
-
-#mapa mental dos andares:
-#|a1|a2|
-#|b1|b2|
-#|c2|c1|
-#Começamos em a1
 
 ##### Interações em jogo #####
-
 def print_local():
     if meu_jogador.local != 'a1':
         limpar_tela()
@@ -633,41 +622,69 @@ def prompt():
         mostrar_mapa()
     elif acao == 'invocar':
         encontro_aleatorio()
+
+def locais():
+    print('O que deseja fazer?')
+    acao = input('>>').lower()
+    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'], 'sair'
     
+    while acao not in acoes_aceitas:
+        print('Acao inválida, tente novamente. (caso não tenha mais opções, digite sair)')
+        acao = input('>>').lower()
+    
+    if acao == 'sair':
+        main_game_loop()
+    if acao == 'trono':
+        trono()
+    elif acao == 'bau':
+        # Adicione aqui a função para o baú quando existir
+        pass
+    else:
+        print('Acao inválida, tente novamente.')
+        locais()
+
 def acao_loja(escolha):
     if escolha == 'comprar':
         comprar()
     elif escolha == 'vender':
         vender()
 
-def locais():
-    print('O que deseja fazer?')
-    acao = input('>>').lower()
-    acaoes_aceitas = mapa[meu_jogador.local]['LOCAIS']
-    while acao not in acaoes_aceitas:
-        print('Acao inválida, tente novamente.')
-        acao = input('>>').lower()
-        if acao == 'trono':
-            trono()
-        else:
-            print('Acao inválida, tente novamente.')
-            locais()
-            
 ### Objetos interativos dos andares ###
-
 def trono():
-    
     print('▬'*60)
-    print('Você vai até o brilho e vê um anel dourado.\n  ao toca-lo um frio intenso percorre seu braço.\n  Seu dedo o aceita sem resistência, como se ele sentisse que voce era o seu Dono.\n')
-    item = lista_itens_especiais[0]
-    meu_jogador.add_item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'], item['preco'])
-    print('Anel desconhecido adicionado ao seu inventario!')
-    mapa[meu_jogador.local]['SOLVED'] = True
-    intervalo()
-    main_game_loop()
+    if meu_jogador.local == 'a1' and mapa[meu_jogador.local]['SOLVED'] == False:
+        fala1 ='Você vai até o brilho e vê um anel dourado.\nao toca-lo um frio intenso percorre seu braço.\nSeu dedo o aceita sem resistência, como se ele sentisse que voce era o seu Dono.\n'
+        for fala in fala1:
+            sys.stdout.write(fala)
+            sys.stdout.flush()
+            time.sleep(0.01)
+        item = lista_itens_especiais[0]
+        meu_jogador.add_item(Item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'], item['preco']))
+        fala2 ='Anel desconhecido adicionado ao seu inventario!'
+        for fala in fala2:
+            sys.stdout.write(fala)
+            sys.stdout.flush()
+            time.sleep(0.01)
+        print('\n', '▬'*60)
+        mapa[meu_jogador.local]['SOLVED'] = True
+        time.sleep(1.5)
+        limpar_tela()
+        main_game_loop()
+    elif meu_jogador.local == 'a1' and mapa[meu_jogador.local]['SOLVED'] == True:
+        fala3 = 'Nã há mais nada no trono.'
+        for fala in fala3:
+            sys.stdout.write(fala)
+            sys.stdout.flush()
+            time.sleep(0.01)
+        print('\n', '▬'*60)
+        time.sleep(1.5)
+        limpar_tela()
+        main_game_loop()
+    else:
+        print('Não tem um trono aqui.')
+        main_game_loop()
 
 ########################################
-
 def comprar(escolha):
         lista_itens_loja[escolha]['comprado'] = True
         item = lista_itens_loja[escolha]
@@ -709,7 +726,7 @@ def acao_luta(escolha, monstro):
 def abrir_mochila():
     if meu_jogador.game_over:
         return
-        main_game_loop() 
+        main_game_loop()
     if meu_jogador.mochila:
         print (f'Ouro: {meu_jogador.ouro}')
         for i in range(len(meu_jogador.mochila)):
@@ -1042,22 +1059,21 @@ def movimento_manipulado(destino):
     print_local()
 
 def jogador_examinar():
-    print(mapa[meu_jogador.local]['EXAMINAR'])
-    mapa[meu_jogador.local]['SOLVED'] = True
+    examinar = mapa[meu_jogador.local]['EXAMINAR']
+    print('▬'*60)
+    for examina in examinar:
+        sys.stdout.write(examina)
+        sys.stdout.flush()
+        time.sleep(0.01)
     locais()
 
 ##### Fluxo principal #####
-
 def main_game_loop():
     while not meu_jogador.game_over:
         prompt()
-        # Aqui tratar se os enigmas foram resolvidos, chefe derrotado, tudo explorado, etc.
     limpar_tela()
     print("\n\n**FIM DE JOGO**")
     sys.exit()
-    exit()
-    limpar_tela()
-    print("\n\n**FIM DE JOGO**")
 
 def setup_jogo():
     os.system('clear' if os.name != 'nt' else 'cls')
@@ -1159,7 +1175,7 @@ def setup_jogo():
     time.sleep(2)
 
     os.system('clear' if os.name != 'nt' else 'cls')
-    print ("=====================================")
+    print ("▬"*60)
     introducao1 = '''
       O frio das pedras toca sua pele como agulhas. O ar está pesado, carregado de uma magia que pulsa devagar, 
     como um coração moribundo. Ao abrir os olhos, tudo é cinza e vermelho: 
