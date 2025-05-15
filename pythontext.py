@@ -61,6 +61,15 @@ def calcular_atributos(jogador):
         jogador.atk_final += jogador.item_equipado.atk
     jogador.dano_magico = jogador.inteligencia * 2
 
+def atualizar_atributos(jogador):
+    jogador.vida_max = jogador.vida_base + (jogador.fortitude * 10)
+    jogador.mana_max = jogador.mana_base + (jogador.inteligencia * 8)
+    jogador.atk = jogador.atk_base + (jogador.forca * 2)
+    jogador.atk_final = jogador.atk
+    if jogador.item_equipado:
+        jogador.atk_final += jogador.item_equipado.atk
+    jogador.dano_magico = jogador.inteligencia * 2
+
 def subi_nivel(jogador):
     jogador.nivel += 1
     print(f'{jogador.nome} subiu de nivel para #{jogador.nivel}!!!')
@@ -86,7 +95,7 @@ def subi_nivel(jogador):
             print('Comando invádido')
             continue
         pontos -= 1
-    calcular_atributos(meu_jogador)
+    atualizar_atributos(meu_jogador)
 
 def exibir_status(jogador):
     limpar_tela()
@@ -118,12 +127,13 @@ def experiencia(monstro):
         subi_nivel(meu_jogador)
 
 class Item:
-    def __init__(self, nome, atk, desc, equipado, consumivel):
+    def __init__(self, nome, atk, desc, equipado, consumivel, preco):
         self.nome = nome
         self.atk = atk
         self.desc = desc
         self.equipado = equipado
         self.consumivel = consumivel
+        self.preco = preco
     
 class Magia:
     def __init__(self, nome, dano, desc, mana_gasta):
@@ -133,6 +143,8 @@ class Magia:
         self.mana_gasta = mana_gasta 
 
 def mostrar_loja():
+        if meu_jogador.game_over:
+            main_game_loop() 
         # if meu_jogador.local != 'b2':
         #     print('NãO HÁ LOJAS POR AQUI')
         #     main_game_loop()
@@ -144,13 +156,18 @@ def mostrar_loja():
                 continue
             print(f"{i+1}. {lista_itens_loja[i]['nome']} | Preço: {lista_itens_loja[i]['preco']} | Descricao: {lista_itens_loja[i]['desc']} {status}\n")
         print(f'Ouro: {meu_jogador.ouro}')
-        print('-> USE NÚMEROS PARA SELECIONAR O ITEM OU [fechar]')
+        print('-> USE NÚMEROS PARA SELECIONAR O ITEM OU [vender | fechar]')
         escolha = input('>>').lower()
         if escolha == 'fechar':
             print_local()
+        elif escolha == 'vender':
+            limpar_tela()
+            vender_item()
         try:
             escolha = int(escolha)-1
             if escolha not in range(0, len(lista_itens_loja)):
+                if meu_jogador.game_over:
+                    main_game_loop() 
                 print('**ITEM INVÁLIDO**')
                 mostrar_loja()
             
@@ -160,7 +177,7 @@ def mostrar_loja():
                 print(f"{lista_itens_loja[escolha]['nome']} | ATK: {lista_itens_loja[escolha]['atk']} | Preço: {lista_itens_loja[escolha]['preco']} | Descricao: {lista_itens_loja[escolha]['desc']} {status}\n")
             print('[compra | voltar | fechar]')
             acao = input('>>')
-            if acao not in ['comprar', 'voltar']:
+            if acao not in ['comprar', 'voltar', 'fechar']:
                 print('**COMANDO INVÁLIDO**')
                 mostrar_loja()
             if acao == 'comprar':
@@ -171,9 +188,60 @@ def mostrar_loja():
                 print_local()
 
         except:
+            if meu_jogador.game_over:
+                main_game_loop() 
             print('**ITEM INVÁLIDO**')
             mostrar_loja()
-            
+
+def vender_item():
+    print('ITENS DA MOCHILA:')
+    for i, item in enumerate(meu_jogador.mochila):
+        if item.equipado:
+            print(f'{i+1}. {item.nome} | {item.desc} | valor: {item.preco} | (EQUIPADO)')
+            continue
+        print(f'{i+1}. {item.nome} | {item.desc} | valor: {item.preco}')
+    print('-> USE NÚMEROS PARA SELECIONAR O ITEM OU [comprar | fechar]')
+    escolha = input('>>').lower()
+    if escolha == 'fechar':
+        print_local()
+    elif escolha == 'comprar':
+        limpar_tela()
+        mostrar_loja()
+    try:
+        escolha = int(escolha)-1
+        if escolha not in range(0, len(lista_itens_loja)):
+            print('**ITEM INVÁLIDO**')
+            vender_item()
+        
+        if meu_jogador.mochila[escolha].equipado:
+            print(f'{meu_jogador.mochila[escolha].nome} | {meu_jogador.mochila[escolha].desc} | valor: {meu_jogador.mochila[escolha].preco} | (EQUIPADO)')
+        else:
+            print(f'{meu_jogador.mochila[escolha].nome} | {meu_jogador.mochila[escolha].desc} | valor: {meu_jogador.mochila[escolha].preco}')
+        print('[vender | voltar | fechar]')
+        acao = input('>>')
+        if acao not in ['vender', 'voltar', 'fechar']:
+            print('**COMANDO INVÁLIDO**')
+            vender_item()
+        if acao == 'vender':
+            vender_acao(escolha)
+        elif acao == 'voltar':
+            vender_item()
+        elif acao == 'fechar':
+            print_local()
+    except:
+        print('**ITEM INVÁLIDO**')
+        vender_item()
+
+def vender_acao(escolha):
+    item = meu_jogador.mochila[escolha]
+    meu_jogador.ouro += item.preco
+    if item.equipado:
+        meu_jogador.item_equipado = None
+        meu_jogador.atk = meu_jogador.atk_base + (meu_jogador.forca * 2)
+        meu_jogador.atk_final = meu_jogador.atk
+    meu_jogador.mochila.pop(escolha)
+    vender_item()
+
 def add_item_comprado(item):
     if lista_itens_loja[0]['comprado'] == True:
         meu_jogador.add_item(item)
@@ -231,10 +299,10 @@ lista_consumiveis = [
 ]
 
 lista_armas = [
-    {'nome': 'Adaga enferrujada', 'atk': 3, 'desc': 'Parece ser bem antiga', 'equipado': False, 'consumivel': False},
-    {'nome': 'Varinha capenga', 'atk': 3, 'desc': 'É nova, mas bem barata', 'equipado': False, 'consumivel': False},
-    {'nome': 'Espada longa', 'atk': 4, 'desc': 'A espada de todo guerreiro.', 'equipado': False, 'consumivel': False},
-    {'nome': 'Grimório', 'atk': 2, 'desc': 'O grimório de um mago, o local de sua sabedoria.', 'equipado': False, 'consumivel': False},
+    {'nome': 'Adaga enferrujada', 'atk': 3, 'preco': 100, 'desc': 'Parece ser bem antiga', 'equipado': False, 'consumivel': False},
+    {'nome': 'Varinha capenga', 'atk': 3, 'preco': 100, 'desc': 'É nova, mas bem barata', 'equipado': False, 'consumivel': False},
+    {'nome': 'Espada longa', 'atk': 4, 'preco': 100, 'desc': 'A espada de todo guerreiro.', 'equipado': False, 'consumivel': False},
+    {'nome': 'Grimório', 'atk': 2, 'preco': 100, 'desc': 'O grimório de um mago, o local de sua sabedoria.', 'equipado': False, 'consumivel': False},
 ]
 
 lista_magias = [
@@ -257,7 +325,7 @@ lista_monstros_normais = [
 def arma_aleatoria():
     chances = [30, 30, 20, 20]
     arma_random = random.choices(lista_armas, weights=chances, k=1)[0]
-    arma = Item(arma_random['nome'], arma_random['atk'], arma_random['desc'], arma_random['equipado'], arma_random['consumivel'])
+    arma = Item(arma_random['nome'], arma_random['atk'], arma_random['desc'], arma_random['equipado'], arma_random['consumivel'], arma_random['preco'])
     return arma
 
 monstro = lista_monstros_normais[0]
@@ -540,7 +608,7 @@ def acao_loja(escolha):
 def comprar(escolha):
         lista_itens_loja[escolha]['comprado'] = True
         item = lista_itens_loja[escolha]
-        item_add = Item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'])
+        item_add = Item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'], item['preco'])
         print(f'**VOCE COMPROU {item_add.nome}**')
         meu_jogador.add_item(item_add)
         meu_jogador.ouro -= lista_itens_loja[escolha]['preco']
@@ -577,6 +645,7 @@ def acao_luta(escolha, monstro):
 
 def abrir_mochila():
     if meu_jogador.game_over:
+        return
         main_game_loop() 
     if meu_jogador.mochila:
         print (f'Ouro: {meu_jogador.ouro}')
@@ -681,6 +750,7 @@ def abrir_mochila():
                         abrir_mochila()
                     elif acao == 'fechar':
                         print_local()
+                        main_game_loop()
             # jogador selecionou sem item equipado
             else:
                 if meu_jogador.mochila[escolha].consumivel:
@@ -877,11 +947,11 @@ def jogador_mover():
     if meu_jogador.local == 'a1':
         pergunta = "Avançar para a próxima sala? (escreva avançar)\n"
     elif meu_jogador.local in ['b1', 'c1']:
-        pergunta = "Avançar para a próxima sala ou subir as escadas e voltar a sala anterior? (escreva avançar ou subir)\n"
+        pergunta = "Avançar para a próxima sala ou subir as escadas e voltar a sala anterior? (escreva: avançar ou subir)\n"
     elif meu_jogador.local in ['a2', 'c2']:
-        pergunta = "Descer as escadas ou retornar a sala anterior? (escreva descer ou retornar)\n"
+        pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n"
     elif meu_jogador.local in ['b2']:
-        pergunta = "Há uma loja no andar. para onde deseja se mover? (loja, descer ou retornar)\n"
+        pergunta = "Há uma loja no andar. para onde deseja se mover? (escreva: loja, descer ou retornar)\n"
     
     dest = input(pergunta).lower()
     direcoes_validas = ['subir', 'descer', 'avançar', 'retornar', 'loja']
@@ -918,6 +988,8 @@ def main_game_loop():
     print("\n\n**FIM DE JOGO**")
     sys.exit()
     exit()
+    limpar_tela()
+    print("\n\n**FIM DE JOGO**")
 
 def setup_jogo():
     os.system('clear' if os.name != 'nt' else 'cls')
@@ -956,12 +1028,12 @@ def setup_jogo():
         meu_jogador.mana_max = meu_jogador.mana
         meu_jogador.atk_base = 6
         meu_jogador.atk = meu_jogador.atk_base
-        meu_jogador.item_equipado = Item(arma_padrao['nome'], arma_padrao['atk'], arma_padrao['desc'], True, arma_padrao['consumivel'])
+        meu_jogador.item_equipado = Item(arma_padrao['nome'], arma_padrao['atk'], arma_padrao['desc'], True, arma_padrao['consumivel'], arma_padrao['preco'])
         meu_jogador.add_item(meu_jogador.item_equipado)
         meu_jogador.atk_final = meu_jogador.atk + meu_jogador.item_equipado.atk
-        meu_jogador.add_item(Item(pocao_vida_baixa['nome'], pocao_vida_baixa['atk'], pocao_vida_baixa['desc'], pocao_vida_baixa['equipado'], pocao_vida_baixa['consumivel']))
-        meu_jogador.add_item(Item(pocao_vida_media['nome'], pocao_vida_media['atk'], pocao_vida_media['desc'], pocao_vida_media['equipado'], pocao_vida_media['consumivel']))
-        meu_jogador.add_item(Item(pocao_vida_alta['nome'], pocao_vida_alta['atk'], pocao_vida_alta['desc'], pocao_vida_alta['equipado'], pocao_vida_alta['consumivel']))
+        meu_jogador.add_item(Item(pocao_vida_baixa['nome'], pocao_vida_baixa['atk'], pocao_vida_baixa['desc'], pocao_vida_baixa['equipado'], pocao_vida_baixa['consumivel'], pocao_vida_baixa['preco']))
+        meu_jogador.add_item(Item(pocao_vida_media['nome'], pocao_vida_media['atk'], pocao_vida_media['desc'], pocao_vida_media['equipado'], pocao_vida_media['consumivel'], pocao_vida_media['preco']))
+        meu_jogador.add_item(Item(pocao_vida_alta['nome'], pocao_vida_alta['atk'], pocao_vida_alta['desc'], pocao_vida_alta['equipado'], pocao_vida_alta['consumivel'], pocao_vida_alta['preco']))
         calcular_atributos(meu_jogador)
 
     elif meu_jogador.classe == 'mago':
@@ -978,9 +1050,9 @@ def setup_jogo():
         meu_jogador.atk_base = 5
         meu_jogador.atk = meu_jogador.atk_base
         meu_jogador.magias.append(Magia(magia_basica['nome'], magia_basica['dano'], magia_basica['desc'], magia_basica['mana_gasta']))
-        meu_jogador.add_item(Item(pocao_mana_baixa['nome'], pocao_mana_baixa['atk'], pocao_mana_baixa['desc'], pocao_mana_baixa['equipado'], pocao_mana_baixa['consumivel']))
-        meu_jogador.add_item(Item(pocao_mana_media['nome'], pocao_mana_media['atk'], pocao_mana_media['desc'], pocao_mana_media['equipado'], pocao_mana_media['consumivel']))
-        meu_jogador.add_item(Item(pocao_mana_alta['nome'], pocao_mana_alta['atk'], pocao_mana_alta['desc'], pocao_mana_alta['equipado'], pocao_mana_alta['consumivel']))
+        meu_jogador.add_item(Item(pocao_mana_baixa['nome'], pocao_mana_baixa['atk'], pocao_mana_baixa['desc'], pocao_mana_baixa['equipado'], pocao_mana_baixa['consumivel'], pocao_mana_baixa['preco']))
+        meu_jogador.add_item(Item(pocao_mana_media['nome'], pocao_mana_media['atk'], pocao_mana_media['desc'], pocao_mana_media['equipado'], pocao_mana_media['consumivel'], pocao_mana_media['preco']))
+        meu_jogador.add_item(Item(pocao_mana_alta['nome'], pocao_mana_alta['atk'], pocao_mana_alta['desc'], pocao_mana_alta['equipado'], pocao_mana_alta['consumivel'], pocao_mana_alta['preco']))
         calcular_atributos(meu_jogador)
 
     elif meu_jogador.classe == 'monge':
