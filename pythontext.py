@@ -501,9 +501,17 @@ mapa = {
         'contador' : 0
     },
     'a2': {
-        'NOME_LOCAL': "Sala2",
-        'DESCRICAO': 'Descrição da sala 2.',
-        'EXAMINAR': 'Você observa objetos antigos.',
+        'NOME_LOCAL': "Sala do Guardião Enraizado",
+-        'DESCRICAO': '''
+-         Um odor de terra úmida e carne podre invade seus sentidos. A sala adiante parece
+-         uma antiga estufa esquecida, onde raízes negras tomaram os pilares de pedra...''',
+-        'EXAMINAR': '''
+-                      No centro do local, uma árvore retorcida cresce a partir de um altar quebrado.
+-                      Seus galhos têm formas humanoides penduradas, como se absorvessem ecos de vida.
+-                                                        .....
+-        Uma criatura — metade carne, metade madeira — jaz ajoelhada, presa por correntes de prata, seus olhos fechados.
+-                       (para enfrentar o guardião Enraizado, digite 'enfrentar', para retornar digite sair)
+-        ''',
         'SOLVED': False,
         'SUBIR': '',
         'DESCER': 'b1',
