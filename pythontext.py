@@ -502,16 +502,16 @@ mapa = {
     },
     'a2': {
         'NOME_LOCAL': "Sala do Guardião Enraizado",
--        'DESCRICAO': '''
--         Um odor de terra úmida e carne podre invade seus sentidos. A sala adiante parece
--         uma antiga estufa esquecida, onde raízes negras tomaram os pilares de pedra...''',
--        'EXAMINAR': '''
--                      No centro do local, uma árvore retorcida cresce a partir de um altar quebrado.
--                      Seus galhos têm formas humanoides penduradas, como se absorvessem ecos de vida.
--                                                        .....
--        Uma criatura — metade carne, metade madeira — jaz ajoelhada, presa por correntes de prata, seus olhos fechados.
--                       (para enfrentar o guardião Enraizado, digite 'enfrentar', para retornar digite sair)
--        ''',
+        'DESCRICAO': '''
+         Um odor de terra úmida e carne podre invade seus sentidos. A sala adiante parece
+         uma antiga estufa esquecida, onde raízes negras tomaram os pilares de pedra...''',
+        'EXAMINAR': '''
+                      No centro do local, uma árvore retorcida cresce a partir de um altar quebrado. 
+                      Seus galhos têm formas humanoides penduradas, como se absorvessem ecos de vida.
+                                                        .....
+        Uma criatura — metade carne, metade madeira — jaz ajoelhada, presa por correntes de prata, seus olhos fechados.
+                       (para enfrentar o guardião Enraizado, digite 'enfrentar', para retornar digite sair)
+        ''',
         'SOLVED': False,
         'SUBIR': '',
         'DESCER': 'b1',
@@ -519,6 +519,19 @@ mapa = {
         'RETORNAR': 'a1',
         'MONSTRO': '',
         'LOCAIS': 'enfrentar',
+        'contador' : 0
+    },
+    'b1': { 
+        'NOME_LOCAL': "Sala1 Segundo andar",
+        'DESCRICAO': 'Descrição da sala b1.',
+        'EXAMINAR': 'Uma escada quebrada e mobília velha.',
+        'SOLVED': False,
+        'SUBIR': 'a2',
+        'DESCER': '',
+        'AVANÇAR': 'b2',
+        'RETORNAR': '',
+        'MONSTRO': monstro_exemplo2,
+        'LOCAIS': '',
         'contador' : 0
     },
     'b1': { 
