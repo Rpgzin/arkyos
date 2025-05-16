@@ -12,8 +12,7 @@ from utilitarios import(
 
 #TO-DO:
 '''
-sistema de SPAWNAR MOSNTRO POR SALA
-sistema de VENDA DE ITENS DA MOCHILA
+Drop de itens especificos de boss
 '''
 
 ######### Setup do jogador ########
@@ -99,7 +98,7 @@ def subi_nivel(jogador):
 
 def exibir_status(jogador):
     limpar_tela()
-    print('▬'*60)
+    print('▬'*80)
     print('STATUS'.upper())
     print(f'{jogador.nome} LVL:{jogador.nivel} XP: {jogador.xp}/{jogador.xp_max}')
     print(f'vida: {jogador.vida}/{jogador.vida_max} ATK: {jogador.atk}/MAG.ATK: {jogador.dano_magico}/ MANA: {jogador.mana}/{jogador.mana_max}')
@@ -110,7 +109,7 @@ def exibir_status(jogador):
     print(f'forca: {jogador.forca} fortitude: {jogador.fortitude} inteligência: {jogador.inteligencia}')
 
 class Monstro:
-    def __init__(self, nome, vida, nivel, atk, xp, ouro):
+    def __init__(self, nome, vida, nivel, atk, xp, ouro, boss):
         self.nome = nome
         self.vida = vida*nivel
         self.vida_max = vida*nivel
@@ -119,6 +118,7 @@ class Monstro:
         self.xp = xp
         self.ouro = ouro
         self.item = arma_aleatoria()
+        self.boss = boss
 
 def encontro_aleatorio():
     if meu_jogador.local != 'b1':
@@ -295,7 +295,7 @@ def pocao_mana_alta():
     print (" você bebeu a poção!!!")
 
 lista_itens_loja = [
-    { 'nome': 'Espada de ferro', 'atk': 5, 'preco': 100, 'desc': 'Uma espada de ferro, muito forte.', 'item': 'espada de ferro', 'comprado': False, 'equipado': False, 'consumivel': False},
+    { 'nome': 'Espada de ferro', 'atk': 5, 'preco': 120, 'desc': 'Uma espada de ferro, muito forte.', 'item': 'espada de ferro', 'comprado': False, 'equipado': False, 'consumivel': False},
     { 'nome': 'Arco longo', 'atk': 4,'preco': 100, 'desc': 'Um arco longo, muito forte.', 'item': 'arco longo', 'comprado': False, 'equipado': False, 'consumivel': False},
     { 'nome': 'Pocao de vida baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de vida baixa, cura 15 pontos de vida.', 'item': 'pocao de vida baixa', 'comprado': False, 'equipado': False, 'consumivel': True},
     { 'nome': 'Pocao de vida media', 'atk': 0,'preco': 100, 'desc': 'Uma pocao de vida media, cura 30 pontos de vida.', 'item': 'pocao de vida media', 'comprado': False, 'equipado': False, 'consumivel': True},
@@ -330,25 +330,28 @@ lista_magias = [
 ]
 
 lista_monstros_normais = [
-    {'nome': 'slime', 'vida': 10, 'nivel': 1, 'atk': 2, 'xp': 150, 'ouro': 100},
-    {'nome': 'goblin', 'vida': 20, 'nivel': 2, 'atk': 4, 'xp': 100, 'ouro': 200},
-    {'nome': 'lobo selvagem', 'vida': 25, 'nivel': 3, 'atk': 5, 'xp': 15, 'ouro': 100},
-    {'nome': 'esqueleto', 'vida': 30, 'nivel': 4, 'atk': 6, 'xp': 20, 'ouro': 200},
-    {'nome': 'zumbi', 'vida': 35, 'nivel': 4, 'atk': 4, 'xp': 18, 'ouro': 100},
-    {'nome': 'morcego gigante', 'vida': 28, 'nivel': 3, 'atk': 6, 'xp': 12, 'ouro': 200},
-    {'nome': 'aranha venenosa', 'vida': 22, 'nivel': 2, 'atk': 7, 'xp': 14, 'ouro': 100},
-    {'nome': 'orc', 'vida': 40, 'nivel': 5, 'atk': 8, 'xp': 25, 'ouro': 200},
-    {'nome': 'troll da caverna', 'vida': 50, 'nivel': 6, 'atk': 10, 'xp': 30, 'ouro': 300},
-    {'nome': 'gárgula', 'vida': 45, 'nivel': 5, 'atk': 9, 'xp': 28, 'ouro': 200}
+    {'nome': 'slime', 'vida': 10, 'nivel': 1, 'atk': 2, 'xp': 150, 'ouro': 100, 'boss': False},
+    {'nome': 'goblin', 'vida': 20, 'nivel': 2, 'atk': 4, 'xp': 100, 'ouro': 200, 'boss': False},
+    {'nome': 'lobo selvagem', 'vida': 25, 'nivel': 3, 'atk': 5, 'xp': 15, 'ouro': 100, 'boss': False},
+    {'nome': 'esqueleto', 'vida': 30, 'nivel': 4, 'atk': 6, 'xp': 20, 'ouro': 200, 'boss': False},
+    {'nome': 'zumbi', 'vida': 35, 'nivel': 4, 'atk': 4, 'xp': 18, 'ouro': 100, 'boss': False},
+    {'nome': 'morcego gigante', 'vida': 28, 'nivel': 3, 'atk': 6, 'xp': 12, 'ouro': 200, 'boss': False},
+    {'nome': 'aranha venenosa', 'vida': 22, 'nivel': 2, 'atk': 7, 'xp': 14, 'ouro': 100, 'boss': False},
+    {'nome': 'orc', 'vida': 40, 'nivel': 5, 'atk': 8, 'xp': 25, 'ouro': 200, 'boss': False},
+    {'nome': 'troll da caverna', 'vida': 50, 'nivel': 6, 'atk': 10, 'xp': 30, 'ouro': 300, 'boss': False},
+    {'nome': 'gárgula', 'vida': 45, 'nivel': 5, 'atk': 9, 'xp': 28, 'ouro': 200, 'boss': False},
 ]
 
 lista_monstros_invocacoes = [
-    {'nome': 'Tieflíngs', 'vida': 50, 'nivel': 5, 'atk': 5, 'xp': 50, 'ouro': 10},
-    {'nome': 'Tieflíngs', 'vida': 50, 'nivel': 6, 'atk': 6, 'xp': 60, 'ouro': 15},
-    {'nome': 'Demônio Inferior', 'vida': 50, 'nivel': 7, 'atk': 7, 'xp': 70, 'ouro': 20},
-    {'nome': 'Demônio Inferior', 'vida': 50, 'nivel': 8, 'atk': 8, 'xp': 80, 'ouro': 25},
-    {'nome': 'Demoníaco', 'vida': 50, 'nivel': 9, 'atk': 9, 'xp': 90, 'ouro': 30},
-    {'nome': 'Demoníaco', 'vida': 50, 'nivel': 10, 'atk': 10, 'xp': 100, 'ouro': 35},
+    {'nome': 'Tieflíngs', 'vida': 50, 'nivel': 5, 'atk': 5, 'xp': 50, 'ouro': 10, 'boss': False},
+    {'nome': 'Tieflíngs', 'vida': 50, 'nivel': 6, 'atk': 6, 'xp': 60, 'ouro': 15, 'boss': False},
+    {'nome': 'Demônio Inferior', 'vida': 50, 'nivel': 7, 'atk': 7, 'xp': 70, 'ouro': 20, 'boss': False},
+    {'nome': 'Demônio Inferior', 'vida': 50, 'nivel': 8, 'atk': 8, 'xp': 80, 'ouro': 25, 'boss': False},
+    {'nome': 'Demoníaco', 'vida': 50, 'nivel': 9, 'atk': 9, 'xp': 90, 'ouro': 30, 'boss': False},
+    {'nome': 'Demoníaco', 'vida': 50, 'nivel': 10, 'atk': 10, 'xp': 100, 'ouro': 35, 'boss': False},
+]
+lista_monstros_fixos = [
+    {'nome': 'Guardião Enraizado', 'vida': 100, 'nivel': 1, 'atk': 6, 'xp': 40, 'ouro': 50, 'boss': True},
 ]
 
 def arma_aleatoria():
@@ -357,17 +360,17 @@ def arma_aleatoria():
     arma = Item(arma_random['nome'], arma_random['atk'], arma_random['desc'], arma_random['equipado'], arma_random['consumivel'], arma_random['preco'])
     return arma
 
-monstro = lista_monstros_normais[0]
+monstro = lista_monstros_fixos[0]
 monstro2 = lista_monstros_normais[1]
-monstro_exemplo = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'], monstro['ouro'])
-monstro_exemplo2 = Monstro(monstro2['nome'], monstro2['vida'], monstro2['nivel'], monstro2['atk'], monstro2['xp'], monstro2['ouro'])
+guardiao_enraizado = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'], monstro['ouro'], monstro['boss'])
+monstro_exemplo2 = Monstro(monstro2['nome'], monstro2['vida'], monstro2['nivel'], monstro2['atk'], monstro2['xp'], monstro2['ouro'], monstro2['boss'])
 
 ######### Tela de título #########
 def navegação_tela_titulo():
     opção = input(">").lower()
     while opção not in ['jogar', 'ajuda', 'sair']:
         print("Por favor, utilize um comando válido.")
-        opção = input(">").lower()
+        opção = input(">>").lower()
     if opção == "jogar":
         setup_jogo()
     elif opção == "ajuda":
@@ -378,20 +381,36 @@ def navegação_tela_titulo():
 def tela_titulo():
     limpar_tela()
     titulo ='''
-            #########################
-            # >Bem vindo ao ARKYOS! #
-            #########################
+             _____                                                                                 _____ 
+            ( ___ )                                                                               ( ___ )
+             |   |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|   | 
+             |   |                                                                                 |   | 
+             |   |    █████████   ███████████   █████   ████ █████ █████    ███████     █████████  |   | 
+             |   |   ███░░░░░███ ░░███░░░░░███ ░░███   ███░ ░░███ ░░███   ███░░░░░███  ███░░░░░███ |   | 
+             |   |  ░███    ░███  ░███    ░███  ░███  ███    ░░███ ███   ███     ░░███░███    ░░░  |   | 
+             |   |  ░███████████  ░██████████   ░███████      ░░█████   ░███      ░███░░█████████  |   | 
+             |   |  ░███░░░░░███  ░███░░░░░███  ░███░░███      ░░███    ░███      ░███ ░░░░░░░░███ |   | 
+             |   |  ░███    ░███  ░███    ░███  ░███ ░░███      ░███    ░░███     ███  ███    ░███ |   | 
+             |   |  █████   █████ █████   █████ █████ ░░████    █████    ░░░███████░  ░░█████████  |   | 
+             |   | ░░░░░   ░░░░░ ░░░░░   ░░░░░ ░░░░░   ░░░░    ░░░░░       ░░░░░░░     ░░░░░░░░░   |   | 
+             |   |                                                                                 |   | 
+             |___|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|___| 
+            (_____)                                                                               (_____)
+                                            ────────────────────────────────
+                                                 Uma torre esquecida...
+                                             Onde magia e trevas se colidem
+                                            ────────────────────────────────
  '''
     opcoes = '''
-                   - Jogar -        
-                   - Ajuda -        
-                   - Sair  -      
+                                                     [@] Jogar
+                                                     [@] Ajuda
+                                                     [@] Sair      
             
           '''
     for titulo1 in titulo:
         sys.stdout.write(titulo1)
         sys.stdout.flush()
-        time.sleep(0.01)
+        time.sleep(0.0001)
     for opcao in opcoes:
         sys.stdout.write(opcao)
         sys.stdout.flush()
@@ -402,16 +421,31 @@ def tela_titulo():
 def ajuda_menu():
     limpar_tela()
     print('''
-          #########################
-          # >Bem vindo ao ARKYOS! #
-          #########################'
+             _____                                                                                 _____ 
+            ( ___ )                                                                               ( ___ )
+             |   |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|   | 
+             |   |                                                                                 |   | 
+             |   |    █████████   ███████████   █████   ████ █████ █████    ███████     █████████  |   | 
+             |   |   ███░░░░░███ ░░███░░░░░███ ░░███   ███░ ░░███ ░░███   ███░░░░░███  ███░░░░░███ |   | 
+             |   |  ░███    ░███  ░███    ░███  ░███  ███    ░░███ ███   ███     ░░███░███    ░░░  |   | 
+             |   |  ░███████████  ░██████████   ░███████      ░░█████   ░███      ░███░░█████████  |   | 
+             |   |  ░███░░░░░███  ░███░░░░░███  ░███░░███      ░░███    ░███      ░███ ░░░░░░░░███ |   | 
+             |   |  ░███    ░███  ░███    ░███  ░███ ░░███      ░███    ░░███     ███  ███    ░███ |   | 
+             |   |  █████   █████ █████   █████ █████ ░░████    █████    ░░░███████░  ░░█████████  |   | 
+             |   | ░░░░░   ░░░░░ ░░░░░   ░░░░░ ░░░░░   ░░░░    ░░░░░       ░░░░░░░     ░░░░░░░░░   |   | 
+             |   |                                                                                 |   | 
+             |___|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|___| 
+            (_____)                                                                               (_____)
           
-  principais comandos: [mover / olhar / mochila / status / mapa]
+                        [@]principais comandos: [mover / olhar / mochila / status / mapa]
           
-    - Digite mover para se movimentar
-    - Digite seus comandos para executá-los
-    - Use o comando "olhar" para examinar a área algo
-    - Boa sorte e não morra :p
+                    [@] Digite seus comandos para executá-los
+                    [@] Digite mover para se movimentar
+                    [@] Use o comando "olhar" para examinar a área
+                    [@] Use o comando "mochila" para abrir a mochila
+                    [@] Use o comando "status" para ver seus status
+                    [@] Use o comando "mapa" para ver o mapa
+                    [@] Boa sorte e não morra :p
           ''')
     if meu_jogador.nome != '':
         print('Voltar ao game? [s/n]')
@@ -463,16 +497,24 @@ mapa = {
         'contador' : 0
     },
     'a2': {
-        'NOME_LOCAL': "Sala2",
-        'DESCRICAO': 'Descrição da sala 2.',
-        'EXAMINAR': 'Você observa objetos antigos.',
+        'NOME_LOCAL': "Sala do Guardião Enraizado",
+        'DESCRICAO': '''
+         Um odor de terra úmida e carne podre invade seus sentidos. A sala adiante parece
+         uma antiga estufa esquecida, onde raízes negras tomaram os pilares de pedra...''',
+        'EXAMINAR': '''
+                      No centro do local, uma árvore retorcida cresce a partir de um altar quebrado. 
+                      Seus galhos têm formas humanoides penduradas, como se absorvessem ecos de vida.
+                                                        .....
+        Uma criatura — metade carne, metade madeira — jaz ajoelhada, presa por correntes de prata, seus olhos fechados.
+                       (para enfrentar o guardião Enraizado, digite 'enfrentar', para retornar digite sair)
+        ''',
         'SOLVED': False,
         'SUBIR': '',
         'DESCER': 'b1',
         'AVANÇAR': '',
         'RETORNAR': 'a1',
-        'MONSTRO': monstro_exemplo,
-        'LOCAIS': '',
+        'MONSTRO': '',
+        'LOCAIS': 'enfrentar',
         'contador' : 0
     },
     'b1': { 
@@ -532,7 +574,7 @@ mapa = {
 def mostrar_mapa():
     if meu_jogador.local == 'a1':
         limpar_tela()
-        print('▬'*60)
+        print('▬'*80)
         print('Mapa:')
         print('''
                 |x| |
@@ -586,10 +628,13 @@ def print_local():
         limpar_tela()
     local_nome = mapa[meu_jogador.local]['NOME_LOCAL']
     local_desc = mapa[meu_jogador.local]['DESCRICAO']
-    print('\n' + ('▬' * 60), '\n')
-    print(f"{local_nome.upper()}")
-    print(f"{local_desc} \n")
-    print('▬' * 60)
+    print('\n' + '█'*100 +f''' 
+                       
+                                    {local_nome.upper()}
+            {local_desc}
+''')   
+    print('█' * 100)
+
     mostrar_status(meu_jogador)
     if mapa[meu_jogador.local]['MONSTRO'] != '':
         print(f"há um {mapa[meu_jogador.local]['MONSTRO'].nome} na sala. O que deseja fazer?\n[lutar / fugir / falar]")
@@ -600,7 +645,7 @@ def print_local():
     main_game_loop()
 
 def prompt():
-    print("\n" + "▬"*60)
+    print("\n" + "▬"*80)
     print("O que deseja fazer?")
     acao = input(">>").lower()
     acoes_aceitas = ['invocar','status', 'mover', 'loja', 'sair', 'ajuda', 'olhar', 'inspecionar', 'teleportar', 'dormir', 'mochila', 'mapa']
@@ -645,6 +690,8 @@ def locais():
     elif acao == 'bau':
         # Adicione aqui a função para o baú quando existir
         pass
+    elif acao == 'enfrentar':
+        boss_enraizado()
     else:
         print('Acao inválida, tente novamente.')
         locais()
@@ -657,7 +704,7 @@ def acao_loja(escolha):
 
 ### Objetos interativos dos andares ###
 def trono():
-    print('▬'*60)
+    print('▬'*80)
     if meu_jogador.local == 'a1' and mapa[meu_jogador.local]['SOLVED'] == False:
         fala1 ='Você vai até o brilho e vê um anel dourado.\nao toca-lo um frio intenso percorre seu braço.\nSeu dedo o aceita sem resistência, como se ele sentisse que voce era o seu Dono.\n'
         for fala in fala1:
@@ -671,7 +718,7 @@ def trono():
             sys.stdout.write(fala)
             sys.stdout.flush()
             time.sleep(0.01)
-        print('\n', '▬'*60)
+        print('\n', '▬'*80)
         mapa[meu_jogador.local]['SOLVED'] = True
         time.sleep(1.5)
         limpar_tela()
@@ -682,12 +729,36 @@ def trono():
             sys.stdout.write(fala)
             sys.stdout.flush()
             time.sleep(0.01)
-        print('\n', '▬'*60)
+        print('\n', '▬'*80)
         time.sleep(1.5)
         limpar_tela()
         main_game_loop()
     else:
-        print('Não tem um trono aqui.')
+        print('Comando inválido.')
+        main_game_loop()
+
+def boss_enraizado():
+    if meu_jogador.local == 'a2':
+        if mapa[meu_jogador.local]['SOLVED'] == False:
+            lutar = 'Quando você se aproxima… ela desperta.'
+            for fala in lutar:
+                sys.stdout.write(fala)
+                sys.stdout.flush()
+                time.sleep(0.01)
+            time.sleep(1)
+            limpar_tela()
+            luta(guardiao_enraizado, meu_jogador)        
+    elif meu_jogador.local == 'a2' and mapa[meu_jogador.local]['SOLVED'] == True:
+        fala1 = 'O monstro está caido morto bem a sua frente.'
+        for fala in fala1:
+            sys.stdout.write(fala)
+            sys.stdout.flush()
+            time.sleep(0.01)
+        time.sleep(1.5)
+        limpar_tela()
+        main_game_loop()
+    else:
+        print('Comando inválido.')
         main_game_loop()
 
 ########################################
@@ -967,9 +1038,13 @@ def luta(monstro, meu_jogador):
         limpar_tela()
         print(f'VOCÊ DERROTOU {monstro.nome}')
         experiencia(monstro)
+        time.sleep(1)
+        if monstro.boss == True:
+            mapa[meu_jogador.local]['SOLVED'] = True
         if random.random() < 0.3:
             drop(monstro)
         mapa[meu_jogador.local]['MONSTRO'] = ''
+        print(f'Você derrotou o {monstro.nome} e ganhou {monstro.xp} de XP.')
         print_local()
         main_game_loop()
 
@@ -1008,7 +1083,7 @@ def fugir():
     main_game_loop()
 
 def mostrar_status(self):
-    print('▬'*60)
+    print('▬'*80)
     print(f'{self.nome} LVL:{self.nivel} XP: {self.xp}/{self.xp_max}')
     print(f'vida: {self.vida}/{self.vida_max} ATK: {self.atk} MANA: {self.mana}/{self.mana_max}')
     if self.item_equipado:
@@ -1030,13 +1105,22 @@ def jogador_dormir():
     
 def jogador_mover():
     if mapa[meu_jogador.local]['SOLVED'] == False:
-        fala = 'Você não consegue passar pela porta, alguma energia estranha te impede'
-        for falas in fala:
-            sys.stdout.write(falas)
-            sys.stdout.flush()
-            time.sleep(0.01)
-        time.sleep(1)
-        main_game_loop()
+        if meu_jogador.local == 'a1':
+            fala = 'Você não consegue passar pela porta, alguma energia estranha te impede'
+            for falas in fala:
+                sys.stdout.write(falas)
+                sys.stdout.flush()
+                time.sleep(0.01)
+            time.sleep(1)
+            main_game_loop()
+        elif meu_jogador.local == 'a2':
+            fala1 = 'Algumas raizes impedem a passagem, aparentemente vem do Enraizado.'
+            for falas in fala1:
+                sys.stdout.write(falas)
+                sys.stdout.flush()
+                time.sleep(0.01)
+            time.sleep(1)
+            main_game_loop()
     elif meu_jogador.local == 'a1':
         pergunta = "Avançar em direção ao portão negro? (escreva avançar)\n >>"
     elif meu_jogador.local in ['b1', 'c1']:
@@ -1096,7 +1180,7 @@ A estrutura range como um animal faminto, esperando que você se mova.
             sys.stdout.flush()
             time.sleep(0.01)
     else:
-        print('▬')
+        print('▬'*80)
         for examina in examinar:
             sys.stdout.write(examina)
             sys.stdout.flush()
@@ -1211,7 +1295,7 @@ def setup_jogo():
     time.sleep(2)
 
     os.system('clear' if os.name != 'nt' else 'cls')
-    print ("▬"*60)
+    print ("▬"*80)
     introducao1 = '''
       O frio das pedras toca sua pele como agulhas. O ar está pesado, carregado de uma magia que pulsa devagar, 
     como um coração moribundo. Ao abrir os olhos, tudo é cinza e vermelho: 
