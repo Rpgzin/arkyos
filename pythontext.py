@@ -143,13 +143,14 @@ def experiencia(monstro):
         subi_nivel(meu_jogador)
 
 class Item:
-    def __init__(self, nome, atk, desc, equipado, consumivel, preco):
+    def __init__(self, nome, atk, desc, equipado, consumivel, preco, especial):
         self.nome = nome
         self.atk = atk
         self.desc = desc
         self.equipado = equipado
         self.consumivel = consumivel
         self.preco = preco
+        self.especial = especial
     
 class Magia:
     def __init__(self, nome, dano, desc, mana_gasta):
@@ -239,6 +240,9 @@ def vender_item():
             print('**COMANDO INVÁLIDO**')
             vender_item()
         if acao == 'vender':
+            if meu_jogador.mochila[escolha].especial:
+                print('Item não pode ser vendido')
+                vender_item()
             vender_acao(escolha)
         elif acao == 'voltar':
             vender_item()
@@ -295,34 +299,34 @@ def pocao_mana_alta():
     print (" você bebeu a poção!!!")
 
 lista_itens_loja = [
-    { 'nome': 'Espada de ferro', 'atk': 5, 'preco': 120, 'desc': 'Uma espada de ferro, muito forte.', 'item': 'espada de ferro', 'comprado': False, 'equipado': False, 'consumivel': False},
-    { 'nome': 'Arco longo', 'atk': 4,'preco': 100, 'desc': 'Um arco longo, muito forte.', 'item': 'arco longo', 'comprado': False, 'equipado': False, 'consumivel': False},
-    { 'nome': 'Pocao de vida baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de vida baixa, cura 15 pontos de vida.', 'item': 'pocao de vida baixa', 'comprado': False, 'equipado': False, 'consumivel': True},
-    { 'nome': 'Pocao de vida media', 'atk': 0,'preco': 100, 'desc': 'Uma pocao de vida media, cura 30 pontos de vida.', 'item': 'pocao de vida media', 'comprado': False, 'equipado': False, 'consumivel': True},
-    { 'nome': 'Pocao de vida alta', 'atk': 0,'preco': 150, 'desc': 'Uma pocao de vida alta, cura 60 pontos de vida.', 'item': 'pocao de vida alta', 'comprado': False, 'equipado': False, 'consumivel': True},
-    { 'nome': 'Pocao de mana baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de mana baixa, cura 20 pontos de mana.', 'item': 'pocao de mana baixa', 'comprado': False, 'equipado': False, 'consumivel': True},
-    { 'nome': 'Pocao de mana media', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de mana media, cura 20 pontos de mana.', 'item': 'pocao de mana media', 'comprado': False, 'equipado': False, 'consumivel': True},
-    { 'nome': 'Pocao de mana alta', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de mana alta, cura 20 pontos de mana.', 'item': 'pocao de mana alta', 'comprado': False, 'equipado': False, 'consumivel': True},
+    { 'nome': 'Espada de ferro', 'atk': 5, 'preco': 100, 'desc': 'Uma espada de ferro, muito forte.', 'item': 'espada de ferro', 'comprado': False, 'equipado': False, 'consumivel': False, 'especial': False},
+    { 'nome': 'Arco longo', 'atk': 4,'preco': 100, 'desc': 'Um arco longo, muito forte.', 'item': 'arco longo', 'comprado': False, 'equipado': False, 'consumivel': False, 'especial': False},
+    { 'nome': 'Pocao de vida baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de vida baixa, cura 15 pontos de vida.', 'item': 'pocao de vida baixa', 'comprado': False, 'equipado': False, 'consumivel': True, 'especial': False},
+    { 'nome': 'Pocao de vida media', 'atk': 0,'preco': 100, 'desc': 'Uma pocao de vida media, cura 30 pontos de vida.', 'item': 'pocao de vida media', 'comprado': False, 'equipado': False, 'consumivel': True, 'especial': False},
+    { 'nome': 'Pocao de vida alta', 'atk': 0,'preco': 150, 'desc': 'Uma pocao de vida alta, cura 60 pontos de vida.', 'item': 'pocao de vida alta', 'comprado': False, 'equipado': False, 'consumivel': True, 'especial': False},
+    { 'nome': 'Pocao de mana baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de mana baixa, cura 20 pontos de mana.', 'item': 'pocao de mana baixa', 'comprado': False, 'equipado': False, 'consumivel': True, 'especial': False},
+    { 'nome': 'Pocao de mana media', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de mana media, cura 20 pontos de mana.', 'item': 'pocao de mana media', 'comprado': False, 'equipado': False, 'consumivel': True, 'especial': False},
+    { 'nome': 'Pocao de mana alta', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de mana alta, cura 20 pontos de mana.', 'item': 'pocao de mana alta', 'comprado': False, 'equipado': False, 'consumivel': True, 'especial': False},
 ]
 
 lista_consumiveis = [
-    { 'nome': 'Pocao de vida baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de vida, cura 15 pontos de vida.', 'equipado': False, 'consumivel': True},
-    { 'nome': 'Pocao de vida media', 'atk': 0,'preco': 100, 'desc': 'Uma pocao de vida media, cura 30 pontos de vida.', 'comprado': False, 'equipado': False, 'consumivel': True},
-    { 'nome': 'Pocao de vida alta', 'atk': 0,'preco': 150, 'desc': 'Uma pocao de vida alta, cura 60 pontos de vida.', 'comprado': False, 'equipado': False, 'consumivel': True},
-    { 'nome': 'Pocao de mana baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de mana, cura 15 pontos de mana.', 'equipado': False, 'consumivel': True},
-    { 'nome': 'Pocao de mana media', 'atk': 0,'preco': 100, 'desc': 'Uma pocao de mana media, cura 30 pontos de mana.', 'comprado': False, 'equipado': False, 'consumivel': True},
-    { 'nome': 'Pocao de mana alta', 'atk': 0,'preco': 150, 'desc': 'Uma pocao de mana alta, cura 60 pontos de mana.', 'comprado': False, 'equipado': False, 'consumivel': True},
+    { 'nome': 'Pocao de vida baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de vida, cura 15 pontos de vida.', 'equipado': False, 'consumivel': True, 'especial': False},
+    { 'nome': 'Pocao de vida media', 'atk': 0,'preco': 100, 'desc': 'Uma pocao de vida media, cura 30 pontos de vida.', 'comprado': False, 'equipado': False, 'consumivel': True, 'especial': False},
+    { 'nome': 'Pocao de vida alta', 'atk': 0,'preco': 150, 'desc': 'Uma pocao de vida alta, cura 60 pontos de vida.', 'comprado': False, 'equipado': False, 'consumivel': True, 'especial': False},
+    { 'nome': 'Pocao de mana baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de mana, cura 15 pontos de mana.', 'equipado': False, 'consumivel': True, 'especial': False},
+    { 'nome': 'Pocao de mana media', 'atk': 0,'preco': 100, 'desc': 'Uma pocao de mana media, cura 30 pontos de mana.', 'comprado': False, 'equipado': False, 'consumivel': True, 'especial': False},
+    { 'nome': 'Pocao de mana alta', 'atk': 0,'preco': 150, 'desc': 'Uma pocao de mana alta, cura 60 pontos de mana.', 'comprado': False, 'equipado': False, 'consumivel': True, 'especial': False},
 ]
 
 lista_armas = [
-    {'nome': 'Adaga enferrujada', 'atk': 3, 'preco': 100, 'desc': 'Parece ser bem antiga', 'equipado': False, 'consumivel': False},
-    {'nome': 'Varinha capenga', 'atk': 3, 'preco': 100, 'desc': 'É nova, mas bem barata', 'equipado': False, 'consumivel': False},
-    {'nome': 'Espada longa', 'atk': 4, 'preco': 100, 'desc': 'A espada de todo guerreiro.', 'equipado': False, 'consumivel': False},
-    {'nome': 'Grimório', 'atk': 2, 'preco': 100, 'desc': 'O grimório de um mago, o local de sua sabedoria.', 'equipado': False, 'consumivel': False},
+    {'nome': 'Adaga enferrujada', 'atk': 3, 'preco': 100, 'desc': 'Parece ser bem antiga', 'equipado': False, 'consumivel': False, 'especial': False},
+    {'nome': 'Varinha capenga', 'atk': 3, 'preco': 100, 'desc': 'É nova, mas bem barata', 'equipado': False, 'consumivel': False, 'especial': False},
+    {'nome': 'Espada longa', 'atk': 4, 'preco': 100, 'desc': 'A espada de todo guerreiro.', 'equipado': False, 'consumivel': False, 'especial': False},
+    {'nome': 'Grimório', 'atk': 2, 'preco': 100, 'desc': 'O grimório de um mago, o local de sua sabedoria.', 'equipado': False, 'consumivel': False, 'especial': False},
 ]
 
 lista_itens_especiais = [
-    {'nome': 'Anel Desconhecido', 'atk': 0, 'preco': 00, 'desc': 'Um anel feito de ouro. Sua origem é desconhecida.', 'equipado': False, 'consumivel': False},
+    {'nome': 'Anel Desconhecido', 'atk': 0, 'preco': 00, 'desc': 'Um anel feito de ouro. Sua origem é desconhecida.', 'equipado': False, 'consumivel': False, 'especial': True},
 ]
 
 lista_magias = [
@@ -357,7 +361,7 @@ lista_monstros_fixos = [
 def arma_aleatoria():
     chances = [30, 30, 20, 20]
     arma_random = random.choices(lista_armas, weights=chances, k=1)[0]
-    arma = Item(arma_random['nome'], arma_random['atk'], arma_random['desc'], arma_random['equipado'], arma_random['consumivel'], arma_random['preco'])
+    arma = Item(arma_random['nome'], arma_random['atk'], arma_random['desc'], arma_random['equipado'], arma_random['consumivel'], arma_random['preco'], arma_random['especial'])
     return arma
 
 monstro = lista_monstros_fixos[0]
@@ -497,17 +501,9 @@ mapa = {
         'contador' : 0
     },
     'a2': {
-        'NOME_LOCAL': "Sala do Guardião Enraizado",
-        'DESCRICAO': '''
-         Um odor de terra úmida e carne podre invade seus sentidos. A sala adiante parece
-         uma antiga estufa esquecida, onde raízes negras tomaram os pilares de pedra...''',
-        'EXAMINAR': '''
-                      No centro do local, uma árvore retorcida cresce a partir de um altar quebrado. 
-                      Seus galhos têm formas humanoides penduradas, como se absorvessem ecos de vida.
-                                                        .....
-        Uma criatura — metade carne, metade madeira — jaz ajoelhada, presa por correntes de prata, seus olhos fechados.
-                       (para enfrentar o guardião Enraizado, digite 'enfrentar', para retornar digite sair)
-        ''',
+        'NOME_LOCAL': "Sala2",
+        'DESCRICAO': 'Descrição da sala 2.',
+        'EXAMINAR': 'Você observa objetos antigos.',
         'SOLVED': False,
         'SUBIR': '',
         'DESCER': 'b1',
@@ -712,7 +708,7 @@ def trono():
             sys.stdout.flush()
             time.sleep(0.01)
         item = lista_itens_especiais[0]
-        meu_jogador.add_item(Item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'], item['preco']))
+        meu_jogador.add_item(Item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'], item['preco'], item['especial']))
         fala2 ='Anel desconhecido adicionado ao seu inventario!'
         for fala in fala2:
             sys.stdout.write(fala)
@@ -765,7 +761,7 @@ def boss_enraizado():
 def comprar(escolha):
         lista_itens_loja[escolha]['comprado'] = True
         item = lista_itens_loja[escolha]
-        item_add = Item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'], item['preco'])
+        item_add = Item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'], item['preco'], item['especial'])
         print(f'**VOCE COMPROU {item_add.nome}**')
         meu_jogador.add_item(item_add)
         meu_jogador.ouro -= lista_itens_loja[escolha]['preco']
@@ -802,7 +798,6 @@ def acao_luta(escolha, monstro):
 
 def abrir_mochila():
     if meu_jogador.game_over:
-        return
         main_game_loop()
     if meu_jogador.mochila:
         print (f'Ouro: {meu_jogador.ouro}')
@@ -822,14 +817,17 @@ def abrir_mochila():
             escolha = int(escolha)-1
             if escolha not in range(0, len(meu_jogador.mochila)):
                 abrir_mochila()
-            print(f'item: {meu_jogador.mochila[escolha].nome} ATK: {meu_jogador.mochila[escolha].atk}')
+            if meu_jogador.mochila[escolha].consumivel or meu_jogador.mochila[escolha].especial:
+                print(f'item: {meu_jogador.mochila[escolha].nome} | desc: {meu_jogador.mochila[escolha].desc}')
+            else:    
+                print(f'item: {meu_jogador.mochila[escolha].nome} | ATK: {meu_jogador.mochila[escolha].atk} | desc: {meu_jogador.mochila[escolha].desc}')
             # jogador selecionou com item equipao
             if meu_jogador.item_equipado:
                 # jogador selecionou item equipado
                 if meu_jogador.mochila[escolha].equipado == True:
-                    print('[desequipar / remover / fechar]')
+                    print('[desequipar / remover / voltar / fechar]')
                     acao = input('>>').lower()
-                    if acao not in ['desequipar', 'remover', 'fechar']:
+                    if acao not in ['desequipar', 'remover', 'voltar', 'fechar']:
                         print('\ncomando inválido')
                         abrir_mochila()
                     
@@ -846,44 +844,45 @@ def abrir_mochila():
                         meu_jogador.mochila.pop(escolha)
                         meu_jogador.atk_final = meu_jogador.atk
                         abrir_mochila()
+                    elif acao == 'voltar':
+                        abrir_mochila()
                     elif acao == 'fechar':
                         print_local()
                 # jogador selecionou item NÂO equipado
                 else:
-                    if meu_jogador.mochila[escolha].consumivel:
-                        print( '[usar / remover / fechar]')
+                    if meu_jogador.mochila[escolha].especial:
+                        print('[voltar / fechar]')
                         acao = input('>>').lower()
-                        if acao not in ['usar', 'remover', 'fechar']:
+                        if acao not in ['voltar' ,'fechar']:
+                            abrir_mochila()
+                        elif acao == 'voltar':
+                            abrir_mochila()
+                        elif acao == 'fechar':
+                            print_local()
+                        
+                    if meu_jogador.mochila[escolha].consumivel:
+                        print('[usar / remover / voltar / fechar]')
+                        acao = input('>>').lower()
+                        if acao not in ['usar', 'remover', 'voltar', 'fechar']:
                             print('\ncomando inválido')
                             abrir_mochila()
                         if acao == 'usar':
                             if meu_jogador.mochila[escolha].nome == 'Pocao de vida baixa':
                                 pocao_vida()
-                                meu_jogador.mochila.pop(escolha)
-                                main_game_loop()
                             elif meu_jogador.mochila[escolha].nome == 'Pocao de vida media':
                                 pocao_vida_media()
-                                meu_jogador.mochila.pop(escolha)
-                                main_game_loop()
                             elif meu_jogador.mochila[escolha].nome == 'Pocao de vida alta':
-                                pocao_vida_alta()
-                                meu_jogador.mochila.pop(escolha)
-                                main_game_loop()
-
+                                pocao_vida_media()
                             elif meu_jogador.mochila[escolha].nome == 'Pocao de mana baixa':
                                 pocao_mana()
-                                meu_jogador.mochila.pop(escolha)
-                                main_game_loop()
                             elif meu_jogador.mochila[escolha].nome == 'Pocao de mana media':
                                 pocao_mana_media()
-                                meu_jogador.mochila.pop(escolha)
-                                main_game_loop()
                             elif meu_jogador.mochila[escolha].nome == 'Pocao de mana alta':
                                 pocao_mana_alta()
-                                meu_jogador.mochila.pop(escolha)
-                                main_game_loop()
+                            meu_jogador.mochila.pop(escolha)
+                            abrir_mochila()
                             
-                    print('[equipar / remover / fechar]')
+                    print('[equipar / remover / voltar / fechar]')
                     
                     acao = input('>>').lower()
                     if acao not in ['equipar', 'remover', 'fechar']:
@@ -905,42 +904,61 @@ def abrir_mochila():
                         print(f'**VOCÊ DROPOU {meu_jogador.mochila[escolha].nome}')
                         meu_jogador.mochila.pop(escolha)
                         abrir_mochila()
+                    elif acao == 'voltar':
+                        abrir_mochila()
                     elif acao == 'fechar':
                         print_local()
                         main_game_loop()
             # jogador selecionou sem item equipado
             else:
+                if meu_jogador.mochila[escolha].especial:
+                    print('[voltar / fechar]')
+                    acao = input('>>').lower()
+                    if acao not in ['voltar' ,'fechar']:
+                        abrir_mochila()
+                    elif acao == 'voltar':
+                        abrir_mochila()
+                    elif acao == 'fechar':
+                        print_local()
                 if meu_jogador.mochila[escolha].consumivel:
-                        print( '[usar / remover / fechar]')
+                        print( '[usar / remover / voltar / fechar]')
                         acao = input('>>').lower()
-                        if acao not in ['usar', 'remover', 'fechar']:
+                        if acao not in ['usar', 'remover', 'voltar', 'fechar']:
                             print('\ncomando inválido')
                             abrir_mochila()
                         if acao == 'usar':
                             if meu_jogador.mochila[escolha].nome == 'Pocao de vida baixa':
                                 pocao_vida()
                                 meu_jogador.mochila.pop(escolha)
-                                main_game_loop()
+                                abrir_mochila()
                             elif meu_jogador.mochila[escolha].nome == 'Pocao de vida media':
                                 pocao_vida_media()
                                 meu_jogador.mochila.pop(escolha)
-                                main_game_loop()
+                                abrir_mochila()
                             elif meu_jogador.mochila[escolha].nome == 'Pocao de vida alta':
                                 pocao_vida_alta()
                                 meu_jogador.mochila.pop(escolha)
-                                main_game_loop()
+                                abrir_mochila()
                             elif meu_jogador.mochila[escolha].nome == 'Pocao de mana baixa':
                                 pocao_mana()
                                 meu_jogador.mochila.pop(escolha)
-                                main_game_loop()
+                                abrir_mochila()
                             elif meu_jogador.mochila[escolha].nome == 'Pocao de mana media':
                                 pocao_mana_media()
                                 meu_jogador.mochila.pop(escolha)
-                                main_game_loop()
+                                abrir_mochila()
                             elif meu_jogador.mochila[escolha].nome == 'Pocao de mana alta':
                                 pocao_mana_alta()
                                 meu_jogador.mochila.pop(escolha)
-                                main_game_loop()
+                                abrir_mochila()
+                        elif acao == 'remover':
+                            print(f'**VOCÊ DROPOU {meu_jogador.mochila[escolha].nome}')
+                            meu_jogador.mochila.pop(escolha)
+                            abrir_mochila()
+                        elif acao == 'voltar':
+                            abrir_mochila()
+                        elif acao == 'fechar':
+                            print_local()
                 print('[equipar / remover / fechar]')
                 acao = input('>>').lower()
                 if acao not in ['equipar', 'remover', 'fechar']:
@@ -957,6 +975,8 @@ def abrir_mochila():
                     print(f'**VOCÊ DROPOU {meu_jogador.mochila[escolha].nome}')
                     meu_jogador.mochila.pop(escolha)
                     abrir_mochila()
+                elif acao == 'voltar':
+                    abrir_mochila()
                 elif acao == 'fechar':
                     print_local()
         except:
@@ -968,9 +988,9 @@ def luta(monstro, meu_jogador):
     print(f'\n{monstro.nome} #{monstro.nivel}')
     print(f'vida: {monstro.vida}/{monstro.vida_max} ATK: {monstro.atk}')
     mostrar_status(meu_jogador)
-    print('atacar / magia / fugir')
+    print('atacar / magia / mochila / fugir')
     acao = input(">>").lower()
-    if acao not in ['atacar', 'magia', 'fugir']:
+    if acao not in ['atacar', 'magia', 'mochila', 'fugir']:
         limpar_tela()
         print("comando invádido".upper())
         luta(monstro, meu_jogador)
@@ -1023,6 +1043,52 @@ def luta(monstro, meu_jogador):
             meu_jogador.vida -= monstro.atk
             print(f'o {monstro.nome} te ataca')
             intervalo()
+    elif acao == 'mochila':
+        consumiveis = []
+        for consumivel in meu_jogador.mochila:
+            if consumivel.consumivel:
+                consumiveis.append(consumivel)
+        if not consumivel:
+            print('Nenhum item para ser usado')
+            luta(monstro, meu_jogador)
+        for i, consumivel in enumerate(consumiveis):
+            print(f'{i+1}. {consumivel.nome} | {consumivel.desc}')
+        print('Use os números para selecionar os itens')
+        escolha = input('>>').lower()
+        try:
+            escolha = int(escolha)-1
+            if escolha not in range(0, len(consumiveis)):
+                print('\nComando inválido')
+                luta(monstro, meu_jogador)
+            print(f'{consumiveis[escolha].nome} | {consumiveis[escolha].desc}')
+            print('[usar | voltar]')
+            acao = input('>>').lower()
+            if acao not in ['usar', 'voltar']:
+                print('\nComando inválido')
+                luta(monstro, meu_jogador)
+            if acao == 'usar':
+                if meu_jogador.mochila[escolha].nome == 'Pocao de vida baixa':
+                    pocao_vida()
+                elif meu_jogador.mochila[escolha].nome == 'Pocao de vida media':
+                    pocao_vida_media()
+                elif meu_jogador.mochila[escolha].nome == 'Pocao de vida alta':
+                    pocao_vida_alta()
+                elif meu_jogador.mochila[escolha].nome == 'Pocao de mana baixa':
+                    pocao_mana()
+                elif meu_jogador.mochila[escolha].nome == 'Pocao de mana media':
+                    pocao_mana_media()
+                elif meu_jogador.mochila[escolha].nome == 'Pocao de mana alta':
+                    pocao_mana_alta()
+                for i, item in enumerate(meu_jogador.mochila):
+                    if item.nome == consumiveis[escolha].nome:
+                        meu_jogador.mochila.pop(i)
+                luta(monstro, meu_jogador)
+            elif acao == 'voltar':
+                luta(monstro, meu_jogador)
+        except:
+            print('\nComando inválido')
+            luta(monstro, meu_jogador)
+    
     elif acao == 'fugir':
         fugir()
     
@@ -1232,12 +1298,12 @@ def setup_jogo():
         meu_jogador.mana_max = meu_jogador.mana
         meu_jogador.atk_base = 6
         meu_jogador.atk = meu_jogador.atk_base
-        meu_jogador.item_equipado = Item(arma_padrao['nome'], arma_padrao['atk'], arma_padrao['desc'], True, arma_padrao['consumivel'], arma_padrao['preco'])
+        meu_jogador.item_equipado = Item(arma_padrao['nome'], arma_padrao['atk'], arma_padrao['desc'], True, arma_padrao['consumivel'], arma_padrao['preco'], arma_padrao['especial'])
         meu_jogador.add_item(meu_jogador.item_equipado)
         meu_jogador.atk_final = meu_jogador.atk + meu_jogador.item_equipado.atk
-        meu_jogador.add_item(Item(pocao_vida_baixa['nome'], pocao_vida_baixa['atk'], pocao_vida_baixa['desc'], pocao_vida_baixa['equipado'], pocao_vida_baixa['consumivel'], pocao_vida_baixa['preco']))
-        meu_jogador.add_item(Item(pocao_vida_media['nome'], pocao_vida_media['atk'], pocao_vida_media['desc'], pocao_vida_media['equipado'], pocao_vida_media['consumivel'], pocao_vida_media['preco']))
-        meu_jogador.add_item(Item(pocao_vida_alta['nome'], pocao_vida_alta['atk'], pocao_vida_alta['desc'], pocao_vida_alta['equipado'], pocao_vida_alta['consumivel'], pocao_vida_alta['preco']))
+        meu_jogador.add_item(Item(pocao_vida_baixa['nome'], pocao_vida_baixa['atk'], pocao_vida_baixa['desc'], pocao_vida_baixa['equipado'], pocao_vida_baixa['consumivel'], pocao_vida_baixa['preco'], pocao_vida_baixa['especial']))
+        meu_jogador.add_item(Item(pocao_vida_media['nome'], pocao_vida_media['atk'], pocao_vida_media['desc'], pocao_vida_media['equipado'], pocao_vida_media['consumivel'], pocao_vida_media['preco'], pocao_vida_media['especial']))
+        meu_jogador.add_item(Item(pocao_vida_alta['nome'], pocao_vida_alta['atk'], pocao_vida_alta['desc'], pocao_vida_alta['equipado'], pocao_vida_alta['consumivel'], pocao_vida_alta['preco'], pocao_vida_alta['especial']))
         calcular_atributos(meu_jogador)
 
     elif meu_jogador.classe == 'mago':
@@ -1254,9 +1320,9 @@ def setup_jogo():
         meu_jogador.atk_base = 5
         meu_jogador.atk = meu_jogador.atk_base
         meu_jogador.magias.append(Magia(magia_basica['nome'], magia_basica['dano'], magia_basica['desc'], magia_basica['mana_gasta']))
-        meu_jogador.add_item(Item(pocao_mana_baixa['nome'], pocao_mana_baixa['atk'], pocao_mana_baixa['desc'], pocao_mana_baixa['equipado'], pocao_mana_baixa['consumivel'], pocao_mana_baixa['preco']))
-        meu_jogador.add_item(Item(pocao_mana_media['nome'], pocao_mana_media['atk'], pocao_mana_media['desc'], pocao_mana_media['equipado'], pocao_mana_media['consumivel'], pocao_mana_media['preco']))
-        meu_jogador.add_item(Item(pocao_mana_alta['nome'], pocao_mana_alta['atk'], pocao_mana_alta['desc'], pocao_mana_alta['equipado'], pocao_mana_alta['consumivel'], pocao_mana_alta['preco']))
+        meu_jogador.add_item(Item(pocao_mana_baixa['nome'], pocao_mana_baixa['atk'], pocao_mana_baixa['desc'], pocao_mana_baixa['equipado'], pocao_mana_baixa['consumivel'], pocao_mana_baixa['preco'], pocao_mana_baixa['especial']))
+        meu_jogador.add_item(Item(pocao_mana_media['nome'], pocao_mana_media['atk'], pocao_mana_media['desc'], pocao_mana_media['equipado'], pocao_mana_media['consumivel'], pocao_mana_media['preco'], pocao_mana_media['especial']))
+        meu_jogador.add_item(Item(pocao_mana_alta['nome'], pocao_mana_alta['atk'], pocao_mana_alta['desc'], pocao_mana_alta['equipado'], pocao_mana_alta['consumivel'], pocao_mana_alta['preco'], pocao_mana_alta['especial']))
         calcular_atributos(meu_jogador)
 
     elif meu_jogador.classe == 'monge':
