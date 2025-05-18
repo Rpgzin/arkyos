@@ -134,7 +134,7 @@ class Monstro:
         self.boss = boss
 
 def encontro_aleatorio():
-    if meu_jogador.local != 'b1':
+    if meu_jogador.local != 'c2':
         print('Você não está em um circulo de invocação!')
         main_game_loop()
     numero = random.randint(0, 1)
@@ -148,7 +148,7 @@ def encontro_aleatorio():
 
 def monstro_aleatorio():
     monstro_invocacao = random.choice(lista_monstros_invocacoes)
-    return Monstro(monstro_invocacao['nome'], monstro_invocacao['vida'], monstro_invocacao['nivel'], monstro_invocacao['atk'], monstro_invocacao['xp'], monstro_invocacao['ouro'])
+    return Monstro(monstro_invocacao['nome'], monstro_invocacao['vida'], monstro_invocacao['nivel'],)
 
 def experiencia(monstro):
     meu_jogador.xp += monstro.xp
@@ -340,7 +340,11 @@ lista_armas = [
 
 lista_itens_especiais = [
     {'nome': 'Anel Desconhecido', 'atk': 0, 'preco': 00, 'desc': 'Um anel feito de ouro. Sua origem é desconhecida.', 'equipado': False, 'consumivel': False, 'especial': True},
-]
+    {'nome': 'Máscara da Raiva', 'atk': 0, 'preco': 00, 'desc': 'Máscara pega no Salão das Vozes Vazias. O uso da mesma é desconhecido.', 'equipado': False, 'consumivel': False, 'especial': True},
+    {'nome': 'Máscara da Medo', 'atk': 0, 'preco': 00, 'desc': 'Máscara pega no Salão das Vozes Vazias. O uso da mesma é desconhecido.', 'equipado': False, 'consumivel': False, 'especial': True},
+    {'nome': 'Máscara da Alegria', 'atk': 0, 'preco': 00, 'desc': 'Máscara pega no Salão das Vozes Vazias. O uso da mesma é desconhecido.', 'equipado': False, 'consumivel': False, 'especial': True},
+    {'nome': 'Máscara da Loucura', 'atk': 0, 'preco': 00, 'desc': 'Máscara pega no Salão das Vozes Vazias. O uso da mesma é desconhecido.', 'equipado': False, 'consumivel': False, 'especial': True},
+]   
 
 lista_magias = [
     {'nome': 'Bola de fogo', 'dano': 20, 'desc':'A magia mais forte de um mago', 'mana_gasta': 30}
@@ -370,6 +374,72 @@ lista_monstros_invocacoes = [
 lista_monstros_fixos = [
     {'nome': 'Guardião Enraizado', 'vida': 100, 'nivel': 1, 'atk': 6, 'xp': 40, 'ouro': 50, 'boss': True},
 ]
+
+def raiva():
+    if meu_jogador.local == 'b1' and mapa[meu_jogador.local]['SOLVED'] == False:
+        fala1 = 'Máscara da raiva adicionada ao seu inventário!\n'
+        for falas in fala1:
+            sys.stdout.write(falas)
+            sys.stdout.flush()
+            time.sleep(0.01)
+        time.sleep(1.5)
+        item1 = lista_itens_especiais[1]
+        meu_jogador.add_item(Item(item1['nome'], item1['atk'], item1['desc'], item1['equipado'], item1['consumivel'], item1['preco'], item1['especial']))
+        mapa[meu_jogador.local]['SOLVED'] = True
+        limpar_tela()
+    else:
+        print(Fore.RED +'Comando inválido.'+Fore.RESET)
+        locais()
+def medo():
+    if meu_jogador.local == 'b1' and mapa[meu_jogador.local]['SOLVED'] == False:
+        fala2 = 'Máscara do medo adicionada ao seu inventário!\n'
+        for falas in fala2:
+            sys.stdout.write(falas)
+            sys.stdout.flush()
+            time.sleep(0.01)
+        time.sleep(1.5)
+        item2 = lista_itens_especiais[2]
+        meu_jogador.add_item(Item(item2['nome'], item2['atk'], item2['desc'], item2['equipado'], item2['consumivel'], item2['preco'], item2['especial']))
+        mapa[meu_jogador.local]['SOLVED'] = True
+        limpar_tela()
+        main_game_loop()
+    else:
+        print(Fore.RED +'Comando inválido.'+Fore.RESET)
+        locais()
+def alegria():
+    if meu_jogador.local == 'b1' and mapa[meu_jogador.local]['SOLVED'] == False:
+        fala3 = 'Máscara da alegria adicionada ao seu inventário!\n'
+        for falas in fala3:
+            sys.stdout.write(falas)
+            sys.stdout.flush()
+            time.sleep(0.01)
+        time.sleep(1.5)
+        item3 = lista_itens_especiais[3]
+        meu_jogador.add_item(Item(item3['nome'], item3['atk'], item3['desc'], item3['equipado'], item3['consumivel'], item3['preco'], item3['especial']))
+        mapa[meu_jogador.local]['SOLVED'] = True
+        limpar_tela()
+        main_game_loop()
+    else:
+        print(Fore.RED +'Comando inválido.'+Fore.RESET)
+        locais()
+
+def loucura():
+    if meu_jogador.local == 'b1' and mapa[meu_jogador.local]['SOLVED'] == False:
+        fala3 = 'Máscara da loucura adicionada ao seu inventário!\n'
+        for falas in fala3:
+            sys.stdout.write(falas)
+            sys.stdout.flush()
+            time.sleep(0.01)
+        time.sleep(1.5)
+        item4 = lista_itens_especiais[4]
+        meu_jogador.add_item(Item(item4['nome'], item4['atk'], item4['desc'], item4['equipado'], item4['consumivel'], item4['preco'], item4['especial']))
+        mapa[meu_jogador.local]['SOLVED'] = True
+        limpar_tela()
+        main_game_loop()
+    else:
+        print(Fore.RED +'Comando inválido.'+Fore.RESET)
+        locais()
+        
 
 def arma_aleatoria():
     chances = [30, 30, 20, 20]
@@ -538,29 +608,25 @@ mapa = {
         'contador' : 0
     },
     'b1': { 
-        'NOME_LOCAL': "Sala1 Segundo andar",
-        'DESCRICAO': 'Descrição da sala b1.',
-        'EXAMINAR': 'Uma escada quebrada e mobília velha.',
+        'NOME_LOCAL': "O Salão das Vozes Vazias",
+        'DESCRICAO': '''
+O ar é denso, carregado de um silêncio que parece ecoar vozes distantes.
+Sussurros deslizam pela sua mente como fios de memórias perdidas.
+As paredes estão cobertas por máscaras de todos os tipos, cada uma esculpida em expressões vívidas: raiva, medo, alegria, loucura.
+Elas pendem como troféus macabros, imóveis... até que você passa por uma.
+Então, lentamente, uma delas se vira. Os olhos vazios seguem seus movimentos, e você sente o peso de um olhar que não deveria existir.
+''',
+        'EXAMINAR': '''
+Você vê aquelas máscaras te olhando. Você sente como se estivessem te chamando. '
+(Digite raiva, medo, alegria ou loucura para ir até a máscara correspondente.)
+''',
         'SOLVED': False,
         'SUBIR': 'a2',
         'DESCER': '',
         'AVANÇAR': 'b2',
         'RETORNAR': '',
-        'MONSTRO': monstro_exemplo2,
-        'LOCAIS': '',
-        'contador' : 0
-    },
-    'b1': { 
-        'NOME_LOCAL': "Sala1 Segundo andar",
-        'DESCRICAO': 'Descrição da sala b1.',
-        'EXAMINAR': 'Uma escada quebrada e mobília velha.',
-        'SOLVED': False,
-        'SUBIR': 'a2',
-        'DESCER': '',
-        'AVANÇAR': 'b2',
-        'RETORNAR': '',
-        'MONSTRO': monstro_exemplo2,
-        'LOCAIS': '',
+        'MONSTRO': '',
+        'LOCAIS': ['raiva', 'medo', 'alegria', 'loucura'],
         'contador' : 0
     },
     'b2': {
@@ -710,7 +776,7 @@ def prompt():
 def locais():
     print(Fore.LIGHTYELLOW_EX + 'O que deseja fazer?' + Fore.RESET)
     acao = input(Fore.LIGHTYELLOW_EX +'>>'+Fore.RESET).lower()
-    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'], 'sair'
+    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'],'raiva','medo','alegria','loucura', 'sair',
     
     while acao not in acoes_aceitas:
         print(Fore.RED + 'Acao inválida, tente novamente. (caso não tenha mais opções, digite sair)'+Fore.RESET)
@@ -725,6 +791,14 @@ def locais():
         pass
     elif acao == 'enfrentar':
         boss_enraizado()
+    elif acao == 'raiva':
+        raiva()
+    elif acao == 'medo':
+        medo()
+    elif acao == 'alegria':
+        alegria()
+    elif acao == 'loucura':
+        loucura()
     else:
         print('Acao inválida, tente novamente.')
         locais()
@@ -1226,14 +1300,29 @@ def jogador_mover():
                 time.sleep(0.01)
             time.sleep(1)
             main_game_loop()
+        if meu_jogador.local == 'b1':
+            fala2 = 'A força das máscaras por algum motivo impedem de abrir a porta.'
+            for falas in fala2:
+                sys.stdout.write(falas)
+                sys.stdout.flush()
+                time.sleep(0.01)
+            time.sleep(1)
+            main_game_loop()
     elif meu_jogador.local == 'a1':
         pergunta = "Avançar em direção ao portão negro? (escreva avançar)\n >>"
-    elif meu_jogador.local in ['b1', 'c1']:
-        pergunta = "Avançar para a próxima sala ou subir as escadas e voltar a sala anterior? (escreva: avançar ou subir)\n>>"
-    elif meu_jogador.local in ['a2', 'c2']:
-        pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
+    elif meu_jogador.local == 'a2':
+        pergunta = '''
+O proximo portão se ilumina revelando ser uma escada que leva para os andares inferiores A torre está viva, Observando, Esperando.
+E você sente que o verdadeiro inferno... não ficou para trás.
+Você deseja descer a escada ou retornar a sala anterior? (escreva: descer ou retornar)\n>>'''
+    elif meu_jogador.local in ['b1',]:
+        pergunta = "A sua frente está a porta para a proxima area. Avançar para a proxima area ou subir as escadas e retornar a sala anterior? (escreva: avançar ou subir)\n>>"
     elif meu_jogador.local in ['b2']:
-        pergunta = "Há uma loja no andar. para onde deseja se mover? (escreva: loja, descer ou retornar)\n>>"
+        pergunta = "Avançar ou retornar a sala anterior? (escreva: avançar ou retornar)\n>>"
+    elif meu_jogador.local in ['c1']:
+        pergunta = "Avançar ou subir a sala anterior? (escreva: avançar ou subir)\n>>"
+    elif meu_jogador.local in ['c2']:
+        pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
     
     dest = input(pergunta).lower()
     direcoes_validas = ['subir', 'descer', 'avançar', 'retornar', 'loja']
@@ -1251,28 +1340,44 @@ def jogador_mover():
 def movimento_manipulado(destino):
     if destino == 'a2':
         if mapa[meu_jogador.local]['contador'] == 0:      
-            passagem ='''
+            passagem = '''
 Ao Abrir o portão, Uma nuvem de poeira antiga Cobre o Local. Uma voz, baixa e arrastada, sussurra em sua mente:
 "O herdeiro da ruína caminha outra vez... mas será que lembrará antes de se perder?"
 
 .....
-
 Ao Atravessar Para o Proximo comodo, 
 a cada passo a dentro o ambiente é iluminado por tochas azuis que você sente que não deviam acender.
 '''
-            for passa in passagem:
-                sys.stdout.write(passa)
+        for passagens in passagem:
+            sys.stdout.write(passagens)
+            sys.stdout.flush()
+            time.sleep(0.01)
+        time.sleep(2)
+        mapa[meu_jogador.local]['contador'] += 1
+        print(f"\nVocê se moveu para {destino}.")
+        meu_jogador.local = destino
+        print_local()
+
+    elif destino == 'b1': 
+        if mapa[meu_jogador.local]['contador'] == 0:
+            passagem2 = '''
+Ao entrar, o som desaparece. Nenhum eco. Nenhuma respiração. No lugar, apenas sussurros em sua mente — 
+vozes que carregam seu nome, mas ditas por pessoas que você não lembra.
+As paredes são cobertas por máscaras penduradas, cada uma diferente — raiva, medo, alegria, loucura.
+Quando você se aproxima, uma delas vira lentamente... te observando.'''
+            for passagens in passagem2:
+                sys.stdout.write(passagens)
                 sys.stdout.flush()
                 time.sleep(0.01)
             time.sleep(2)
         mapa[meu_jogador.local]['contador'] += 1
-    print(f"\nVocê se moveu para {destino}.")
-    meu_jogador.local = destino
-    print_local()
+        print(f"\nVocê se moveu para {destino}.")
+        meu_jogador.local = destino
+        print_local()
 
 def jogador_examinar():
     examinar = mapa[meu_jogador.local]['EXAMINAR']
-    if mapa[meu_jogador.local][SOLVED] == True:
+    if mapa[meu_jogador.local][SOLVED] == True and meu_jogador.local == 'a2':
         examinar2 = '''
 Atrás de você, o que restou do trono escurece ainda mais, como se a própria sombra tentasse fugir dali. 
 A energia maligna está morrendo... mas algo abaixo desperta.
@@ -1281,6 +1386,15 @@ Você se vira, encarando a única saída: um Portão Negro, que leva a uma proxi
 A estrutura range como um animal faminto, esperando que você se mova.
               '''
         for examina in examinar2:
+            sys.stdout.write(examina)
+            sys.stdout.flush()
+            time.sleep(0.01)
+
+    elif meu_jogador == 'b1' and mapa[meu_jogador.local][SOLVED] == True:
+        examinar3 = '''
+As máscaras param de se mover e o som das vozes desaparece, o poder delas se apagaram.
+'''
+        for examina in examinar3:
             sys.stdout.write(examina)
             sys.stdout.flush()
             time.sleep(0.01)
