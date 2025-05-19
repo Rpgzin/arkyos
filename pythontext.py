@@ -347,7 +347,7 @@ lista_itens_especiais = [
 ]   
 
 lista_magias = [
-    {'nome': 'Bola de fogo', 'dano': 20, 'desc':'A magia mais forte de um mago', 'mana_gasta': 30}
+    {'nome': 'Bola de fogo', 'dano': 200, 'desc':'A magia mais forte de um mago', 'mana_gasta': 30}
 ]
 
 lista_monstros_normais = [
@@ -385,8 +385,10 @@ def raiva():
         time.sleep(1.5)
         item1 = lista_itens_especiais[1]
         meu_jogador.add_item(Item(item1['nome'], item1['atk'], item1['desc'], item1['equipado'], item1['consumivel'], item1['preco'], item1['especial']))
-        mapa[meu_jogador.local]['SOLVED'] = True
+        mapa[meu_jogador.local]['SOLVED'] = True  # Marca a sala como resolvida
         limpar_tela()
+        print_local()
+        main_game_loop()
     else:
         print(Fore.RED +'Comando inválido.'+Fore.RESET)
         locais()
@@ -402,6 +404,7 @@ def medo():
         meu_jogador.add_item(Item(item2['nome'], item2['atk'], item2['desc'], item2['equipado'], item2['consumivel'], item2['preco'], item2['especial']))
         mapa[meu_jogador.local]['SOLVED'] = True
         limpar_tela()
+        print_local()
         main_game_loop()
     else:
         print(Fore.RED +'Comando inválido.'+Fore.RESET)
@@ -418,6 +421,7 @@ def alegria():
         meu_jogador.add_item(Item(item3['nome'], item3['atk'], item3['desc'], item3['equipado'], item3['consumivel'], item3['preco'], item3['especial']))
         mapa[meu_jogador.local]['SOLVED'] = True
         limpar_tela()
+        print_local()
         main_game_loop()
     else:
         print(Fore.RED +'Comando inválido.'+Fore.RESET)
@@ -435,6 +439,7 @@ def loucura():
         meu_jogador.add_item(Item(item4['nome'], item4['atk'], item4['desc'], item4['equipado'], item4['consumivel'], item4['preco'], item4['especial']))
         mapa[meu_jogador.local]['SOLVED'] = True
         limpar_tela()
+        print_local()
         main_game_loop()
     else:
         print(Fore.RED +'Comando inválido.'+Fore.RESET)
@@ -1284,7 +1289,7 @@ def jogador_dormir():
     
 def jogador_mover():
     if mapa[meu_jogador.local]['SOLVED'] == False:
-        if meu_jogador.local == 'a1':
+        if meu_jogador.local == 'a1' and not mapa[meu_jogador.local]['SOLVED']:
             fala = 'Você não consegue passar pela porta, alguma energia estranha te impede'
             for falas in fala:
                 sys.stdout.write(falas)
@@ -1292,7 +1297,7 @@ def jogador_mover():
                 time.sleep(0.01)
             time.sleep(1)
             main_game_loop()
-        elif meu_jogador.local == 'a2':
+        elif meu_jogador.local == 'a2' and not mapa[meu_jogador.local]['SOLVED']:
             fala1 = 'Algumas raizes impedem a passagem, aparentemente vem do Enraizado.'
             for falas in fala1:
                 sys.stdout.write(falas)
@@ -1300,7 +1305,7 @@ def jogador_mover():
                 time.sleep(0.01)
             time.sleep(1)
             main_game_loop()
-        if meu_jogador.local == 'b1':
+        if meu_jogador.local == 'b1' and not mapa[meu_jogador.local]['SOLVED']:
             fala2 = 'A força das máscaras por algum motivo impedem de abrir a porta.'
             for falas in fala2:
                 sys.stdout.write(falas)
@@ -1339,7 +1344,9 @@ Você deseja descer a escada ou retornar a sala anterior? (escreva: descer ou re
 
 def movimento_manipulado(destino):
     if destino == 'a2':
-        if mapa[meu_jogador.local]['contador'] == 0:      
+        meu_jogador.local = destino
+        if mapa['a1']['contador'] == 0:  
+            mapa['a1']['contador'] += 1  
             passagem = '''
 Ao Abrir o portão, Uma nuvem de poeira antiga Cobre o Local. Uma voz, baixa e arrastada, sussurra em sua mente:
 "O herdeiro da ruína caminha outra vez... mas será que lembrará antes de se perder?"
@@ -1348,18 +1355,17 @@ Ao Abrir o portão, Uma nuvem de poeira antiga Cobre o Local. Uma voz, baixa e a
 Ao Atravessar Para o Proximo comodo, 
 a cada passo a dentro o ambiente é iluminado por tochas azuis que você sente que não deviam acender.
 '''
-        for passagens in passagem:
-            sys.stdout.write(passagens)
-            sys.stdout.flush()
-            time.sleep(0.01)
-        time.sleep(2)
-        mapa[meu_jogador.local]['contador'] += 1
-        print(f"\nVocê se moveu para {destino}.")
-        meu_jogador.local = destino
+            for passagens in passagem:
+                sys.stdout.write(passagens)
+                sys.stdout.flush()
+                time.sleep(0.01)
+            time.sleep(2)
         print_local()
 
-    elif destino == 'b1': 
-        if mapa[meu_jogador.local]['contador'] == 0:
+    elif destino == 'b1':
+        meu_jogador.local = destino 
+        if mapa['a2']['contador'] == 0:
+            mapa['a2']['contador'] += 1
             passagem2 = '''
 Ao entrar, o som desaparece. Nenhum eco. Nenhuma respiração. No lugar, apenas sussurros em sua mente — 
 vozes que carregam seu nome, mas ditas por pessoas que você não lembra.
@@ -1370,10 +1376,11 @@ Quando você se aproxima, uma delas vira lentamente... te observando.'''
                 sys.stdout.flush()
                 time.sleep(0.01)
             time.sleep(2)
-        mapa[meu_jogador.local]['contador'] += 1
-        print(f"\nVocê se moveu para {destino}.")
-        meu_jogador.local = destino
-        print_local()
+            print_local()
+    meu_jogador.local = destino
+    print(f"\nVocê se moveu para {destino}.")
+    print_local()
+
 
 def jogador_examinar():
     examinar = mapa[meu_jogador.local]['EXAMINAR']
@@ -1389,10 +1396,11 @@ A estrutura range como um animal faminto, esperando que você se mova.
             sys.stdout.write(examina)
             sys.stdout.flush()
             time.sleep(0.01)
+        time.sleep(2)
 
-    elif meu_jogador == 'b1' and mapa[meu_jogador.local][SOLVED] == True:
+    elif meu_jogador.local == 'b1' and mapa[meu_jogador.local]['SOLVED'] == True:
         examinar3 = '''
-As máscaras param de se mover e o som das vozes desaparece, o poder delas se apagaram.
+As máscaras param de se mover e o som das vozes desaparece, o poder delas se apagou.
 '''
         for examina in examinar3:
             sys.stdout.write(examina)
