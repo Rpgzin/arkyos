@@ -47,9 +47,17 @@ class Player:
         self.magias = []
         self.local = 'começo'
         self.game_over = False
+        self.pular_turno = False
     
     def add_item(self, item):
         self.mochila.append(item)
+    
+    def add_efeito(self, efeito):
+        for i, efeito_existente in enumerate(self.efeitos_status):
+            if efeito_existente.nome == efeito.nome:
+                efeito.tempo += efeito_existente.tempo
+                self.efeitos_status.pop(i)
+        self.efeitos_status.append(efeito)
 
 meu_jogador = Player()
 
@@ -122,7 +130,7 @@ def exibir_status(jogador):
     print(f'forca: {jogador.forca} fortitude: {jogador.fortitude} inteligência: {jogador.inteligencia}')
 
 class Monstro:
-    def __init__(self, nome, vida, nivel, atk, xp, ouro, boss):
+    def __init__(self, nome, vida, nivel, atk, xp, ouro, boss, atk_efeito=None):
         self.nome = nome
         self.vida = vida*nivel
         self.vida_max = vida*nivel
@@ -132,6 +140,17 @@ class Monstro:
         self.ouro = ouro
         self.item = arma_aleatoria()
         self.boss = boss
+        self.efeitos_status = []
+        self.pular_turno = False
+        self.atk_turnos = 0
+        self.atk_efeito = atk_efeito
+
+    def add_efeito(self, efeito):
+        for i, efeito_existente in enumerate(self.efeitos_status):
+            if efeito_existente.nome == efeito.nome:
+                efeito.tempo += efeito_existente.tempo
+                self.efeitos_status.pop(i)
+        self.efeitos_status.append(efeito)
 
 def encontro_aleatorio():
     if meu_jogador.local != 'c2':
@@ -166,11 +185,19 @@ class Item:
         self.especial = especial
     
 class Magia:
-    def __init__(self, nome, dano, desc, mana_gasta):
+    def __init__(self, nome, dano, desc, mana_gasta, efeito=None):
         self.nome = nome
         self.dano = dano
         self.desc = desc
-        self.mana_gasta = mana_gasta 
+        self.mana_gasta = mana_gasta
+        self.efeito = efeito
+
+class Efeito:
+    def __init__(self, nome, tipo, tempo, dano=None):
+        self.nome = nome
+        self.tipo = tipo
+        self.tempo = tempo
+        self.dano = dano
 
 def mostrar_loja():
         if meu_jogador.game_over:
@@ -347,7 +374,14 @@ lista_itens_especiais = [
 ]   
 
 lista_magias = [
-    {'nome': 'Bola de fogo', 'dano': 200, 'desc':'A magia mais forte de um mago', 'mana_gasta': 30}
+    {'nome': 'Bola de fogo', 'dano': 200, 'desc':'A magia mais forte de um mago', 'mana_gasta': 30},
+    {'nome': 'Rajada de Gelo', 'dano': 10, 'desc':'Esfrio né', 'mana_gasta': 35},
+]
+
+lista_efeitos = [
+    {'nome': 'queimação', 'tipo': 'dano', 'tempo': 2, 'dano': 5},
+    {'nome': 'envenamento', 'tipo': 'dano', 'tempo': 3, 'dano': 4},
+    {'nome': 'congelamento', 'tipo': 'pular', 'tempo': 3},
 ]
 
 lista_monstros_normais = [
@@ -454,7 +488,8 @@ def arma_aleatoria():
 
 monstro = lista_monstros_fixos[0]
 monstro2 = lista_monstros_normais[1]
-guardiao_enraizado = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'], monstro['ouro'], monstro['boss'])
+efeito_boss = Efeito(lista_efeitos[1]['nome'], lista_efeitos[1]['tipo'], lista_efeitos[1]['tempo'], lista_efeitos[1]['dano'])
+guardiao_enraizado = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'], monstro['ouro'], monstro['boss'], efeito_boss)
 monstro_exemplo2 = Monstro(monstro2['nome'], monstro2['vida'], monstro2['nivel'], monstro2['atk'], monstro2['xp'], monstro2['ouro'], monstro2['boss'])
 
 ######### Tela de título #########
@@ -1102,9 +1137,14 @@ def abrir_mochila():
 
 def luta(monstro, meu_jogador):
     print('▀'*100)
-    print(f'|\n|{monstro.nome} LVL: {monstro.nivel}')
-    print(f'|vida: {monstro.vida}/{monstro.vida_max} ATK: {monstro.atk}\n|')
+    efeitos = ''
+    for efeito in monstro.efeitos_status:
+        efeitos += ("" + efeito.nome + " ")
+    print(f'\n{monstro.nome} #{monstro.nivel} efeitos: {efeitos}')
+    print(f'vida: {monstro.vida}/{monstro.vida_max} ATK: {monstro.atk}')
     print('▀'*100)
+    if meu_jogador.efeitos_status:
+        aplicar_efeito(meu_jogador)
     mostrar_status(meu_jogador)
     print('atacar / magia / mochila / fugir')
     acao = input(">>").lower()
@@ -1119,6 +1159,19 @@ def luta(monstro, meu_jogador):
         intervalo()
         
         if monstro.vida > 0:
+            monstro.atk_turnos += 1
+            if monstro.efeitos_status:
+                aplicar_efeito(monstro)
+            if monstro.pular_turno:
+                luta(monstro, meu_jogador)
+            if monstro.atk_turnos >= 3:
+                meu_jogador.vida -= monstro.atk*2
+                print(f'O {monstro.nome} te ataca ferozmente')
+                monstro.atk_turnos = 0
+                if monstro.atk_efeito:
+                    meu_jogador.add_efeito(monstro.atk_efeito)
+                meu_jogador.add_efeito(monstro.atk_efeito)
+                luta(monstro, meu_jogador)
             meu_jogador.vida -= monstro.atk
             print(f'\no {monstro.nome} te ataca\n')
             loading()
@@ -1143,11 +1196,26 @@ def luta(monstro, meu_jogador):
 
                 monstro.vida -= (meu_jogador.magias[escolha].dano + meu_jogador.dano_magico)
                 meu_jogador.mana -= meu_jogador.magias[escolha].mana_gasta
+                monstro.add_efeito(meu_jogador.magias[escolha].efeito)
                 print(f'Você lança {meu_jogador.magias[escolha].nome} em {monstro.nome}')
                 loading()
                 intervalo()
 
                 if monstro.vida > 0:
+                    
+                    monstro.atk_turnos += 1
+                    if monstro.efeitos_status:
+                        aplicar_efeito(monstro)
+                    if monstro.pular_turno:
+                        luta(monstro, meu_jogador)
+                    if monstro.atk_turnos >= 3:
+                        meu_jogador.vida -= monstro.atk*2
+                        print(f'O {monstro.nome} te ataca ferozmente')
+                        monstro.atk_turnos = 0
+                        if monstro.atk_efeito:
+                            meu_jogador.add_efeito(monstro.atk_efeito)
+                        luta(monstro, meu_jogador)
+
                     meu_jogador.vida -= monstro.atk
                     print(f'\no {monstro.nome} te ataca\n')
                     loading()
@@ -1210,14 +1278,18 @@ def luta(monstro, meu_jogador):
     elif acao == 'fugir':
         fugir()
     
+    # fim do turno
     if meu_jogador.vida > 0 and monstro.vida > 0:
         luta(monstro, meu_jogador)
         
+    # jogador morre
     if meu_jogador.vida <= 0:
         meu_jogador.local = 'a1'
         meu_jogador.vida = meu_jogador.vida_max
         limpar_tela()
         print('Você morreu e acorda na sala inicial')
+
+    # monstro morre
     elif monstro.vida <= 0:
         limpar_tela()
         print(f'VOCÊ DERROTOU {monstro.nome}')
@@ -1232,6 +1304,21 @@ def luta(monstro, meu_jogador):
         print_local()
         main_game_loop()
 
+def aplicar_efeito(alvo):
+    for i, efeito in enumerate(alvo.efeitos_status):
+        if efeito.tipo == 'dano':
+            alvo.vida -= efeito.dano
+            print(f'{alvo.nome} sofreu {efeito.nome} e sofreu {efeito.dano} de dano')
+            alvo.efeitos_status[i].tempo -= 1
+            if alvo.efeitos_status[i].tempo == 0:
+                alvo.efeitos_status.pop(i)
+        elif efeito.tipo == 'pular':
+            alvo.pular_turno = True
+            if random.random() < 0.5:
+                alvo.pular_turno = False
+                alvo.efeitos_status.pop(i)
+                continue
+            print(f'{alvo.nome} está conglado e não pode atacar')
 def drop(monstro):
     print(f'Você ganhou {monstro.ouro} e o {monstro.nome} dropou {monstro.item.nome}')
     meu_jogador.ouro += monstro.ouro
@@ -1269,11 +1356,13 @@ def fugir():
 def mostrar_status(self):
     print('▬'*100)
     print(f'{self.nome} LVL:{self.nivel} XP: {self.xp}/{self.xp_max}')
-    print(f'vida: {self.vida}/{self.vida_max} ATK: {self.atk} MANA: {self.mana}/{self.mana_max}')
+    print(f'vida: {self.vida}/{self.vida_max} ATK: {self.atk} MANA: {self.mana}/{self.mana_max}\nefeitos:', end=' ')
+    for efeito in self.efeitos_status:
+        print(f'{efeito.nome}', end=' ')
     if self.item_equipado:
-        print(f'arma: {self.item_equipado.nome} ATK: {self.item_equipado.atk}')
+        print(f'\narma: {self.item_equipado.nome} ATK: {self.item_equipado.atk}')
     else:
-        print('arma: sem arma equipada')
+        print('\narma: sem arma equipada')
 
 def jogador_dormir():
     if meu_jogador.local in ['a1', 'c1']:
@@ -1472,6 +1561,9 @@ def setup_jogo():
         pocao_mana_media = lista_consumiveis[4]
         pocao_mana_alta = lista_consumiveis[5]
         magia_basica = lista_magias[0]
+        magia_basica1 = lista_magias[1]
+        efeito = Efeito(lista_efeitos[0]['nome'], lista_efeitos[0]['tipo'], lista_efeitos[0]['tempo'], lista_efeitos[0]['dano'])
+        efeito1 = Efeito(lista_efeitos[2]['nome'], lista_efeitos[2]['tipo'], lista_efeitos[2]['tempo'], lista_efeitos[0]['dano'])
         meu_jogador.vida_base = 50
         meu_jogador.vida = meu_jogador.vida_base
         meu_jogador.vida_max = meu_jogador.vida
@@ -1480,7 +1572,8 @@ def setup_jogo():
         meu_jogador.mana_max = meu_jogador.mana
         meu_jogador.atk_base = 5
         meu_jogador.atk = meu_jogador.atk_base
-        meu_jogador.magias.append(Magia(magia_basica['nome'], magia_basica['dano'], magia_basica['desc'], magia_basica['mana_gasta']))
+        meu_jogador.magias.append(Magia(magia_basica['nome'], magia_basica['dano'], magia_basica['desc'], magia_basica['mana_gasta'], efeito))
+        meu_jogador.magias.append(Magia(magia_basica1['nome'], magia_basica1['dano'], magia_basica1['desc'], magia_basica1['mana_gasta'], efeito1))
         meu_jogador.add_item(Item(pocao_mana_baixa['nome'], pocao_mana_baixa['atk'], pocao_mana_baixa['desc'], pocao_mana_baixa['equipado'], pocao_mana_baixa['consumivel'], pocao_mana_baixa['preco'], pocao_mana_baixa['especial']))
         meu_jogador.add_item(Item(pocao_mana_media['nome'], pocao_mana_media['atk'], pocao_mana_media['desc'], pocao_mana_media['equipado'], pocao_mana_media['consumivel'], pocao_mana_media['preco'], pocao_mana_media['especial']))
         meu_jogador.add_item(Item(pocao_mana_alta['nome'], pocao_mana_alta['atk'], pocao_mana_alta['desc'], pocao_mana_alta['equipado'], pocao_mana_alta['consumivel'], pocao_mana_alta['preco'], pocao_mana_alta['especial']))
