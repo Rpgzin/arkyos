@@ -12,7 +12,7 @@ from utilitarios import(
     intervalo
 )
 
-colorama.init(autoreset=True)
+colorama.init()
 
 #TO-DO:
 '''
@@ -83,7 +83,7 @@ def atualizar_atributos(jogador):
 
 def subi_nivel(jogador):
     jogador.nivel += 1
-    print(f'{jogador.nome} subiu de nivel para o LVL:'+Fore.GREEN+f'{jogador.nivel}'+Fore.RESET+'!!!')
+    print(f'{jogador.nome} subiu de nivel para o LVL:'+Fore.GREEN+f'{jogador.nivel}'+Style.RESET_ALL+'!!!')
     pontos = 0
     while jogador.xp >= jogador.xp_max:
         pontos += 3
@@ -92,7 +92,7 @@ def subi_nivel(jogador):
         jogador.xp_max +=50
     while pontos > 0:
         print(f'Pontos restantes: '+Fore.YELLOW+f'{pontos}')
-        escolha = input(Fore.GREEN+"Aumentar Forca (for)"+Fore.RESET+", "+Fore.RED+"Fortitude (fort)"+Fore.RESET+" ou "+Fore.BLUE+"Inteligência (int)"+Fore.RESET+": ").lower()
+        escolha = input(Fore.GREEN+"Aumentar Forca (for)"+Style.RESET_ALL+", "+Fore.RED+"Fortitude (fort)"+Style.RESET_ALL+" ou "+Fore.BLUE+"Inteligência (int)"+Style.RESET_ALL+": ").lower()
         if escolha == 'for':
             jogador.forca += 1
             print(f'for: {jogador.forca}')
@@ -103,7 +103,7 @@ def subi_nivel(jogador):
             jogador.inteligencia += 1
             print(f'inteligência: {jogador.inteligencia}')
         else:
-            print(Fore.RED+'Comando invádido'+Fore.RESET)
+            print(Fore.RED+'Comando invádido'+Style.RESET_ALL)
             continue
         pontos -= 1
     atualizar_atributos(meu_jogador)
@@ -121,8 +121,8 @@ def exibir_status(jogador):
         │╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚══════╝│
         └───────────────────────────────────────────────────┘   
 '''.upper())
-    print(f'Nome:{jogador.nome} LVL: {jogador.nivel}'+Fore.RESET+f' XP: {jogador.xp}/{jogador.xp_max}')
-    print('vida:'+Fore.RED+f' {jogador.vida}/{jogador.vida_max}'+Fore.RESET+ ' / MANA: '+Fore.BLUE+f'{jogador.mana}/{jogador.mana_max}'+Fore.RESET+' / ATK: '+Fore.YELLOW+f'{jogador.atk}'+Fore.RESET+' / MAG.ATK: '+Fore.LIGHTBLUE_EX+f'{jogador.dano_magico}')
+    print(f'Nome:{jogador.nome} LVL: {jogador.nivel}'+Style.RESET_ALL+f' XP: {jogador.xp}/{jogador.xp_max}')
+    print('vida:'+Fore.RED+f' {jogador.vida}/{jogador.vida_max}'+Style.RESET_ALL+ ' / MANA: '+Fore.BLUE+f'{jogador.mana}/{jogador.mana_max}'+Style.RESET_ALL+' / ATK: '+Fore.YELLOW+f'{jogador.atk}'+Style.RESET_ALL+' / MAG.ATK: '+Fore.LIGHTBLUE_EX+f'{jogador.dano_magico}')
     if jogador.item_equipado:
         print(f'arma: {jogador.item_equipado.nome} ATK: {jogador.item_equipado.atk}')
     else:
@@ -153,7 +153,7 @@ class Monstro:
         self.efeitos_status.append(efeito)
 
 def encontro_aleatorio():
-    if meu_jogador.local != 'c2':
+    if meu_jogador.local != 'c1':
         print('Você não está em um circulo de invocação!')
         main_game_loop()
     numero = random.randint(0, 1)
@@ -167,7 +167,7 @@ def encontro_aleatorio():
 
 def monstro_aleatorio():
     monstro_invocacao = random.choice(lista_monstros_invocacoes)
-    return Monstro(monstro_invocacao['nome'], monstro_invocacao['vida'], monstro_invocacao['nivel'],)
+    return Monstro(monstro_invocacao['nome'], monstro_invocacao['vida'], monstro_invocacao['nivel'], monstro_invocacao['atk'], monstro_invocacao['xp'], monstro_invocacao['ouro'], monstro_invocacao['boss'])
 
 def experiencia(monstro):
     meu_jogador.xp += monstro.xp
@@ -214,7 +214,7 @@ def mostrar_loja():
             print(f"{i+1}. {lista_itens_loja[i]['nome']} | Preço: {lista_itens_loja[i]['preco']} | Descricao: {lista_itens_loja[i]['desc']} {status}\n")
         print(f'Ouro: {meu_jogador.ouro}')
         print('>> USE NÚMEROS PARA SELECIONAR O ITEM OU [vender | fechar]')
-        escolha = input(Fore.LIGHTYELLOW_EX + '>>'+ Fore.RESET).lower()
+        escolha = input(Fore.LIGHTYELLOW_EX + '>>'+ Style.RESET_ALL).lower()
         if escolha == 'fechar':
             print_local()
         elif escolha == 'vender':
@@ -233,7 +233,7 @@ def mostrar_loja():
             else:
                 print(f"{lista_itens_loja[escolha]['nome']} | ATK: {lista_itens_loja[escolha]['atk']} | Preço: {lista_itens_loja[escolha]['preco']} | Descricao: {lista_itens_loja[escolha]['desc']} {status}\n")
             print('[compra | voltar | fechar]')
-            acao = input(Fore.LIGHTYELLOW_EX + '>>'+Fore.RESET)
+            acao = input(Fore.LIGHTYELLOW_EX + '>>'+Style.RESET_ALL)
             if acao not in ['comprar', 'voltar', 'fechar']:
                 print('**COMANDO INVÁLIDO**')
                 mostrar_loja()
@@ -258,7 +258,7 @@ def vender_item():
             continue
         print(f'{i+1}. {item.nome} | {item.desc} | valor: {item.preco}')
     print('>> USE NÚMEROS PARA SELECIONAR O ITEM OU [comprar | fechar]')
-    escolha = input(Fore.LIGHTYELLOW_EX + '>>'+Fore.RESET).lower()
+    escolha = input(Fore.LIGHTYELLOW_EX + '>>'+Style.RESET_ALL).lower()
     if escolha == 'fechar':
         print_local()
     elif escolha == 'comprar':
@@ -275,7 +275,7 @@ def vender_item():
         else:
             print(f'{meu_jogador.mochila[escolha].nome} | {meu_jogador.mochila[escolha].desc} | valor: {meu_jogador.mochila[escolha].preco}')
         print('[vender | voltar | fechar]')
-        acao = input(Fore.LIGHTYELLOW_EX + '>>'+Fore.RESET)
+        acao = input(Fore.LIGHTYELLOW_EX + '>>'+Style.RESET_ALL)
         if acao not in ['vender', 'voltar', 'fechar']:
             print('**COMANDO INVÁLIDO**')
             vender_item()
@@ -364,6 +364,11 @@ lista_armas = [
     {'nome': 'Espada longa', 'atk': 4, 'preco': 100, 'desc': 'A espada de todo guerreiro.', 'equipado': False, 'consumivel': False, 'especial': False},
     {'nome': 'Grimório', 'atk': 2, 'preco': 100, 'desc': 'O grimório de um mago, o local de sua sabedoria.', 'equipado': False, 'consumivel': False, 'especial': False},
 ]
+lista_armas_especiais = [
+    {'nome': 'Manoplas de ferro', 'atk': 20, 'preco': 150, 'desc': 'Usada a muito tempo por um exímio monge, as manoplas de ferro são uma das mais fortes armas de um monge', 'equipado': False, 'consumivel': False, 'especial': False},
+    {'nome': 'Espada do guerreiro impetuoso', 'atk': 15, 'preco': 150, 'desc': 'espada usada por um guerreiro impetuoso, ela tem um grande poder de ataque', 'equipado': False, 'consumivel': False, 'especial': False},
+    {'nome': 'Grimório Morbius', 'atk': 0, 'preco': 150, 'desc': 'Um grimório desconhecido e com um grande potencial', 'equipado': False, 'consumivel': False, 'especial': False},    
+]
 
 lista_itens_especiais = [
     {'nome': 'Anel Desconhecido', 'atk': 0, 'preco': 00, 'desc': 'Um anel feito de ouro. Sua origem é desconhecida.', 'equipado': False, 'consumivel': False, 'especial': True},
@@ -429,7 +434,7 @@ def raiva():
         print_local()
         main_game_loop()
     else:
-        print(Fore.RED +'Comando inválido.'+Fore.RESET)
+        print(Fore.RED +'Comando inválido.'+Style.RESET_ALL)
         locais()
 def medo():
     if meu_jogador.local == 'b1' and mapa[meu_jogador.local]['SOLVED'] == False:
@@ -446,7 +451,7 @@ def medo():
         print_local()
         main_game_loop()
     else:
-        print(Fore.RED +'Comando inválido.'+Fore.RESET)
+        print(Fore.RED +'Comando inválido.'+Style.RESET_ALL)
         locais()
 def alegria():
     if meu_jogador.local == 'b1' and mapa[meu_jogador.local]['SOLVED'] == False:
@@ -463,7 +468,7 @@ def alegria():
         print_local()
         main_game_loop()
     else:
-        print(Fore.RED +'Comando inválido.'+Fore.RESET)
+        print(Fore.RED +'Comando inválido.'+Style.RESET_ALL)
         locais()
 
 def loucura():
@@ -481,7 +486,7 @@ def loucura():
         print_local()
         main_game_loop()
     else:
-        print(Fore.RED +'Comando inválido.'+Fore.RESET)
+        print(Fore.RED +'Comando inválido.'+Style.RESET_ALL)
         locais()
 
 monstro = lista_monstros_fixos[0]
@@ -509,7 +514,7 @@ def navegação_tela_titulo():
     opção = input(">").lower()
     while opção not in ['jogar', 'ajuda', 'sair']:
         print("Por favor, utilize um comando válido.")
-        opção = input(Fore.LIGHTYELLOW_EX + ">>"+Fore.RESET).lower()
+        opção = input(Fore.LIGHTYELLOW_EX + ">>"+Style.RESET_ALL).lower()
     if opção == "jogar":
         setup_jogo()
     elif opção == "ajuda":
@@ -542,11 +547,11 @@ def tela_titulo():
  '''
     opcoes = Fore.YELLOW + '''
                                                      [@] Jogar
-                                                     [@] Ajuda''' + Fore.RESET
+                                                     [@] Ajuda''' + Style.RESET_ALL
     Sair = Fore.RED + '''                            
                                                      [@] Sair      
             
-          ''' + Fore.RESET
+          ''' + Style.RESET_ALL
     for titulo1 in titulo:
         sys.stdout.write(titulo1)
         sys.stdout.flush()
@@ -587,18 +592,18 @@ def ajuda_menu():
                     [@] Use o comando "status" para ver seus status
                     [@] Use o comando "mapa" para ver o mapa
                     [@] Boa sorte e não morra :p
-          ''' + Fore.RESET)
+          ''' + Style.RESET_ALL)
     
     if meu_jogador.nome != '':
-        print(Fore.CYAN + 'Voltar ao game? [s/n]'+Fore.RESET)
-        voltar_game = input(Fore.LIGHTYELLOW_EX +'>>'+Fore.RESET).lower()
+        print(Fore.CYAN + 'Voltar ao game? [s/n]'+Style.RESET_ALL)
+        voltar_game = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
         if voltar_game != 's':
             limpar_tela()
             ajuda_menu()
         print_local()
         main_game_loop()
-    print(Fore.CYAN + "- voltar ao MENU? [s/n]"+Fore.RESET)
-    voltar_menu = input(Fore.LIGHTYELLOW_EX +'>>'+Fore.RESET).lower()
+    print(Fore.CYAN + "- voltar ao MENU? [s/n]"+Style.RESET_ALL)
+    voltar_menu = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
     if voltar_menu != 's':
         limpar_tela()
         ajuda_menu()
@@ -655,21 +660,19 @@ mapa = {
         'DESCER': 'b1',
         'AVANÇAR': '',
         'RETORNAR': 'a1',
-        'MONSTRO': monstro_exemplo2,
+        'MONSTRO': '',
         'LOCAIS': 'enfrentar',
         'contador' : 0
     },
     'b1': { 
         'NOME_LOCAL': "O Salão das Vozes Vazias",
         'DESCRICAO': '''
-O ar é denso, carregado de um silêncio que parece ecoar vozes distantes.
-Sussurros deslizam pela sua mente como fios de memórias perdidas.
-As paredes estão cobertas por máscaras de todos os tipos, cada uma esculpida em expressões vívidas: raiva, medo, alegria, loucura.
-Elas pendem como troféus macabros, imóveis... até que você passa por uma.
-Então, lentamente, uma delas se vira. Os olhos vazios seguem seus movimentos, e você sente o peso de um olhar que não deveria existir.
+Ao entrar, o som desaparece. Nenhum eco. Nenhuma respiração. No lugar, apenas sussurros em sua mente — 
+vozes que carregam seu nome, mas ditas por pessoas que você não lembra.
 ''',
         'EXAMINAR': '''
-Você vê aquelas máscaras te olhando. Você sente como se estivessem te chamando. '
+As paredes são cobertas por máscaras penduradas, cada uma com uma representação diferente sendo elas raiva, medo, alegria, loucura.
+Quando você se aproxima, elas viram lentamente... te observando. '
 (Digite raiva, medo, alegria ou loucura para ir até a máscara correspondente.)
 ''',
         'SOLVED': False,
@@ -682,17 +685,27 @@ Você vê aquelas máscaras te olhando. Você sente como se estivessem te chaman
         'contador' : 0
     },
     'b2': {
-        'NOME_LOCAL': "LOJA",
-        'DESCRICAO': 'Descrição da sala b2.',
-        'EXAMINAR': 'Rochas espalhadas pelo chão.',
-        'SOLVED': False,
+        'NOME_LOCAL': "O Poço das Memórias Afundadas",
+        'DESCRICAO': '''
+Um poço escuro sussurra memórias esquecidas. Símbolos antigos cobrem as paredes úmidas, e o ar é carregado de nostalgia.
+''',
+        'EXAMINAR': '''
+                No centro de um salão de pedra úmida, há um poço negro como breu. 
+Correntes quebradas o rodeiam, e marcas de garras riscam o chão como se algo tivesse sido arrastado para fora.
+              Ao se aproximar, imagens distorcidas começam a surgir na água parada
+                são lembranças suas, mas... distorcidas, erradas, talvez falsas.
+                      No fundo do poço você vê uma arma, deseja pegar? 
+                  (Para pegar digite 'pegar', para ignorar digite 'sair')
+                ''',
+        'SOLVED': True,
         'SUBIR': '',
         'DESCER': 'c1',
         'AVANÇAR': '',
         'RETORNAR': 'b1',
         'MONSTRO': '',
-        'LOCAIS': '',
-        'contador' : 0
+        'LOCAIS': 'pegar',
+        'contador' : 0,
+        'contador2' : 0
     },
     'c1': {
         'NOME_LOCAL': "Sala1 Terceiro andar",
@@ -783,13 +796,13 @@ def print_local():
                        
                                     {local_nome.upper()}
             {local_desc}
-''' + Fore.RESET + '\n')   
+''' + Style.RESET_ALL + '\n')   
     print('▄' * 100)
 
     mostrar_status(meu_jogador)
     if mapa[meu_jogador.local]['MONSTRO'] != '':
-        print(f"há um" + Fore.RED + f" {mapa[meu_jogador.local]['MONSTRO'].nome}" + Fore.RESET + " na sala. O que deseja fazer?" + Fore.YELLOW + "\n[lutar / fugir / falar]")
-        escolha = input(Fore.YELLOW + ">>"+Fore.RESET).lower()
+        print(f"há um" + Fore.RED + f" {mapa[meu_jogador.local]['MONSTRO'].nome}" + Style.RESET_ALL + " na sala. O que deseja fazer?" + Fore.YELLOW + "\n[lutar / fugir / falar]")
+        escolha = input(Fore.YELLOW + ">>"+Style.RESET_ALL).lower()
         if escolha not in ['lutar', 'fugir', 'falar']:
             print_local()
         acao_luta(escolha, mapa[meu_jogador.local]['MONSTRO'])
@@ -797,12 +810,12 @@ def print_local():
 
 def prompt():
     print("\n" + "▬"*100)
-    print(Fore.LIGHTYELLOW_EX + "O que deseja fazer?"+Fore.RESET)
-    acao = input(Fore.LIGHTYELLOW_EX +">>"+Fore.RESET).lower()
+    print(Fore.LIGHTYELLOW_EX + "O que deseja fazer?"+Style.RESET_ALL)
+    acao = input(Fore.LIGHTYELLOW_EX +">>"+Style.RESET_ALL).lower()
     acoes_aceitas = ['invocar','status', 'mover', 'loja', 'sair', 'ajuda', 'olhar', 'inspecionar', 'teleportar', 'dormir', 'mochila', 'mapa']
     while acao not in acoes_aceitas:
         print(Fore.RED + "Ação inválida, tente novamente.\n")
-        acao = input(Fore.YELLOW +">> "+Fore.RESET).lower()
+        acao = input(Fore.YELLOW +">> "+Style.RESET_ALL).lower()
     if acao == 'sair':
         sair()
     if acao in ['mover', 'teleportar']:
@@ -817,7 +830,7 @@ def prompt():
         abrir_mochila()
     elif acao == 'loja':
         mostrar_loja()
-        acao_loja(input(Fore.LIGHTYELLOW_EX +'>>'+Fore.RESET).lower())
+        acao_loja(input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower())
     elif acao == 'status':
         exibir_status(meu_jogador)
     elif acao == 'mapa':
@@ -826,16 +839,17 @@ def prompt():
         encontro_aleatorio()
 
 def locais():
-    print(Fore.LIGHTYELLOW_EX + 'O que deseja fazer?' + Fore.RESET)
-    acao = input(Fore.LIGHTYELLOW_EX +'>>'+Fore.RESET).lower()
-    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'],'raiva','medo','alegria','loucura', 'sair',
+    print(Fore.LIGHTYELLOW_EX + 'O que deseja fazer?' + Style.RESET_ALL)
+    acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
+    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'],'raiva','medo','alegria','loucura', 'sair', 'pegar',
     
     while acao not in acoes_aceitas:
-        print(Fore.RED + 'Acao inválida, tente novamente. (caso não tenha mais opções, digite sair)'+Fore.RESET)
-        acao = input(Fore.LIGHTYELLOW_EX +'>>'+Fore.RESET).lower()
+        print(Fore.RED + 'Acao inválida, tente novamente. (caso não tenha mais opções, digite sair)'+Style.RESET_ALL)
+        acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
     
     if acao == 'sair':
         main_game_loop()
+        print_local()
     if acao == 'trono':
         trono()
     elif acao == 'bau':
@@ -851,6 +865,8 @@ def locais():
         alegria()
     elif acao == 'loucura':
         loucura()
+    elif acao == 'pegar':
+        pegar()
     else:
         print('Acao inválida, tente novamente.')
         locais()
@@ -872,7 +888,7 @@ def trono():
             time.sleep(0.01)
         item = lista_itens_especiais[0]
         meu_jogador.add_item(Item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'], item['preco'], item['especial']))
-        fala2 = Fore.LIGHTYELLOW_EX + 'Anel desconhecido adicionado ao seu inventario!'+Fore.RESET
+        fala2 = Fore.YELLOW + 'Anel desconhecido adicionado ao seu inventario!' + Style.RESET_ALL
         for fala in fala2:
             sys.stdout.write(fala)
             sys.stdout.flush()
@@ -893,13 +909,13 @@ def trono():
         limpar_tela()
         main_game_loop()
     else:
-        print(Fore.RED + 'Comando inválido.'+Fore.RESET)
+        print(Fore.RED + 'Comando inválido.'+Style.RESET_ALL)
         main_game_loop()
 
 def boss_enraizado():
     if meu_jogador.local == 'a2':
         if mapa[meu_jogador.local]['SOLVED'] == False:
-            lutar = 'Quando você se aproxima…' + Fore.RED + ' ela desperta.'+Fore.RESET
+            lutar = 'Quando você se aproxima…'+Fore.RED+' ela desperta.'+Style.RESET_ALL
             for fala in lutar:
                 sys.stdout.write(fala)
                 sys.stdout.flush()
@@ -908,7 +924,7 @@ def boss_enraizado():
             limpar_tela()
             luta(guardiao_enraizado, meu_jogador)        
     elif meu_jogador.local == 'a2' and mapa[meu_jogador.local]['SOLVED'] == True:
-        fala1 = Fore.LIGHTYELLOW_EX + 'O monstro está caido morto bem a sua frente.'+Fore.RESET
+        fala1 = Fore.LIGHTYELLOW_EX+'O monstro está caido morto bem a sua frente.'+Style.RESET_ALL
         for fala in fala1:
             sys.stdout.write(fala)
             sys.stdout.flush()
@@ -917,15 +933,60 @@ def boss_enraizado():
         limpar_tela()
         main_game_loop()
     else:
-        print(Fore.RED + 'Comando inválido.'+Fore.RESET)
+        print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
         main_game_loop()
+
+def pegar():
+    item = lista_armas_especiais[0]
+    item2 = lista_armas_especiais[1]
+    item3 = lista_armas_especiais[2]
+    if meu_jogador.local == 'b2' and mapa['b2']['contador2'] == 0:
+        if meu_jogador.classe == 'monge':
+            meu_jogador.add_item(Item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'], item['preco'], item['especial']))
+            mapa['b2']['contador2'] += 1
+            fala_monge = Fore.YELLOW+'Você se lembra da arma que usava antes, colocando a mão dentro do poço você a pega e agora ela está na sua mao.\n'+Style.RESET_ALL
+            for fala in fala_monge:
+                sys.stdout.write(fala)
+                sys.stdout.flush()
+                time.sleep(0.01)
+            time.sleep(1.5)
+            limpar_tela()
+            main_game_loop()
+        elif meu_jogador.classe == 'guerreiro':
+            meu_jogador.add_item(Item(item2['nome'], item2['atk'], item2['desc'], item2['equipado'], item2['consumivel'], item2['preco'], item2['especial']))
+            mapa['b2']['contador2'] += 1
+            fala_guerreiro = Fore.YELLOW+' Vocé se lembra da arma que usava antes, colocando a mão dentro do poço vocé a pega e agora ela está na sua mao.\n'+Style.RESET_ALL
+            for fala in fala_guerreiro:
+                sys.stdout.write(fala)
+                sys.stdout.flush()
+                time.sleep(0.01)
+            time.sleep(1.5)
+            limpar_tela()
+            print_local()
+            main_game_loop()
+        elif meu_jogador.classe == 'mago':
+            meu_jogador.add_item(Item(item3['nome'], item3['atk'], item3['desc'], item3['equipado'], item3['consumivel'], item3['preco'], item3['especial']))
+            mapa['b2']['contador2'] += 1
+            fala_mago = Fore.YELLOW+' Vocé se lembra da arma que usava antes, colocando a mão dentro do poço vocé a pega e agora ela está na sua mao.\n'+Style.RESET_ALL
+            for fala in fala_mago:
+                sys.stdout.write(fala)
+                sys.stdout.flush()
+                time.sleep(0.01)
+            time.sleep(1.5)
+            limpar_tela()
+            print_local()
+            main_game_loop()
+    else:
+        print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
+        locais()
+
 
 ########################################
 def comprar(escolha):
         lista_itens_loja[escolha]['comprado'] = True
         item = lista_itens_loja[escolha]
         item_add = Item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'], item['preco'], item['especial'])
-        print(Fore.GREEN +'**VOCE COMPROU'+Fore.RESET+f' {item_add.nome}**')
+        print(Fore.GREEN +'**VOCE COMPROU'+Style.RESET_ALL+f' {item_add.nome}**')
         meu_jogador.add_item(item_add)
         meu_jogador.ouro -= lista_itens_loja[escolha]['preco']
         mostrar_loja()
@@ -934,10 +995,10 @@ def vender(self):
     self.vendido = True
 
 def sair():
-    print(Fore.LIGHTRED_EX + "Tem certeza que deseja sair? [s/n] "+Fore.RESET)
-    confirmar = input(Fore.LIGHTYELLOW_EX +'>>'+Fore.RESET).lower()
+    print(Fore.LIGHTRED_EX+"Tem certeza que deseja sair? [s/n] "+Style.RESET_ALL)
+    confirmar = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
     if confirmar not in ['s', 'n']:
-        print(Fore.RED + '\ncomando inválido'+Fore.RESET)
+        print(Fore.RED+'\ncomando inválido'+Style.RESET_ALL)
         sair()
     if confirmar == 's':
         meu_jogador.game_over = True
@@ -954,7 +1015,7 @@ def acao_luta(escolha, monstro):
         fugir()
     elif escolha == 'falar':
         loading()
-        print(Fore.RED + f'O {monstro.nome} não te entende e te ataca'+Fore.RESET)
+        print(Fore.RED + f'O {monstro.nome} não te entende e te ataca'+Style.RESET_ALL)
         intervalo()
         meu_jogador.vida -= monstro.atk
         luta(monstro, meu_jogador)
@@ -963,17 +1024,17 @@ def abrir_mochila():
     if meu_jogador.game_over:
         main_game_loop()
     if meu_jogador.mochila:
-        print ('G:' + Fore.YELLOW + f' {meu_jogador.ouro}'+Fore.RESET)
+        print ('G:' + Fore.YELLOW + f' {meu_jogador.ouro}'+Style.RESET_ALL)
         for i in range(len(meu_jogador.mochila)):
             if meu_jogador.mochila[i].consumivel:
-                print(Fore.YELLOW + f'[{i+1}]' + Fore.RESET + f' {meu_jogador.mochila[i].nome} desc: {meu_jogador.mochila[i].desc}')
+                print(Fore.YELLOW + f'[{i+1}]' + Style.RESET_ALL + f' {meu_jogador.mochila[i].nome} desc: {meu_jogador.mochila[i].desc}')
                 continue
             if meu_jogador.mochila[i].equipado == True:
-                print(Fore.YELLOW + f'[{i+1}]' + Fore.RESET + f' {meu_jogador.mochila[i].nome} ATK: {meu_jogador.mochila[i].atk} desc: {meu_jogador.mochila[i].desc} (EQUIPADO)')
+                print(Fore.YELLOW + f'[{i+1}]' + Style.RESET_ALL + f' {meu_jogador.mochila[i].nome} ATK: {meu_jogador.mochila[i].atk} desc: {meu_jogador.mochila[i].desc} (EQUIPADO)')
                 continue
-            print(Fore.YELLOW + f'[{i+1}]' + Fore.RESET + f' {meu_jogador.mochila[i].nome} ATK: {meu_jogador.mochila[i].atk} desc: {meu_jogador.mochila[i].desc}')
+            print(Fore.YELLOW + f'[{i+1}]' + Style.RESET_ALL + f' {meu_jogador.mochila[i].nome} ATK: {meu_jogador.mochila[i].atk} desc: {meu_jogador.mochila[i].desc}')
         print('>> Use números para selecionar os itens ou [fechar]')
-        escolha = input(Fore.LIGHTYELLOW_EX + ">>"+Fore.RESET)
+        escolha = input(Fore.LIGHTYELLOW_EX + ">>"+Style.RESET_ALL)
         if escolha == 'fechar':
             print_local()
         try:
@@ -988,21 +1049,21 @@ def abrir_mochila():
             if meu_jogador.item_equipado:
                 # jogador selecionou item equipado
                 if meu_jogador.mochila[escolha].equipado == True:
-                    print('[desequipar / remover / voltar / '+ Fore.RED + 'fechar]'+Fore.RESET)
-                    acao = input(Fore.LIGHTYELLOW_EX +'>>'+Fore.RESET).lower()
+                    print('[desequipar / remover / voltar / '+ Fore.RED + 'fechar]'+Style.RESET_ALL)
+                    acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
                     if acao not in ['desequipar', 'remover', 'voltar', 'fechar']:
                         print('\ncomando inválido')
                         abrir_mochila()
                     
                     if acao == 'desequipar':
-                        print(Fore.RED + '**VOCÊ DESEQUIPOU ' + Fore.RESET + f' {meu_jogador.item_equipado.nome}**')
+                        print(Fore.RED + '**VOCÊ DESEQUIPOU ' + Style.RESET_ALL + f' {meu_jogador.item_equipado.nome}**')
                         meu_jogador.item_equipado = False
                         meu_jogador.mochila[escolha].equipado = False
                         meu_jogador.atk_final = meu_jogador.atk
                         abrir_mochila()
                     elif acao == 'remover':
-                        print(Fore.RED + f'**VOCÊ DESEQUIPOU '+ Fore.RESET + f'{meu_jogador.item_equipado.nome}**')
-                        print(Fore.RED + f'**VOCÊ DROPOU '+ Fore.RESET + f'{meu_jogador.item_equipado.nome}**')
+                        print(Fore.RED + f'**VOCÊ DESEQUIPOU '+ Style.RESET_ALL + f'{meu_jogador.item_equipado.nome}**')
+                        print(Fore.RED + f'**VOCÊ DROPOU '+ Style.RESET_ALL + f'{meu_jogador.item_equipado.nome}**')
                         meu_jogador.item_equipado = None
                         meu_jogador.mochila.pop(escolha)
                         meu_jogador.atk_final = meu_jogador.atk
@@ -1014,8 +1075,8 @@ def abrir_mochila():
                 # jogador selecionou item NÂO equipado
                 else:
                     if meu_jogador.mochila[escolha].especial:
-                        print('[voltar / '+ Fore.RED +'fechar]'+Fore.RESET)
-                        acao = input(Fore.LIGHTYELLOW_EX +'>>'+Fore.RESET).lower()
+                        print('[voltar / '+ Fore.RED +'fechar]'+Style.RESET_ALL)
+                        acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
                         if acao not in ['voltar' ,'fechar']:
                             abrir_mochila()
                         elif acao == 'voltar':
@@ -1024,10 +1085,10 @@ def abrir_mochila():
                             print_local()
                         
                     if meu_jogador.mochila[escolha].consumivel:
-                        print('[usar / remover / voltar / '+ Fore.RED + 'fechar]'+Fore.RESET)
-                        acao = input(Fore.LIGHTYELLOW_EX +'>>'+Fore.RESET).lower()
+                        print('[usar / remover / voltar / '+ Fore.RED + 'fechar]'+Style.RESET_ALL)
+                        acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
                         if acao not in ['usar', 'remover', 'voltar', 'fechar']:
-                            print(Fore.RED + '\ncomando inválido'+Fore.RESET)
+                            print(Fore.RED + '\ncomando inválido'+Style.RESET_ALL)
                             abrir_mochila()
                         if acao == 'usar':
                             if meu_jogador.mochila[escolha].nome == 'Pocao de vida baixa':
@@ -1045,15 +1106,15 @@ def abrir_mochila():
                             meu_jogador.mochila.pop(escolha)
                             abrir_mochila()
                             
-                    print('[equipar / remover / voltar / '+ Fore.RED +'fechar]'+Fore.RESET)
+                    print('[equipar / remover / voltar / '+ Fore.RED +'fechar]'+Style.RESET_ALL)
                     
-                    acao = input(Fore.LIGHTYELLOW_EX +'>>'+Fore.RESET).lower()
+                    acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
                     if acao not in ['equipar', 'remover', 'fechar']:
-                        print(Fore.RED + '\ncomando inválido'+Fore.RESET)
+                        print(Fore.RED + '\ncomando inválido'+Style.RESET_ALL)
                         abrir_mochila()
 
                     if acao == 'equipar':
-                        print(Fore.RED + '**VOCÊ DESEQUIPOU '+ Fore.RESET +f'{meu_jogador.item_equipado.nome}**')
+                        print(Fore.RED + '**VOCÊ DESEQUIPOU '+ Style.RESET_ALL +f'{meu_jogador.item_equipado.nome}**')
                         for i in range(len(meu_jogador.mochila)):
                             if meu_jogador.mochila[i].equipado == True:
                                 meu_jogador.mochila[i].equipado = False
@@ -1061,10 +1122,10 @@ def abrir_mochila():
                         meu_jogador.item_equipado = meu_jogador.mochila[escolha]
                         meu_jogador.mochila[escolha].equipado = True
                         meu_jogador.atk_final = meu_jogador.atk + meu_jogador.item_equipado.atk
-                        print(Fore.GREEN +f'**VOCÊ EQUIPOU '+Fore.RESET +f'{meu_jogador.item_equipado.nome}**')
+                        print(Fore.GREEN +f'**VOCÊ EQUIPOU '+Style.RESET_ALL +f'{meu_jogador.item_equipado.nome}**')
                         abrir_mochila()
                     elif acao == 'remover':
-                        print(Fore.RED + '**VOCÊ DROPOU '+Fore.RESET +f'{meu_jogador.mochila[escolha].nome}')
+                        print(Fore.RED + '**VOCÊ DROPOU '+Style.RESET_ALL +f'{meu_jogador.mochila[escolha].nome}')
                         meu_jogador.mochila.pop(escolha)
                         abrir_mochila()
                     elif acao == 'voltar':
@@ -1075,8 +1136,8 @@ def abrir_mochila():
             # jogador selecionou sem item equipado
             else:
                 if meu_jogador.mochila[escolha].especial:
-                    print('[voltar / '+Fore.RED +'fechar]'+Fore.RESET)
-                    acao = input(Fore.LIGHTYELLOW_EX +'>>'+Fore.RESET).lower()
+                    print('[voltar / '+Fore.RED +'fechar]'+Style.RESET_ALL)
+                    acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
                     if acao not in ['voltar' ,'fechar']:
                         abrir_mochila()
                     elif acao == 'voltar':
@@ -1084,8 +1145,8 @@ def abrir_mochila():
                     elif acao == 'fechar':
                         print_local()
                 if meu_jogador.mochila[escolha].consumivel:
-                        print( '[usar / remover / voltar / '+Fore.RED +'fechar]'+Fore.RESET)
-                        acao = input(Fore.LIGHTYELLOW_EX +'>>'+Fore.RESET).lower()
+                        print( '[usar / remover / voltar / '+Fore.RED +'fechar]'+Style.RESET_ALL)
+                        acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
                         if acao not in ['usar', 'remover', 'voltar', 'fechar']:
                             print('\ncomando inválido')
                             abrir_mochila()
@@ -1115,15 +1176,15 @@ def abrir_mochila():
                                 meu_jogador.mochila.pop(escolha)
                                 abrir_mochila()
                         elif acao == 'remover':
-                            print(Fore.RED +f'**VOCÊ DROPOU '+Fore.RESET +f'{meu_jogador.mochila[escolha].nome}')
+                            print(Fore.RED +f'**VOCÊ DROPOU '+Style.RESET_ALL +f'{meu_jogador.mochila[escolha].nome}')
                             meu_jogador.mochila.pop(escolha)
                             abrir_mochila()
                         elif acao == 'voltar':
                             abrir_mochila()
                         elif acao == 'fechar':
                             print_local()
-                print('[equipar / remover / '+Fore.RED +'fechar]'+Fore.RESET)
-                acao = input(Fore.LIGHTYELLOW_EX +'>>'+Fore.RESET).lower()
+                print('[equipar / remover / '+Fore.RED +'fechar]'+Style.RESET_ALL)
+                acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
                 if acao not in ['equipar', 'remover', 'fechar']:
                     print('\ncomando inválido')
                     abrir_mochila()
@@ -1132,10 +1193,10 @@ def abrir_mochila():
                     meu_jogador.mochila[escolha].equipado = True
                     meu_jogador.item_equipado = meu_jogador.mochila[escolha]
                     meu_jogador.atk_final = meu_jogador.item_equipado.atk + meu_jogador.atk
-                    print(Fore.GREEN + '**VOCÊ EQUIPOU '+Fore.RESET +f'{meu_jogador.item_equipado.nome}**')
+                    print(Fore.GREEN + '**VOCÊ EQUIPOU '+Style.RESET_ALL +f'{meu_jogador.item_equipado.nome}**')
                     abrir_mochila()
                 elif acao == 'remover':
-                    print(Fore.RED+f'**VOCÊ DROPOU '+Fore.RESET+f'{meu_jogador.mochila[escolha].nome}')
+                    print(Fore.RED+f'**VOCÊ DROPOU '+Style.RESET_ALL+f'{meu_jogador.mochila[escolha].nome}')
                     meu_jogador.mochila.pop(escolha)
                     abrir_mochila()
                 elif acao == 'voltar':
@@ -1145,7 +1206,7 @@ def abrir_mochila():
         except:
             abrir_mochila()
     else:
-        print(Fore.RED +"Mochila vazia"+Fore.RESET)
+        print(Fore.RED +"Mochila vazia"+Style.RESET_ALL)
 
 def luta(monstro, meu_jogador):
     print('▀'*100)
@@ -1439,13 +1500,17 @@ def jogador_mover():
 O proximo portão se ilumina revelando ser uma escada que leva para os andares inferiores A torre está viva, Observando, Esperando.
 E você sente que o verdadeiro inferno... não ficou para trás.
 Você deseja descer a escada ou retornar a sala anterior? (escreva: descer ou retornar)\n>>'''
-    elif meu_jogador.local in ['b1',]:
-        pergunta = "A sua frente está a porta para a proxima area. Avançar para a proxima area ou subir as escadas e retornar a sala anterior? (escreva: avançar ou subir)\n>>"
-    elif meu_jogador.local in ['b2']:
-        pergunta = "Avançar ou retornar a sala anterior? (escreva: avançar ou retornar)\n>>"
-    elif meu_jogador.local in ['c1']:
+    elif meu_jogador.local in 'b1':
+        pergunta = '''
+A sua frente está uma porta de madeira, atrás de você está a escada para voltar para a sala anterior.
+Deseja abrir a porta e avançar para a próxima sala ou subir a escada? (escreva: avançar ou subir)\n>>'''
+    elif meu_jogador.local in 'b2':
+        pergunta = '''
+A sua frente está uma escada feita de peças mecânicas, ela leva para o próximo andar, atrás de vocé, uma porta de madeira para retornar a sala anterior.
+Descer a escada ou retornar a sala anterior? (escreva: descer ou retornar)\n>>'''
+    elif meu_jogador.local in 'c1':
         pergunta = "Avançar ou subir a sala anterior? (escreva: avançar ou subir)\n>>"
-    elif meu_jogador.local in ['c2']:
+    elif meu_jogador.local in 'c2':
         pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
     
     dest = input(pergunta).lower()
@@ -1525,12 +1590,23 @@ As máscaras param de se mover e o som das vozes desaparece, o poder delas se ap
             sys.stdout.write(examina)
             sys.stdout.flush()
             time.sleep(0.01)
+
+    elif meu_jogador.local == 'b2' and mapa['b2']['contador2'] == 1:
+        examinar4 = '''
+Você já pegou o item de dentro do poço.
+
+'''
+        for examina in examinar4:
+            sys.stdout.write(examina)
+            sys.stdout.flush()
+            time.sleep(0.01)
     else:
         print('▬'*100)
         for examina in examinar:
             sys.stdout.write(examina)
             sys.stdout.flush()
             time.sleep(0.01)
+        
     locais()
 
 ##### Fluxo principal #####
@@ -1538,7 +1614,36 @@ def main_game_loop():
     while not meu_jogador.game_over:
         prompt()
     limpar_tela()
-    print("\n\n**FIM DE JOGO**")
+    if meu_jogador.local == ['a1','a2','b1','b2','c1','c2']:
+        print('''
+               ██      ██    ████     ██    ██       ██████    ██████  ████████   ██████
+               ██      ██  ██    ██   ██    ██       ██    ██    ██    ██         ██    ██
+                 ██  ██    ██    ██   ██    ██       ██    ██    ██    ██████     ██    ██
+                   ██      ██    ██   ██    ██       ██    ██    ██    ██         ██    ██
+                   ██        ████       ████         ██████    ██████  ████████   ██████
+
+
+                                        ██████████████████
+                                      ██                  ██
+                                    ██                      ██
+                                  ██                          ██
+                                ██                              ██
+                                ██                              ██
+                                ██    ████              ████    ██
+                                ██  ████████          ████████  ██
+                                ██  ████████          ████████  ██
+                                ██  ████████          ████████  ██
+                                ██    ████      ██      ████    ██
+                                  ██          ██████          ██
+                                    ██████    ██  ██    ██████
+                                        ██              ██
+                                        ██  ██      ██  ██
+                                        ██  ████  ████  ██
+                                          ██    ██    ██
+      
+      
+              
+              ''')
     sys.exit()
 
 def setup_jogo():
@@ -1577,6 +1682,7 @@ def setup_jogo():
         meu_jogador.mana = meu_jogador.mana_base
         meu_jogador.mana_max = meu_jogador.mana
         meu_jogador.atk_base = 6
+        meu_jogador.forca = 2
         meu_jogador.atk = meu_jogador.atk_base
         meu_jogador.item_equipado = Item(arma_padrao['nome'], arma_padrao['atk'], arma_padrao['desc'], True, arma_padrao['consumivel'], arma_padrao['preco'], arma_padrao['especial'])
         meu_jogador.add_item(meu_jogador.item_equipado)
@@ -1601,6 +1707,7 @@ def setup_jogo():
         meu_jogador.mana = meu_jogador.mana_base
         meu_jogador.mana_max = meu_jogador.mana
         meu_jogador.atk_base = 5
+        meu_jogador.inteligencia = 2
         meu_jogador.atk = meu_jogador.atk_base
         meu_jogador.magias.append(Magia(magia_basica['nome'], magia_basica['dano'], magia_basica['desc'], magia_basica['mana_gasta'], efeito))
         meu_jogador.magias.append(Magia(magia_basica1['nome'], magia_basica1['dano'], magia_basica1['desc'], magia_basica1['mana_gasta'], efeito1))
@@ -1617,8 +1724,11 @@ def setup_jogo():
         meu_jogador.mana = meu_jogador.mana_base
         meu_jogador.mana_max = meu_jogador.mana
         meu_jogador.atk_base = 9
+        meu_jogador.forca = 3
+        meu_jogador.fortitude = 3
         meu_jogador.atk = meu_jogador.atk_base
         calcular_atributos(meu_jogador)
+
 
     fala1 = "Espero que se divirta nessa incrível aventura!\n"
     fala2 = """

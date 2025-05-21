@@ -76,7 +76,7 @@ Quando você se aproxima… ela desperta.
 Passiva do boss: de 3 em 3 turnos ele dobra o dano e causa envenenamento
 
 
-Ao derrotar a criatura hedionda ele dropa uma bolsa, e dentro dela tem pocões de mana, vida e uma sacola de dormir.
+Ao derrotar a criatura hedionda ele dropa uma bolsa, e dentro dela tem pocões de mana e de vida.
 é como se a torre estivesse te preparando para o que esta por vir.
 
 O proximo portão se ilumina revelando ser uma escada que leva para os andares inferiores A torre está viva, Observando, Esperando.
