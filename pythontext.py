@@ -39,7 +39,7 @@ class Player:
         self.atk_base = 0
         self.atk = 0
         self.dano_magico = 0
-        self.ouro = 500
+        self.ouro = 0
         self.atk_final = self.atk
         self.item_equipado = None
         self.mochila = []
@@ -156,18 +156,12 @@ def encontro_aleatorio():
     if meu_jogador.local != 'c1':
         print('Você não está em um circulo de invocação!')
         main_game_loop()
-    numero = random.randint(0, 1)
-    if numero == 0:
-        print('Um monstro apareceu!')
-        luta(monstro_aleatorio(), meu_jogador)
-    else:
-        print('Falha na invocação!!! Você recebeu 5 de dano!')
-        meu_jogador.vida -= 5
-        main_game_loop()
+    print('Um monstro apareceu!')
+    luta(monstro_aleatorio(), meu_jogador)
 
 def monstro_aleatorio():
-    monstro_invocacao = random.choice(lista_monstros_invocacoes)
-    return Monstro(monstro_invocacao['nome'], monstro_invocacao['vida'], monstro_invocacao['nivel'], monstro_invocacao['atk'], monstro_invocacao['xp'], monstro_invocacao['ouro'], monstro_invocacao['boss'])
+    monstro_robo = random.choice(lista_monstros_robo)
+    return Monstro(monstro_robo['nome'], monstro_robo['vida'], monstro_robo['nivel'], monstro_robo['atk'], monstro_robo['xp'], monstro_robo['ouro'], monstro_robo['boss'])
 
 def experiencia(monstro):
     meu_jogador.xp += monstro.xp
@@ -405,6 +399,14 @@ lista_monstros_normais = [
     {'nome': 'orc', 'vida': 40, 'nivel': 5, 'atk': 8, 'xp': 25, 'ouro': 200, 'boss': False},
     {'nome': 'troll da caverna', 'vida': 50, 'nivel': 6, 'atk': 10, 'xp': 30, 'ouro': 300, 'boss': False},
     {'nome': 'gárgula', 'vida': 45, 'nivel': 5, 'atk': 9, 'xp': 28, 'ouro': 200, 'boss': False},
+]
+
+lista_monstros_robo = [
+    {'nome': 'Autômato', 'vida': 20, 'nivel': 1, 'atk': 5, 'xp': 10, 'ouro': 2, 'boss': False},
+    {'nome': 'Autômato', 'vida': 30, 'nivel': 2, 'atk': 6, 'xp': 20, 'ouro': 4, 'boss': False},
+    {'nome': 'Autômato', 'vida': 40, 'nivel': 3, 'atk': 7, 'xp': 30, 'ouro': 6, 'boss': False},
+    {'nome': 'Autômato', 'vida': 50, 'nivel': 4, 'atk': 8, 'xp': 40, 'ouro': 8, 'boss': False},
+    {'nome': 'Autômato', 'vida': 60, 'nivel': 5, 'atk': 9, 'xp': 50, 'ouro': 10, 'boss': False},
 ]
 
 lista_monstros_invocacoes = [
@@ -708,16 +710,21 @@ Correntes quebradas o rodeiam, e marcas de garras riscam o chão como se algo ti
         'contador2' : 0
     },
     'c1': {
-        'NOME_LOCAL': "Sala1 Terceiro andar",
-        'DESCRICAO': 'Descrição da sala c1.',
-        'EXAMINAR': 'Velhas tapeçarias nas paredes.',
+        'NOME_LOCAL': "O Corredor dos Autômatos Esquecidos",
+        'DESCRICAO': 'O ar é pesado com poeira e o som distante de engrenagens esquecidas.',
+        'EXAMINAR': '''
+     Um corredor estreito com paredes de ferro corroído abriga autômatos enferrujados e imóveis. 
+                  O ambiente é marcado por um enorme símbolo de uma engrenagem.
+Uma mensagem é escrita na parede "Derrame sangue no símbolo e acorde aqueles que não deveriam ser acordados."
+                          Deseja invocar um autômato? (Digite invocar)
+                          ''',
         'SOLVED': False,
         'SUBIR': 'b2',
         'DESCER': '',
         'AVANÇAR': 'c2',
         'RETORNAR': '',
         'MONSTRO': '',
-        'LOCAIS': '',
+        'LOCAIS': 'invocar',
         'contador' : 0
     },
     'c2': {
@@ -835,13 +842,11 @@ def prompt():
         exibir_status(meu_jogador)
     elif acao == 'mapa':
         mostrar_mapa()
-    elif acao == 'invocar':
-        encontro_aleatorio()
 
 def locais():
     print(Fore.LIGHTYELLOW_EX + 'O que deseja fazer?' + Style.RESET_ALL)
     acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
-    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'],'raiva','medo','alegria','loucura', 'sair', 'pegar',
+    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'],'raiva','medo','alegria','loucura', 'sair', 'pegar', 'invocar'
     
     while acao not in acoes_aceitas:
         print(Fore.RED + 'Acao inválida, tente novamente. (caso não tenha mais opções, digite sair)'+Style.RESET_ALL)
@@ -867,6 +872,8 @@ def locais():
         loucura()
     elif acao == 'pegar':
         pegar()
+    elif acao == 'invocar':
+        encontro_aleatorio()
     else:
         print('Acao inválida, tente novamente.')
         locais()
@@ -1693,9 +1700,6 @@ def setup_jogo():
         calcular_atributos(meu_jogador)
 
     elif meu_jogador.classe == 'mago':
-        pocao_mana_baixa = lista_consumiveis[3]
-        pocao_mana_media = lista_consumiveis[4]
-        pocao_mana_alta = lista_consumiveis[5]
         magia_basica = lista_magias[0]
         magia_basica1 = lista_magias[1]
         efeito = Efeito(lista_efeitos[0]['nome'], lista_efeitos[0]['tipo'], lista_efeitos[0]['tempo'], lista_efeitos[0]['dano'])
@@ -1706,14 +1710,11 @@ def setup_jogo():
         meu_jogador.mana_base = 100
         meu_jogador.mana = meu_jogador.mana_base
         meu_jogador.mana_max = meu_jogador.mana
-        meu_jogador.atk_base = 5
-        meu_jogador.inteligencia = 2
+        meu_jogador.atk_base = 2
+        meu_jogador.inteligencia = 3
         meu_jogador.atk = meu_jogador.atk_base
         meu_jogador.magias.append(Magia(magia_basica['nome'], magia_basica['dano'], magia_basica['desc'], magia_basica['mana_gasta'], efeito))
         meu_jogador.magias.append(Magia(magia_basica1['nome'], magia_basica1['dano'], magia_basica1['desc'], magia_basica1['mana_gasta'], efeito1))
-        meu_jogador.add_item(Item(pocao_mana_baixa['nome'], pocao_mana_baixa['atk'], pocao_mana_baixa['desc'], pocao_mana_baixa['equipado'], pocao_mana_baixa['consumivel'], pocao_mana_baixa['preco'], pocao_mana_baixa['especial']))
-        meu_jogador.add_item(Item(pocao_mana_media['nome'], pocao_mana_media['atk'], pocao_mana_media['desc'], pocao_mana_media['equipado'], pocao_mana_media['consumivel'], pocao_mana_media['preco'], pocao_mana_media['especial']))
-        meu_jogador.add_item(Item(pocao_mana_alta['nome'], pocao_mana_alta['atk'], pocao_mana_alta['desc'], pocao_mana_alta['equipado'], pocao_mana_alta['consumivel'], pocao_mana_alta['preco'], pocao_mana_alta['especial']))
         calcular_atributos(meu_jogador)
 
     elif meu_jogador.classe == 'monge':
