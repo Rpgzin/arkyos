@@ -130,7 +130,7 @@ def exibir_status(jogador):
     print(f'forca: {jogador.forca} fortitude: {jogador.fortitude} inteligência: {jogador.inteligencia}')
 
 class Monstro:
-    def __init__(self, nome, vida, nivel, atk, xp, ouro, boss, atk_efeito=None):
+    def __init__(self, nome, vida, nivel, atk, xp, ouro, boss, atk_efeito=None, drops=None):
         self.nome = nome
         self.vida = vida*nivel
         self.vida_max = vida*nivel
@@ -138,7 +138,7 @@ class Monstro:
         self.atk = atk
         self.xp = xp
         self.ouro = ouro
-        self.item = arma_aleatoria()
+        self.drops = drops if drops else []  # Lista de itens que o monstro dropa
         self.boss = boss
         self.efeitos_status = []
         self.pular_turno = False
@@ -371,7 +371,12 @@ lista_itens_especiais = [
     {'nome': 'Máscara da Medo', 'atk': 0, 'preco': 00, 'desc': 'Máscara pega no Salão das Vozes Vazias. O uso da mesma é desconhecido.', 'equipado': False, 'consumivel': False, 'especial': True},
     {'nome': 'Máscara da Alegria', 'atk': 0, 'preco': 00, 'desc': 'Máscara pega no Salão das Vozes Vazias. O uso da mesma é desconhecido.', 'equipado': False, 'consumivel': False, 'especial': True},
     {'nome': 'Máscara da Loucura', 'atk': 0, 'preco': 00, 'desc': 'Máscara pega no Salão das Vozes Vazias. O uso da mesma é desconhecido.', 'equipado': False, 'consumivel': False, 'especial': True},
-]   
+]  
+lista_itens_bosses = [
+    { 'nome': 'Pocao de vida baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de vida, cura 15 pontos de vida.', 'equipado': False, 'consumivel': True, 'especial': False},
+    { 'nome': 'Pocao de mana baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de mana, cura 15 pontos de mana.', 'equipado': False, 'consumivel': True, 'especial': False},
+
+] 
 
 lista_magias = [
     {'nome': 'Bola de fogo', 'dano': 200, 'desc':'A magia mais forte de um mago', 'mana_gasta': 30},
@@ -478,19 +483,26 @@ def loucura():
     else:
         print(Fore.RED +'Comando inválido.'+Fore.RESET)
         locais()
-        
-
-def arma_aleatoria():
-    chances = [30, 30, 20, 20]
-    arma_random = random.choices(lista_armas, weights=chances, k=1)[0]
-    arma = Item(arma_random['nome'], arma_random['atk'], arma_random['desc'], arma_random['equipado'], arma_random['consumivel'], arma_random['preco'], arma_random['especial'])
-    return arma
 
 monstro = lista_monstros_fixos[0]
 monstro2 = lista_monstros_normais[1]
 efeito_boss = Efeito(lista_efeitos[1]['nome'], lista_efeitos[1]['tipo'], lista_efeitos[1]['tempo'], lista_efeitos[1]['dano'])
 guardiao_enraizado = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'], monstro['ouro'], monstro['boss'], efeito_boss)
 monstro_exemplo2 = Monstro(monstro2['nome'], monstro2['vida'], monstro2['nivel'], monstro2['atk'], monstro2['xp'], monstro2['ouro'], monstro2['boss'])
+
+guardiao_enraizado.drops = [
+    {'item': Item(lista_itens_bosses[0]['nome'], lista_itens_bosses[0]['atk'],
+                 lista_itens_bosses[0]['desc'], lista_itens_bosses[0]['equipado'],
+                 lista_itens_bosses[0]['consumivel'], lista_itens_bosses[0]['preco'],
+                 lista_itens_bosses[0]['especial']),
+     'chance': 1},  
+     
+    {'item': Item(lista_itens_bosses[1]['nome'], lista_itens_bosses[1]['atk'],
+                 lista_itens_bosses[1]['desc'], lista_itens_bosses[1]['equipado'],
+                 lista_itens_bosses[1]['consumivel'], lista_itens_bosses[1]['preco'],
+                 lista_itens_bosses[1]['especial']),
+     'chance': 1},   
+]
 
 ######### Tela de título #########
 def navegação_tela_titulo():
@@ -643,7 +655,7 @@ mapa = {
         'DESCER': 'b1',
         'AVANÇAR': '',
         'RETORNAR': 'a1',
-        'MONSTRO': '',
+        'MONSTRO': monstro_exemplo2,
         'LOCAIS': 'enfrentar',
         'contador' : 0
     },
@@ -1297,10 +1309,7 @@ def luta(monstro, meu_jogador):
         time.sleep(1)
         if monstro.boss == True:
             mapa[meu_jogador.local]['SOLVED'] = True
-        if random.random() < 0.3:
-            drop(monstro)
-        mapa[meu_jogador.local]['MONSTRO'] = ''
-        print(f'Você derrotou o {monstro.nome} e ganhou {monstro.xp} de XP.')
+        drop(monstro)  # Sem verificação de chance, sempre chama o drop
         print_local()
         main_game_loop()
 
@@ -1320,24 +1329,45 @@ def aplicar_efeito(alvo):
                 continue
             print(f'{alvo.nome} está conglado e não pode atacar')
 def drop(monstro):
-    print(f'Você ganhou {monstro.ouro} e o {monstro.nome} dropou {monstro.item.nome}')
+    print(f'Você ganhou {monstro.ouro} de ouro!')
     meu_jogador.ouro += monstro.ouro
-    print('[pegar / ignorar]')
+    
+    itens_que_droparam = []
+    
+    # Verifica cada item para ver se dropou
+    for drop in monstro.drops:
+        if random.random() <= drop['chance']:  # Gera um número entre 0 e 1
+            itens_que_droparam.append(drop['item'])
+    
+    if not itens_que_droparam:
+        print(f"\nO {monstro.nome} não dropou nenhum item.")
+        mapa[meu_jogador.local]['MONSTRO'] = ''
+        print_local()
+        main_game_loop()
+    
+    # Mostra os itens que droparam
+    print(f"\nO {monstro.nome} dropou os seguintes itens:")
+    for item in itens_que_droparam:
+        print(f"- {item.nome}")
+    
+    print('\n[pegar / ignorar]')
     acao = input('>>').lower()
+    
     if acao not in ['pegar', 'ignorar']:
-        print('\ncomando inválido')
-        drop(monstro)
+        print('\nComando inválido!')
+        return drop(monstro)
     
     if acao == 'pegar':
         mapa[meu_jogador.local]['MONSTRO'] = ''
-        meu_jogador.add_item(monstro.item)
-        print_local()
-        main_game_loop()
+        for item in itens_que_droparam:
+            meu_jogador.add_item(item)
+        print("\nVocê pegou todos os itens!")
     elif acao == 'ignorar':
         mapa[meu_jogador.local]['MONSTRO'] = ''
-        print('você ignora o item e segue viagem')
-        print_local()
-        main_game_loop()
+        print('\nVocê ignorou os itens.')
+    
+    print_local()
+    main_game_loop()
     
 def fugir():
     if meu_jogador.local == 'a2':

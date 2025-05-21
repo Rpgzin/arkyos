@@ -18,7 +18,7 @@ A jornada para escapar é também uma jornada para descobrir quem você é...
 E por que o mundo parecia ter parado de girar no exato momento em que você caiu.
 
 ============================================================================================================================================
-                                                  Capitulo 1 = O Despertar                                                  
+                                                  10º Andar: Sala do Trono                                              
 ============================================================================================================================================
 
 O frio das pedras toca sua pele como agulhas. O ar está pesado, carregado de uma magia que pulsa devagar, 
@@ -59,16 +59,22 @@ Ao Abrir o portão, Uma nuvem de poeira antiga Cobre o Local. Uma voz, baixa e a
 Ao Atravessar Para o Proximo comodo, 
 a cada passo a dentro o ambiente é iluminado por tochas azuis que você sente que não deviam acender.
 ====================================================================================================================================
-2º Sala 'Sala do Guardião Enraizado'
+2º Sala 'Sala do Guardião Enraizado' (SALÃO DE CHEFE)
 Descrição:
 Um odor de terra úmida e carne podre invade seus sentidos. A sala adiante parece uma antiga estufa esquecida, 
 onde raízes negras tomaram os pilares de pedra.
+===================================================================================================================================
+Ao Examinar:
+Raízes cobrem o ambiente úmido e musgoso. No centro, um colosso de madeira viva repousa, integrado à natureza ao redor.
 ===================================================================================================================================
 Evento:
 No centro do local, uma árvore retorcida cresce a partir de um altar quebrado. Seus galhos têm formas humanoides penduradas, 
 como se absorvessem ecos de vida.
 Uma criatura — metade carne, metade madeira — jaz ajoelhada, presa por correntes de prata, seus olhos fechados.
 Quando você se aproxima… ela desperta.
+
+Passiva do boss: de 3 em 3 turnos ele dobra o dano e causa envenenamento
+
 
 Ao derrotar a criatura hedionda ele dropa uma bolsa, e dentro dela tem pocões de mana, vida e uma sacola de dormir.
 é como se a torre estivesse te preparando para o que esta por vir.
@@ -84,16 +90,20 @@ Sala 1: O Salão das Vozes Vazias
 Descrição:
 Ao entrar, o som desaparece. Nenhum eco. Nenhuma respiração. No lugar, apenas sussurros em sua mente — 
 vozes que carregam seu nome, mas ditas por pessoas que você não lembra.
-As paredes são cobertas por máscaras penduradas, cada uma diferente — raiva, medo, alegria, loucura.
+
+Ao Examinar:
+As paredes são cobertas por máscaras penduradas, cada uma com uma representação diferente — raiva, medo, alegria, loucura.
 Quando você se aproxima, uma delas vira lentamente... te observando.
 ====================================================================================================================================
 Evento:
 Você deve escolher uma máscara para tocar.
-Cada uma te concede um benefício e um fardo (Ex: Máscara da Raiva = bônus em combate, mas voce recebe mais dano).
-Tocar mais de uma... atrai as almas contidas nelas para dentro de você.
+Cada uma vai liberar um boss diferente em um andar inferior.
 ====================================================================================================================================
 Sala 2: O Poço das Memórias Afundadas
 Descrição:
+Um poço escuro sussurra memórias esquecidas. Símbolos antigos cobrem as paredes úmidas, e o ar é carregado de nostalgia.
+
+Ao Examinar:
 No centro de um salão de pedra úmida, há um poço negro como breu. 
 Correntes quebradas o rodeiam, e marcas de garras riscam o chão como se algo tivesse sido arrastado para fora.
 Ao se aproximar, imagens distorcidas começam a surgir na água parada — 
@@ -106,13 +116,13 @@ Pode adquirir uma Habilidade Adormecida, ou... libertar algo que o havia esqueci
 (criatura amaldiçoada, fragmento sombrio de si mesmo, etc).
 
 ====================================================================================================================================
-8º Andar — O Eco das Máquinas Quebradas
-Ao se Aproximar para o Proximo andar,a torre revela um lado esquecido da sua origem — não apenas magia, 
-mas também artifícios de um tempo anterior à ruína. 
+8º Andar — O Eco das Máquinas Quebradas (ANDAR COM SISTEMA DE SUMMON NA 1º SALA)
 Aqui, engrenagens rangem como ossos antigos, e o tempo parece... distorcido. 
 ====================================================================================================================================
-Sala 1: O Corredor dos Autômatos Esquecidos
-Descrição: 
+Sala 1: O Corredor dos Autômatos Esquecidos (SALA DE SUMMON)
+Descrição: O ar é pesado com poeira e o som distante de engrenagens esquecidas.
+
+Ao Examinar:
 Um corredor estreito com paredes de ferro corroído abriga autômatos enferrujados, imóveis, cujos olhos piscam lentamente. 
 O ambiente é marcado por sombras dançantes e um zumbido constante, como se máquinas tentassem despertar.
 ====================================================================================================================================
@@ -121,16 +131,16 @@ Um autômato enferrujado ganha vida de repente, seus olhos vermelhos brilhando e
 "O tempo está quebrado... e nós somos seus guardiões."
 
 O chão vibra, e outros autômatos começam a despertar, se movendo lentamente em sua direção. 
-Você tem poucos segundos para buscar pistas ou fugir antes que o corredor se torne uma armadilha.
+Você tem pouco tempo para tomar uma decisão antes que o corredor se torne uma armadilha.
 
-(NOTA:ESSE EVENTO É O SEGUINTE, FUGIR VOCE FOGE E PERDE A OPOTUNIDADE DE OBTER UM FRAGMENTO DE MANA(AUMENTA A MANA MAXIMA),
-E SE BUSCAR PISTAS VOCE GANHA UM FRAGMENTO DE MANA(AUMENTA A MANA MAXIMA) E VOCE TEM QUE ENFRENTAR UMA HORDA DE AUTOMATOS.)
-
+(NOTA:ESSE EVENTO É O SEGUINTE, VOCÊ PODE FICAR ENFRENTANDO INFINITOS OS MONSTROS PARA FARMAR JA QUE É UMA AREA DE SUMMON,
+OU SO AVANÇE DE SALA SEM RESTRIÇÕES)
 ====================================================================================================================================
 Sala 2: A Oficina do Relógio Parado
 Descrição: 
-A porta range e revela uma vasta oficina abandonada, 
-tomada por engrenagens enferrujadas que ainda giram lentamente, como se lutassem contra o tempo.
+Uma vasta oficina abandonada,tomada por engrenagens enferrujadas que ainda giram lentamente.
+
+Ao Examinar:
 Pêndulos partidos oscilam no teto, e no centro há uma grande máquina quebrada com um rosto esculpido nela — 
 uma máscara de dor esculpida no metal.
 O som das engrenagens forma palavras quase humanas. Um relógio gigante ao fundo gira... ao contrário.
@@ -146,21 +156,15 @@ Se o jogador falhar no reparo, o Robo ativara uma defesa: um combate contra múl
 (NOTA:POR FAVOR COLOCAR PROPORÇÃO DE 80%PRA FALHAR E 20% PRA TER SUCESSO)
 
 ==================================================================================================================================== 
-7º Andar — O Sangue da Criação
+7º Andar — O Sangue da Criação (ANDAR QUE TEM UM BOSS NA 2º SALA)
+Descrição:
 Um lugar onde energia vermelha pulsa pelas paredes vivas,
 misturando o orgânico e o mecânico em um ciclo constante de criação e destruição.
 ====================================================================================================================================
-Sala 1: Laboratório dos Deformados
-Descrição:
-Frascos, fórmulas e instrumentos cirúrgicos cobrem as mesas. 
-No fundo da sala, tanques de vidro contêm corpos em decomposição. Alguns... ainda se movem.
-Um grimório aberto repousa sobre uma mesa, com um aviso escrito em sangue: “NÃO DESPERTE O PRIMEIRO”.
-====================================================================================================================================
-Evento:O jogador pode tentar extrair poções experimentais (alto risco e alta recompensa).
-Se explorar demais… o "Primeiro" é despertado — um homúnculo grotesco, feito à imagem do protagonista, mas completamente insano.
-====================================================================================================================================
-Sala 2: Câmara do Nascimento Invertido
-Descrição:
+Sala 1: Câmara do Nascimento Invertido
+Descrição:A sala emana uma energia estranha, como se a vida seguisse seu curso ao contrário.
+
+Ao Examinar:
 Uma gigantesca placenta fossilizada ocupa o centro. 
 Cordões umbilicais petrificados se ligam a pequenos altares dispostos em círculo.
 Um círculo de sangue fresco é visível no chão, como se alguém tivesse realizado um ritual há pouco tempo.
@@ -173,90 +177,111 @@ Completar: voce perde 5% da vida atual mas ganha um fragmento de vida(Aumenta o 
 Desfazer: desperta a fúria da torre, fazendo o próximo andar ficar mais hostil.
 
 (NOTA:O SISTEMA DE SANIDADE SÓ SERA IMPLEMENTADO SE TIVERMOS TEMPO PARA FAZER)
+===================================================================================================================================
+Sala 2: Laboratório dos Deformados (SALÃO DE CHEFE)
+Descrição:O odor de carne podre e sangue cerca o ambiente.
+===================================================================================================================================
+Ao Examinar:
+Frascos, fórmulas e instrumentos cirúrgicos cobrem as mesas. 
+No fundo da sala, tanques de vidro contêm corpos em decomposição. Alguns... ainda se movem.
+===================================================================================================================================
+Evento:
+Ao se Aprofundar no Laboratorio um dos tanques de vidro é destruido e o cadaver dentro dele começa a se regenerar, é como 
+se a torre o tivesse despertado — um Homúnculo grotesco, com uma personalidade instavel e extremamente agressivo te ataca.
 
+Passiva do Boss: de 2-3 tunos ele se cura em porcentagem(porcentagem com voces)
+
+Ao eliminar o Homunculo o Jogador tera 3 escolhas de loot,
+
+1. Armadura do Homúnculo
+Uma armadura fina e resistente, com características regenerativas.
+(Tem Pouca defesa mas tem uma passiva de Curar em porcentagem o hp do jogador a cada 2-3 turnos)
+
+2. 5x Escama de Metamorfose (ITEM CONSUMIVEL)
+Aumenta a Resistencia(ou defesa) por 3-5 turnos(se usa uma vez por combate)
+
+3.A Face do Homúnculo (Magia)
+Uma magia que Atordoa o inimigo por 1-2 turnos.
 ===================================================================================================================================
 6º Andar — O Nervo da Torre
 A descida até aqui parece ter atravessado carne viva. A torre pulsa. Ela sangra. E ela se lembra de você.
 ===================================================================================================================================
-Sala 1: A Coluna Espinhal
-Descrição:
+Sala 1: O Tumor Lúcido
+Descrição:O ambiente vivo sussurra, quente e úmido, como se estivesse consciente.
+
+Ao Examinar:
+Um globo carnoso e pulsante, acorrentado ao teto por ganchos de prata. Ele murmura em uma voz múltipla — 
+às vezes sussurrando, às vezes gritando.
+"Você não devia ter voltado."
+As paredes mostram símbolos pintados com sangue antigo. Você os reconhece… mas não sabe de onde.
+====================================================================================================================================
+Evento:Voce tem 2 opções, interagir com o tumor ou destruir ele.
+
+Interação com o Tumor:Recebe um dos itens a seguir
+
+Para o Guerreiro: Espada de sangue(passiva:cura o personagem 20% do dano causado)
+Em troca, perde parte da sanidade (descrições visuais e auditivas distorcidas nos próximos andares).
+
+Para o Mago: Cajado Grotesco (Passiva: Recupera 20% da mana utilizada)
+
+Para o Monge: Manoplas de Carne (Passiva: chance de causar sangramento[5% da vida por 3 turnos])
+
+
+
+Destruí-lo:O próximo andar se torna mais hostil — a torre reage como se você tivesse tocado algo íntimo.
+
+(NOTA:O SISTEMA DE SANIDADE SÓ SERA IMPLEMENTADO SE TIVERMOS TEMPO PARA FAZER)
+(NOTA2: O STATUS DAS ARMAS ESTAO A MERCE DE VOCES, POREM QUERO AS PASSIVAS""")
+
+====================================================================================================================================
+Sala 2: A Coluna Espinhal
+Descrição:O ambiente vibra com uma energia orgânica, como se fosse uma estrutura viva.
+
+Ao Examinar:
 Um salão estreito e vertical. No centro, uma espinha dorsal monumental flutua no ar, 
 sustentada por fios etéreos que se ligam às paredes como nervos.
 A cada pulsação, imagens cruzam sua mente — campos em chamas, gritos, um rosto... familiar demais para ser estranho.
 Mas tudo passa em segundos. A dor fica.
 ===================================================================================================================================
 Evento:
-Tocar a coluna: Restaura uma habilidade antiga  
+Tocar a coluna: Recebe uma magia(A Criatividade é com vcs) 
 
 Inicia combate contra o Sentinela Cordado, um ser que arrasta vértebras atrás de si e fala frases que você não lembra ter dito.
 ====================================================================================================================================
-Sala 2: O Tumor Lúcido
-Descrição:
-Um globo carnoso e pulsante, acorrentado ao teto por ganchos de prata. Ele murmura em uma voz múltipla — 
-às vezes sussurrando, às vezes gritando.
-"Você não devia ter voltado."
-As paredes mostram símbolos pintados com sangue antigo. Você os reconhece… mas não sabe de onde.
-====================================================================================================================================
-Evento:
-Interação com o Tumor:Recebe uma espada de sangue(passiva:cura o personagem 10% do dano causado)
-Em troca, perde parte da sanidade (descrições visuais e auditivas distorcidas nos próximos andares).
-
-Destruí-lo:O próximo andar se torna mais hostil — a torre reage como se você tivesse tocado algo íntimo.
-
-(NOTA:O SISTEMA DE SANIDADE SÓ SERA IMPLEMENTADO SE TIVERMOS TEMPO PARA FAZER)
-
-====================================================================================================================================
-5º Andar — O Salão das Sombras Esquecidas
+5º Andar — O Salão das Sombras Esquecidas (ANDAR COM SISTEMA DE SUMMON NA 1º SALA)
 Um salão escuro onde sombras parecem ganhar vida, sussurrando segredos antigos e distorcendo a realidade ao seu redor.
 ====================================================================================================================================
-Sala 1: O Espelho dos Ecos
+Sala 1:Galeria dos Pactos Perdidos
+Descrição: 
+Corredor amplo com retratos escurecidos nas paredes. Cada quadro emite uma sombra pulsante que parece observar quem passa.
+
+Ao Examinar:
+Cada quadro emite uma sombra pulsante que parece observar quem passa.
+À medida que o jogador avança, uma sombra salta de um dos quadros e toma forma — uma entidade invocada de um pacto esquecido.
+
+(NOTA:ESSE EVENTO É O SEGUINTE, VOCÊ PODE FICAR ENFRENTANDO INFINITOS OS MONSTROS PARA FARMAR JA QUE É UMA AREA DE SUMMON,
+OU SO AVANÇE DE SALA SEM RESTRIÇÕES)
+
+====================================================================================================================================
+Sala:O Caminhar das Sombras
 Descrição:
-Você entra em uma sala envolta por neblina espessa. 
-Grandes espelhos, com molduras de ferro enferrujadas, cobrem as paredes. 
-Cada espelho reflete uma imagem diferente, mas nenhuma delas parece familiar. 
-À medida que se aproxima, o reflexo de algo distante ou indefinido começa a mudar.
+Um corredor estreito e enevoado, onde sussurros e sombras distorcidas confundem a mente. 
+
+Ao Examinar:
+Quatro portas se erguem em cada direção, todas idênticas e envoltas em sombras pulsantes.
 ====================================================================================================================================
-Evento: O Toque do Espelho
-Ao tocar um espelho, você sente uma onda de frio e uma visão rápida de uma memória distorcida.
+Evento: O jogador tera que escolher uma das portas.
+1º Porta: voce toma um dano massivo(pode botar firme na porcentagem de vida atual do jogador)
+2º Porta: Você encontra um bau com poções de vida
+3º Porta: Voce Avança para a Proxima sala.
+4º Porta: Você é teleportado para o Andar Anterior.
 
-Reflexo da Perda: Tocar esse espelho concede "Resiliência" (aumenta resistência), mas uma sensação de tristeza invade você.
-
-Reflexo da Esperança: Tocar este espelho concede "Foco Afiado" (aumenta percepção), mas você sente uma pressão constante.
-
-Reflexo da Identidade Perdida: Tocar esse espelho revela uma habilidade chamada "Fragmento da Alma" (poder adormecido),
-mas sua sanidade é afetada.
-
-(NOTA: ESSES 'MAS' DEPOIS DE PEGAR O ITEM SAO SÓ ENCHEÇÃO DE LINGUIÇA PRA LORE N FAÇA NADA DE CODIGO N)
-(NOTA:O SISTEMA DE SANIDADE SÓ SERA IMPLEMENTADO SE TIVERMOS TEMPO PARA FAZER)
+(NOTA: A IDEIA AQUI É COLOCAR AS PORTAS DE AVANÇO DE ANDAR E VOLTA UM ANDAR COMO RANDOM, 
+E AS OUTRAS 2 PORTAS SE VOCE JA ACESSOU OCULTE ELAS PARA NAO SER REPETIDO)
 
 
 ====================================================================================================================================
-Sala 2: O Abismo da Voz Silenciosa
-Descrição:
-Esta sala é profunda e não tem teto visível. 
-No centro, um poço negro como a noite se abre, mas ao olhar para baixo, você não vê nada. 
-Apenas um vazio que parece chamar por você. 
-Ao redor, várias figuras de pedra estão alinhadas, todas com as mãos estendidas para o abismo, como se quisessem cair.
-====================================================================================================================================
-Em uma das paredes, uma inscrição é visível, mas está distorcida, como se estivesse parcialmente apagada. 
-Apenas algumas palavras são legíveis: "A verdadeira queda não é a do corpo, mas a da mente..."
-
-Evento:
-A Voz do Abismo: Quando você se aproxima do poço, uma voz suave e distante chama seu nome, mas sem tom, sem forma. 
-A voz diz apenas uma coisa:“O que você procura não está aqui... ou será que já o encontrou?”
-
-Olhar para o abismo: Você pode se aproximar e olhar para o poço. 
-Quando o faz, um momento de clareza se infiltra na sua mente — uma memória fragmentada, 
-talvez de uma decisão difícil que tomou no passado, ou uma escolha entre algo importante.
-
-Resultado: Você ganha um fragmento de uma habilidade passiva perdida (algo como "Mais resistencia" ou "Dano"), 
-mas a memória deixa uma marca persistente, fazendo você questionar se a decisão foi realmente a sua.
-
-Pular no abismo: Você pode tentar pular no poço, em busca de uma verdade oculta, mas ao fazer isso, 
-você é puxado por uma força desconhecida e precisa enfrentar uma visão caótica de seus próprios medos, 
-em forma de um monstro das sombras, feito de fragmentos de suas falhas e arrependimentos.(ou seja um monstro todo preto)
-====================================================================================================================================
-4º Andar — A Guerra Que Nunca Terminou
+4º Andar — A Guerra Que Nunca Terminou (ANDAR QUE TEM UM BOSS NA 2º SALA)
 O ar cheira a ferro queimado. As pedras do chão ainda estão aquecidas. As cicatrizes do combate ainda ardem…
 Mesmo que não saiba quem lutou aqui.
 ====================================================================================================================================
@@ -265,31 +290,33 @@ Descrição:
 Espadas cravadas em corpos cristalizados. Escudos partidos. Ninguém respira, mas os olhos… alguns olhos ainda seguem seus movimentos.
 Há uma lança dourada quebrada no centro, que brilha fracamente quando você se aproxima. Ela pulsa com sua presença.
 
-Evento:
-Tocar a lança:Libera uma Habilidade Marcada pelo Conflito (pode ser de ataque ou suporte, à escolha do jogador).
+Evento Duplo:
+Tocar a lança:Libera uma Habilidade Marcada pelo Conflito (pode ser uma skill de ataque ou suporte, à escolha do jogador).
 
-Ativa um eco de batalha: combatentes espectrais revivem por alguns minutos, lutando entre si. Você pode observar... ou se envolver.
-(se só observar voce ganha um xp bobo mas se voce se envolver voce é recompensado com uma magia de buff de defesa e dano,
-as porcentagens ficam com voces)
+Ativa um eco de batalha: combatentes espectrais revivem, lutando entre si. Você pode observar... ou se envolver.
+(se só observar voce ganha nada mas se voce se envolver voce luta contra fantasmas 
+e é recompensado com uma magia de buff de defesa e dano, as porcentagens ficam com voces)
 ====================================================================================================================================
-Sala 2: O Julgamento Silencioso
-Descrição:
-Uma estátua de obsidiana de tamanho humano, com o rosto encoberto por uma máscara rachada.
-Ao se aproximar, a máscara se parte. Dentro… seu rosto. Mas distorcido. E furioso.
-O reflexo não diz uma palavra, mas se ergue. Em suas mãos: uma réplica de sua arma atual.
-====================================================================================================================================
-Evento:
-Luta obrigatória contra o Eco do Julgamento (um reflexo do seu estado atual, adaptado ao seu estilo e escolhas,
-ou seja um mimico kk).
+Sala 2: O Coliseu dos Ecos Caídos
+Um Coliseu destruído, com pilares rachadas e chão coberto por cinzas e restos de batalha.
+O ambiente transmite a sensação de uma guerra adormecida.
 
-Ao vencer, pode escolher absorver ou selar o reflexo:
+Ao Examinar:
+Uma imensa guerreira, cuja Sua armadura é feita de restos de guerreiros caídos,
+A Forjadora de Ossos usa uma enorme marreta forjada a partir de pedaços de armaduras e ossos, 
+um símbolo de sua arte macabra de criar armas e soldados de carne e metal.
 
-Ao Absorver: Ganha uma habilidade brutal, mas algo dentro “trinca”.
+Boss: A Forjadora de Ossos
 
-Ao Selar: Recebe proteção espiritual contra efeitos de corrupção futuros(ou efeitos de status pra ser mais simples).
+Passivas do Boss: 
+Marretada da Ruína: a cada 4 turnos, a Forjadora golpeia o chão com sua marreta em area, acertando o jogador e atordoando ele por 1 turno.
+(OBS:SE NAO QUISER COLOCAR ESSE DEBUFF, SÓ BOTA PRA DAR MT DANO)
 
-(NOTA: NOVAMENTE, SO SERA ADICIONADO EFEITOS DE STATUS SE DER TEMPO)
 
+Fusão Óssea: Uma vez que a Forjadora de Ossos estiver com 25% de sua vida, ela recupera toda a saúde.(1 vez somente)
+
+
+Drops da forjadora: W.I.P
 
 
 
