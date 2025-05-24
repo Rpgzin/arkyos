@@ -28,6 +28,7 @@ class Player:
         self.xp = 0
         self.xp_max = 100
         self.vida_base = 0
+        self.armadura = None
         self.vida = 0
         self.vida_max = 0
         self.mana_base = 0
@@ -72,6 +73,14 @@ def calcular_atributos(jogador):
     if jogador.item_equipado:
         jogador.atk_final += jogador.item_equipado.atk
     jogador.dano_magico = jogador.inteligencia * 2
+    if jogador.armadura:
+        jogador.armadura_vida_max = jogador.armadura.vida_max
+        jogador.armadura_vida = jogador.armadura_vida_max
+        jogador.armadura_resistencia = jogador.armadura.resistencia
+    else:
+        jogador.armadura_vida_max = 0
+        jogador.armadura_vida = 0
+        jogador.armadura_resistencia = 0
 
 def atualizar_atributos(jogador):
     jogador.vida_max = jogador.vida_base + (jogador.fortitude * 10)
@@ -129,6 +138,11 @@ def exibir_status(jogador):
     else:
         print('arma: Nenhuma arma equipada')
     print(f'forca: '+Fore.GREEN+f'{jogador.forca}'+Style.RESET_ALL+' fortitude: '+Fore.RED+f'{jogador.fortitude}'+Style.RESET_ALL+' inteligência: '+Fore.BLUE+f'{jogador.inteligencia}'+Style.RESET_ALL)
+    if jogador.armadura:
+        print(f'armadura: {jogador.armadura.nome} DEF: {jogador.armadura.defesa} RES: {jogador.armadura.resistencia}%')
+        print(f'vida da armadura: {jogador.armadura_vida}/{jogador.armadura_vida_max}')
+    else:
+        print('armadura: Nenhuma armadura equipada')
 
 class Monstro:
     def __init__(self, nome, vida, nivel, atk, xp, ouro, boss, atk_efeito=None, drops=None):
@@ -181,6 +195,14 @@ class Item:
         self.preco = preco
         self.especial = especial
     
+class Armadura(Item):
+    def __init__(self, nome, defesa, vida_max, resistencia, desc, equipado, consumivel, preco, especial):
+        # Chama o construtor da classe Item com atk=0 para armaduras
+        super().__init__(nome, 0, desc, equipado, consumivel, preco, especial)
+        self.defesa = defesa
+        self.vida_max = vida_max
+        self.resistencia = resistencia
+
 class Magia:
     def __init__(self, nome, dano, desc, mana_gasta, efeito=None):
         self.nome = nome
@@ -246,48 +268,6 @@ def mostrar_loja():
                 main_game_loop() 
             print(Fore.RED + '**ITEM INVÁLIDO**'+Style.RESET_ALL)
             mostrar_loja()
-
-def vender_item():
-    print('ITENS DA MOCHILA:')
-    for i, item in enumerate(meu_jogador.mochila):
-        if item.equipado:
-            print(f'{i+1}. {item.nome} | {item.desc} | valor: {item.preco} | (EQUIPADO)')
-            continue
-        print(f'{i+1}. {item.nome} | {item.desc} | valor: {item.preco}')
-    print('>> USE NÚMEROS PARA SELECIONAR O ITEM OU [comprar | fechar]')
-    escolha = input(Fore.LIGHTYELLOW_EX + '>>'+Style.RESET_ALL).lower()
-    if escolha == 'fechar':
-        print_local()
-    elif escolha == 'comprar':
-        limpar_tela()
-        mostrar_loja()
-    try:
-        escolha = int(escolha)-1
-        if escolha not in range(0, len(lista_itens_loja)):
-            print(Fore.RED + '**ITEM INVÁLIDO**'+Style.RESET_ALL)
-            vender_item()
-        
-        if meu_jogador.mochila[escolha].equipado:
-            print(f'{meu_jogador.mochila[escolha].nome} | {meu_jogador.mochila[escolha].desc} | valor: {meu_jogador.mochila[escolha].preco} | (EQUIPADO)')
-        else:
-            print(f'{meu_jogador.mochila[escolha].nome} | {meu_jogador.mochila[escolha].desc} | valor: {meu_jogador.mochila[escolha].preco}')
-        print('[vender | voltar |'+Fore.RED+'fechar'+Style.RESET_ALL+']')
-        acao = input(Fore.LIGHTYELLOW_EX + '>>'+Style.RESET_ALL)
-        if acao not in ['vender', 'voltar', 'fechar']:
-            print(Fore.RED + '**COMANDO INVÁLIDO**'+Style.RESET_ALL)
-            vender_item()
-        if acao == 'vender':
-            if meu_jogador.mochila[escolha].especial:
-                print('Item não pode ser vendido')
-                vender_item()
-            vender_acao(escolha)
-        elif acao == 'voltar':
-            vender_item()
-        elif acao == 'fechar':
-            print_local()
-    except:
-        print(Fore.RED + '**ITEM INVÁLIDO**'+Style.RESET_ALL)
-        vender_item()
 
 def vender_acao(escolha):
     item = meu_jogador.mochila[escolha]
@@ -365,6 +345,55 @@ lista_armas_especiais = [
     {'nome': 'Manoplas de ferro', 'atk': 20, 'preco': 150, 'desc': 'Usada a muito tempo por um exímio monge, as manoplas de ferro são uma das mais fortes armas de um monge', 'equipado': False, 'consumivel': False, 'especial': False},
     {'nome': 'Espada do guerreiro impetuoso', 'atk': 15, 'preco': 150, 'desc': 'espada usada por um guerreiro impetuoso, ela tem um grande poder de ataque', 'equipado': False, 'consumivel': False, 'especial': False},
     {'nome': 'Grimório Morbius', 'atk': 0, 'preco': 150, 'desc': 'Um grimório desconhecido e com um grande potencial', 'equipado': False, 'consumivel': False, 'especial': False},    
+]
+lista_armaduras = [
+    { 
+    'nome': 'Armadura de Iniciante', 
+    'defesa': 1, 
+    'vida_max': 20, 
+    'resistencia': 5, 
+    'desc': 'Armadura básica para guerreiros iniciantes',
+    'equipado': False, 
+    'consumivel': False, 
+    'preco': 20, 
+    'especial': False
+    },
+
+    { 
+        'nome': 'Armadura de Couro', 
+        'defesa': 2, 
+        'vida_max': 30, 
+        'resistencia': 10, 
+        'desc': 'Armadura leve feita de couro endurecido.', 
+        'comprado': False, 
+        'equipado': False, 
+        'consumivel': False,
+        'preco': 30, 
+        'especial': False},
+
+    { 
+        'nome': 'Armadura de Ferro', 
+        'defesa': 4, 
+        'vida_max': 45, 
+        'resistencia': 15, 
+        'preco': 50, 
+        'desc': 'Armadura média feita de placas de ferro.', 
+        'comprado': False, 
+        'equipado': False, 
+        'consumivel': False, 
+        'especial': False},
+
+    { 
+        'nome': 'Armadura de Aço', 
+        'defesa': 6, 
+        'vida_max': 50, 
+        'resistencia': 50, 
+        'preco': 70, 
+        'desc': 'Armadura pesada feita de aço temperado.', 
+        'comprado': False, 
+        'equipado': False, 
+        'consumivel': False, 
+        'especial': False},
 ]
 
 lista_itens_especiais = [
@@ -955,11 +984,7 @@ def locais():
         print('Acao inválida, tente novamente.')
         locais()
 
-def acao_loja(escolha):
-    if escolha == 'comprar':
-        comprar()
-    elif escolha == 'vender':
-        vender()
+
 
 ### Objetos interativos dos andares ###
 def trono():
@@ -1036,14 +1061,83 @@ def robo():
         
         aleatorio = random.randint(1, 100)
         if aleatorio >= 40:
-            print('O robô se restaurou. Ele se levanta e te dá um item.')
-            # Aqui você pode adicionar a lógica para dar um item ao jogador
+            print('O robô se restaura com um brilho azul nos olhos.')
+            time.sleep(1)
+            print('Ele emite sons mecânicos e abre um compartimento, oferecendo um item.')
+            time.sleep(1)
+            
+            # Lista de possíveis itens que o robô pode dar
+            itens_robo = [
+                lista_armaduras[1],  # Armadura média
+                lista_consumiveis[3],  # Poção de mana
+                lista_itens_especiais[5],  # Núcleo de Robô (para reparar outro)
+                lista_armas[2]  # Espada longa
+            ]
+            
+            # Escolhe um item aleatório
+            item_data = random.choice(itens_robo)
+            
+            # Cria o objeto apropriado
+            if 'defesa' in item_data:  # Se for armadura
+                item = Armadura(
+                    item_data['nome'], 
+                    item_data['defesa'],
+                    item_data['vida_max'],
+                    item_data['resistencia'],
+                    item_data['desc'],
+                    False,  # Não equipado automaticamente
+                    item_data['consumivel'],
+                    item_data['preco'],
+                    item_data['especial']
+                )
+            else:  # Se for item normal
+                item = Item(
+                    item_data['nome'],
+                    item_data.get('atk', 0),  # Usa get() para evitar erro se não existir
+                    item_data['desc'],
+                    False,  # Não equipado
+                    item_data['consumivel'],
+                    item_data['preco'],
+                    item_data['especial']
+                )
+            
+            print(f'\nO robô te dá: {Fore.YELLOW}{item.nome}{Style.RESET_ALL}!')
+            print(f'Descrição: {item.desc}')
+            
+            # Adiciona o item à mochila
+            meu_jogador.add_item(item)
+            
+            print('\n[equipar | guardar]')
+            escolha = input('>> ').lower()
+            
+            if escolha == 'equipar':
+                if isinstance(item, Armadura):
+                    # Desequipa armadura atual se houver
+                    if meu_jogador.armadura:
+                        meu_jogador.armadura.equipado = False
+                    # Equipa a nova
+                    meu_jogador.armadura = item
+                    item.equipado = True
+                    print(f'Você equipou a armadura {item.nome}!')
+                elif hasattr(item, 'atk'):  # Se for arma
+                    # Desequipa arma atual se houver
+                    if meu_jogador.item_equipado:
+                        meu_jogador.item_equipado.equipado = False
+                    # Equipa a nova
+                    meu_jogador.item_equipado = item
+                    item.equipado = True
+                    print(f'Você equipou {item.nome}!')
+                else:
+                    print('Este item não pode ser equipado.')
+            
             time.sleep(1.5)
             limpar_tela()
             print_local()
             main_game_loop()
         else:
-            print('O robô se restaurou, mas com olhos vermelhos, e te ataca!')
+            print('O robô se restaura, mas com olhos vermelhos!')
+            time.sleep(1)
+            print('Sinais de alerta piscam e ele te ataca!')
             time.sleep(1.5)
             luta(robot, meu_jogador)
     else:
@@ -1184,190 +1278,352 @@ def acao_luta(escolha, monstro):
 def abrir_mochila():
     if meu_jogador.game_over:
         main_game_loop()
-    if meu_jogador.mochila:
-        print ('G:' + Fore.YELLOW + f' {meu_jogador.ouro}'+Style.RESET_ALL)
-        for i in range(len(meu_jogador.mochila)):
-            if meu_jogador.mochila[i].consumivel:
-                print(Fore.YELLOW + f'[{i+1}]' + Style.RESET_ALL + f' {meu_jogador.mochila[i].nome} desc: {meu_jogador.mochila[i].desc}')
-                continue
-            if meu_jogador.mochila[i].equipado == True:
-                print(Fore.YELLOW + f'[{i+1}]' + Style.RESET_ALL + f' {meu_jogador.mochila[i].nome} ATK: {meu_jogador.mochila[i].atk} desc: {meu_jogador.mochila[i].desc} (EQUIPADO)')
-                continue
-            print(Fore.YELLOW + f'[{i+1}]' + Style.RESET_ALL + f' {meu_jogador.mochila[i].nome} ATK: {meu_jogador.mochila[i].atk} desc: {meu_jogador.mochila[i].desc}')
-        print('>> Use números para selecionar os itens ou [fechar]')
-        escolha = input(Fore.LIGHTYELLOW_EX + ">>"+Style.RESET_ALL)
-        if escolha == 'fechar':
-            print_local()
-        try:
-            escolha = int(escolha)-1
-            if escolha not in range(0, len(meu_jogador.mochila)):
-                abrir_mochila()
-            if meu_jogador.mochila[escolha].consumivel or meu_jogador.mochila[escolha].especial:
-                print(f'item: {meu_jogador.mochila[escolha].nome} | desc: {meu_jogador.mochila[escolha].desc}')
-            else:    
-                print(f'item: {meu_jogador.mochila[escolha].nome} | ATK: {meu_jogador.mochila[escolha].atk} | desc: {meu_jogador.mochila[escolha].desc}')
-            # jogador selecionou com item equipao
-            if meu_jogador.item_equipado:
-                # jogador selecionou item equipado
-                if meu_jogador.mochila[escolha].equipado == True:
-                    print('[desequipar / remover / voltar / '+ Fore.RED + 'fechar'+Style.RESET_ALL+']')
-                    acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
-                    if acao not in ['desequipar', 'remover', 'voltar', 'fechar']:
-                        print('\ncomando inválido')
-                        abrir_mochila()
-                    
-                    if acao == 'desequipar':
-                        print(Fore.RED + '**VOCÊ DESEQUIPOU ' + Style.RESET_ALL + f' {meu_jogador.item_equipado.nome}**')
-                        meu_jogador.item_equipado = False
-                        meu_jogador.mochila[escolha].equipado = False
-                        meu_jogador.atk_final = meu_jogador.atk
-                        abrir_mochila()
-                    elif acao == 'remover':
-                        print(Fore.RED + f'**VOCÊ DESEQUIPOU '+ Style.RESET_ALL + f'{meu_jogador.item_equipado.nome}**')
-                        print(Fore.RED + f'**VOCÊ DROPOU '+ Style.RESET_ALL + f'{meu_jogador.item_equipado.nome}**')
-                        meu_jogador.item_equipado = None
-                        meu_jogador.mochila.pop(escolha)
-                        meu_jogador.atk_final = meu_jogador.atk
-                        abrir_mochila()
-                    elif acao == 'voltar':
-                        abrir_mochila()
-                    elif acao == 'fechar':
-                        print_local()
-                # jogador selecionou item NÂO equipado
-                else:
-                    if meu_jogador.mochila[escolha].especial:
-                        print('[voltar / '+ Fore.RED +'fechar]'+Style.RESET_ALL)
-                        acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
-                        if acao not in ['voltar' ,'fechar']:
-                            abrir_mochila()
-                        elif acao == 'voltar':
-                            abrir_mochila()
-                        elif acao == 'fechar':
-                            print_local()
-                        
-                    if meu_jogador.mochila[escolha].consumivel:
-                        print('[usar / remover / voltar / '+ Fore.RED + 'fechar]'+Style.RESET_ALL)
-                        acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
-                        if acao not in ['usar', 'remover', 'voltar', 'fechar']:
-                            print(Fore.RED + '\ncomando inválido'+Style.RESET_ALL)
-                            abrir_mochila()
-                        if acao == 'usar':
-                            if meu_jogador.mochila[escolha].nome == 'Pocao de vida baixa':
-                                pocao_vida()
-                            elif meu_jogador.mochila[escolha].nome == 'Pocao de vida media':
-                                pocao_vida_media()
-                            elif meu_jogador.mochila[escolha].nome == 'Pocao de vida alta':
-                                pocao_vida_media()
-                            elif meu_jogador.mochila[escolha].nome == 'Pocao de mana baixa':
-                                pocao_mana()
-                            elif meu_jogador.mochila[escolha].nome == 'Pocao de mana media':
-                                pocao_mana_media()
-                            elif meu_jogador.mochila[escolha].nome == 'Pocao de mana alta':
-                                pocao_mana_alta()
-                            meu_jogador.mochila.pop(escolha)
-                            abrir_mochila()
-                            
-                    print('[equipar / remover / voltar / '+ Fore.RED +'fechar'+Style.RESET_ALL+']')
-                    
-                    acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
-                    if acao not in ['equipar', 'remover', 'fechar']:
-                        print(Fore.RED + '\ncomando inválido'+Style.RESET_ALL)
-                        abrir_mochila()
-
-                    if acao == 'equipar':
-                        print(Fore.RED + '**VOCÊ DESEQUIPOU '+ Style.RESET_ALL +f'{meu_jogador.item_equipado.nome}**')
-                        for i in range(len(meu_jogador.mochila)):
-                            if meu_jogador.mochila[i].equipado == True:
-                                meu_jogador.mochila[i].equipado = False
-                                break
-                        meu_jogador.item_equipado = meu_jogador.mochila[escolha]
-                        meu_jogador.mochila[escolha].equipado = True
-                        meu_jogador.atk_final = meu_jogador.atk + meu_jogador.item_equipado.atk
-                        print(Fore.GREEN +f'**VOCÊ EQUIPOU '+Style.RESET_ALL +f'{meu_jogador.item_equipado.nome}**')
-                        abrir_mochila()
-                    elif acao == 'remover':
-                        print(Fore.RED + '**VOCÊ DROPOU '+Style.RESET_ALL +f'{meu_jogador.mochila[escolha].nome}')
-                        meu_jogador.mochila.pop(escolha)
-                        abrir_mochila()
-                    elif acao == 'voltar':
-                        abrir_mochila()
-                    elif acao == 'fechar':
-                        print_local()
-                        main_game_loop()
-            # jogador selecionou sem item equipado
-            else:
-                if meu_jogador.mochila[escolha].especial:
-                    print('[voltar / '+Fore.RED +'fechar]'+Style.RESET_ALL)
-                    acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
-                    if acao not in ['voltar' ,'fechar']:
-                        abrir_mochila()
-                    elif acao == 'voltar':
-                        abrir_mochila()
-                    elif acao == 'fechar':
-                        print_local()
-                if meu_jogador.mochila[escolha].consumivel:
-                        print( '[usar / remover / voltar / '+Fore.RED +'fechar'+Style.RESET_ALL+']')
-                        acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
-                        if acao not in ['usar', 'remover', 'voltar', 'fechar']:
-                            print('\ncomando inválido')
-                            abrir_mochila()
-                        if acao == 'usar':
-                            if meu_jogador.mochila[escolha].nome == 'Pocao de vida baixa':
-                                pocao_vida()
-                                meu_jogador.mochila.pop(escolha)
-                                abrir_mochila()
-                            elif meu_jogador.mochila[escolha].nome == 'Pocao de vida media':
-                                pocao_vida_media()
-                                meu_jogador.mochila.pop(escolha)
-                                abrir_mochila()
-                            elif meu_jogador.mochila[escolha].nome == 'Pocao de vida alta':
-                                pocao_vida_alta()
-                                meu_jogador.mochila.pop(escolha)
-                                abrir_mochila()
-                            elif meu_jogador.mochila[escolha].nome == 'Pocao de mana baixa':
-                                pocao_mana()
-                                meu_jogador.mochila.pop(escolha)
-                                abrir_mochila()
-                            elif meu_jogador.mochila[escolha].nome == 'Pocao de mana media':
-                                pocao_mana_media()
-                                meu_jogador.mochila.pop(escolha)
-                                abrir_mochila()
-                            elif meu_jogador.mochila[escolha].nome == 'Pocao de mana alta':
-                                pocao_mana_alta()
-                                meu_jogador.mochila.pop(escolha)
-                                abrir_mochila()
-                        elif acao == 'remover':
-                            print(Fore.RED +f'**VOCÊ DROPOU '+Style.RESET_ALL +f'{meu_jogador.mochila[escolha].nome}')
-                            meu_jogador.mochila.pop(escolha)
-                            abrir_mochila()
-                        elif acao == 'voltar':
-                            abrir_mochila()
-                        elif acao == 'fechar':
-                            print_local()
-                print( '[usar / remover / voltar / '+Fore.RED +'fechar'+Style.RESET_ALL+']')
-                acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
-                if acao not in ['equipar', 'remover', 'fechar']:
-                    print('\ncomando inválido')
-                    abrir_mochila()
-                
-                if acao == 'equipar':
-                    meu_jogador.mochila[escolha].equipado = True
-                    meu_jogador.item_equipado = meu_jogador.mochila[escolha]
-                    meu_jogador.atk_final = meu_jogador.item_equipado.atk + meu_jogador.atk
-                    print(Fore.GREEN + '**VOCÊ EQUIPOU '+Style.RESET_ALL +f'{meu_jogador.item_equipado.nome}**')
-                    abrir_mochila()
-                elif acao == 'remover':
-                    print(Fore.RED+f'**VOCÊ DROPOU '+Style.RESET_ALL+f'{meu_jogador.mochila[escolha].nome}')
-                    meu_jogador.mochila.pop(escolha)
-                    abrir_mochila()
-                elif acao == 'voltar':
-                    abrir_mochila()
-                elif acao == 'fechar':
-                    print_local()
-        except:
-            abrir_mochila()
+    
+    if not meu_jogador.mochila:
+        print(Fore.RED + "Mochila vazia" + Style.RESET_ALL)
+        input(Fore.LIGHTYELLOW_EX + "\n[Pressione enter para voltar]" + Style.RESET_ALL)
+        print_local()
+        main_game_loop()
+    
+    limpar_tela()
+    print("▬" * 50)
+    print(Fore.YELLOW + "                   MOCHILA" + Style.RESET_ALL)
+    print("▬" * 50)
+    
+    # Mostra ouro
+    print(f'Ouro: {Fore.YELLOW}{meu_jogador.ouro}{Style.RESET_ALL}\n')
+    
+    # Organiza itens por tipo
+    armas = []
+    armaduras = []
+    consumiveis = []
+    especiais = []
+    
+    for item in meu_jogador.mochila:
+        if item.consumivel:
+            consumiveis.append(item)
+        elif item.especial:
+            especiais.append(item)
+        elif isinstance(item, Armadura):  # Itens de armadura
+            armaduras.append(item)
+        else:  # Assume que é arma se não for os outros tipos
+            armas.append(item)
+    
+    # Mostra seção de armas
+    if armas:
+        print(Fore.LIGHTRED_EX + "ARMAS:" + Style.RESET_ALL)
+        for i, arma in enumerate(armas):
+            equipado = "(EQUIPADO)" if arma.equipado else ""
+            print(f'{Fore.YELLOW}[{i+1}]{Style.RESET_ALL} {arma.nome} | ATK: {arma.atk} | {arma.desc} {equipado}')
+        print()
+    
+    # Mostra seção de armaduras
+    if armaduras:
+        print(Fore.LIGHTBLUE_EX + "ARMADURAS:" + Style.RESET_ALL)
+        for i, armadura in enumerate(armaduras, start=len(armas)+1):
+            equipado = "(EQUIPADO)" if armadura.equipado else ""
+            print(f'{Fore.YELLOW}[{i}]{Style.RESET_ALL} {armadura.nome} | DEF: {armadura.defesa} | VIDA: {armadura.vida_max} | RES: {armadura.resistencia}% | {armadura.desc} {equipado}')
+        print()
+    
+    # Mostra seção de consumíveis
+    if consumiveis:
+        print(Fore.LIGHTGREEN_EX + "CONSUMÍVEIS:" + Style.RESET_ALL)
+        for i, consumivel in enumerate(consumiveis, start=len(armas)+len(armaduras)+1):
+            print(f'{Fore.YELLOW}[{i}]{Style.RESET_ALL} {consumivel.nome} | {consumivel.desc}')
+        print()
+    
+    # Mostra seção de itens especiais
+    if especiais:
+        print(Fore.MAGENTA + "ITENS ESPECIAIS:" + Style.RESET_ALL)
+        for i, especial in enumerate(especiais, start=len(armas)+len(armaduras)+len(consumiveis)+1):
+            print(f'{Fore.YELLOW}[{i}]{Style.RESET_ALL} {especial.nome} | {especial.desc}')
+        print()
+    
+    print("▬" * 50)
+    print("Use os números para selecionar um item ou digite:")
+    print(Fore.LIGHTYELLOW_EX + "[fechar]" + Style.RESET_ALL + " - Voltar ao jogo")
+    print(Fore.LIGHTYELLOW_EX + "[organizar]" + Style.RESET_ALL + " - Reorganizar mochila")
+    print(Fore.LIGHTYELLOW_EX + "[loja]" + Style.RESET_ALL + " - Vender itens")
+    
+    escolha = input(Fore.LIGHTYELLOW_EX + "\n>> " + Style.RESET_ALL).lower()
+    
+    if escolha == "fechar":
+        limpar_tela()
+        print_local()
+        main_game_loop()
+    elif escolha == "organizar":
+        reorganizar_mochila()
+    elif escolha == "loja":
+        vender_item()
     else:
-        print(Fore.RED +"Mochila vazia"+Style.RESET_ALL)
+        try:
+            escolha = int(escolha) - 1
+            if escolha < 0 or escolha >= len(meu_jogador.mochila):
+                print(Fore.RED + "Item inválido!" + Style.RESET_ALL)
+                time.sleep(1)
+                abrir_mochila()
+            
+            item_selecionado = meu_jogador.mochila[escolha]
+            limpar_tela()
+            print("▬" * 50)
+            
+            # Mostra informações detalhadas do item
+            if isinstance(item_selecionado, Armadura):
+                print(f"{Fore.LIGHTBLUE_EX}ARMADURA SELECIONADA:{Style.RESET_ALL}")
+                print(f"Nome: {item_selecionado.nome}")
+                print(f"Defesa: {item_selecionado.defesa}")
+                print(f"Vida: {item_selecionado.vida_max}")
+                print(f"Resistência: {item_selecionado.resistencia}%")
+                print(f"Descrição: {item_selecionado.desc}")
+                
+                if item_selecionado.equipado:
+                    print("\nEsta armadura está equipada")
+                    print(Fore.LIGHTYELLOW_EX + "\n[desequipar] " + Style.RESET_ALL + "- Desequipar esta armadura")
+                else:
+                    if meu_jogador.armadura:
+                        print(f"\nVocê já está equipado com: {meu_jogador.armadura.nome}")
+                        print(Fore.LIGHTYELLOW_EX + "[equipar] " + Style.RESET_ALL + "- Substituir armadura atual")
+                    else:
+                        print(Fore.LIGHTYELLOW_EX + "\n[equipar] " + Style.RESET_ALL + "- Equipar esta armadura")
+                
+                print(Fore.LIGHTYELLOW_EX + "[voltar] " + Style.RESET_ALL + "- Voltar para a mochila")
+                print(Fore.RED + "[descarte] " + Style.RESET_ALL + "- Descartar item permanentemente")
+                
+            elif item_selecionado.consumivel:
+                print(f"{Fore.LIGHTGREEN_EX}CONSUMÍVEL SELECIONADO:{Style.RESET_ALL}")
+                print(f"Nome: {item_selecionado.nome}")
+                print(f"Descrição: {item_selecionado.desc}")
+                
+                print(Fore.LIGHTYELLOW_EX + "\n[usar] " + Style.RESET_ALL + "- Usar item agora")
+                print(Fore.LIGHTYELLOW_EX + "[voltar] " + Style.RESET_ALL + "- Voltar para a mochila")
+                print(Fore.RED + "[descarte] " + Style.RESET_ALL + "- Descartar item permanentemente")
+            
+            elif item_selecionado.especial:
+                print(f"{Fore.MAGENTA}ITEM ESPECIAL SELECIONADO:{Style.RESET_ALL}")
+                print(f"Nome: {item_selecionado.nome}")
+                print(f"Descrição: {item_selecionado.desc}")
+                
+                print(Fore.LIGHTYELLOW_EX + "\n[voltar] " + Style.RESET_ALL + "- Voltar para a mochila")
+                # Itens especiais não podem ser descartados
+                
+            else:  # Assume que é arma
+                print(f"{Fore.LIGHTRED_EX}ARMA SELECIONADA:{Style.RESET_ALL}")
+                print(f"Nome: {item_selecionado.nome}")
+                print(f"Ataque: {item_selecionado.atk}")
+                print(f"Descrição: {item_selecionado.desc}")
+                
+                if item_selecionado.equipado:
+                    print("\nEsta arma está equipada")
+                    print(Fore.LIGHTYELLOW_EX + "\n[desequipar] " + Style.RESET_ALL + "- Desequipar esta arma")
+                else:
+                    if meu_jogador.item_equipado:
+                        print(f"\nVocê já está equipado com: {meu_jogador.item_equipado.nome}")
+                        print(Fore.LIGHTYELLOW_EX + "[equipar] " + Style.RESET_ALL + "- Substituir arma atual")
+                    else:
+                        print(Fore.LIGHTYELLOW_EX + "\n[equipar] " + Style.RESET_ALL + "- Equipar esta arma")
+                
+                print(Fore.LIGHTYELLOW_EX + "[voltar] " + Style.RESET_ALL + "- Voltar para a mochila")
+                print(Fore.RED + "[descarte] " + Style.RESET_ALL + "- Descartar item permanentemente")
+            
+            print("▬" * 50)
+            acao = input(Fore.LIGHTYELLOW_EX + ">> " + Style.RESET_ALL).lower()
+            
+            # Processa a ação selecionada
+            if acao == "voltar":
+                abrir_mochila()
+            
+            elif acao == "equipar":
+                if isinstance(item_selecionado, Armadura):
+                    # Desequipa armadura atual se houver
+                    if meu_jogador.armadura:
+                        meu_jogador.armadura.equipado = False
+                    
+                    # Equipa nova armadura
+                    meu_jogador.armadura = item_selecionado
+                    item_selecionado.equipado = True
+                    calcular_atributos(meu_jogador)
+                    print(f"\n{Fore.GREEN}Você equipou {item_selecionado.nome}!{Style.RESET_ALL}")
+                    time.sleep(1)
+                
+                else:  # Equipar arma
+                    # Desequipa arma atual se houver
+                    if meu_jogador.item_equipado:
+                        meu_jogador.item_equipado.equipado = False
+                    
+                    # Equipa nova arma
+                    meu_jogador.item_equipado = item_selecionado
+                    item_selecionado.equipado = True
+                    calcular_atributos(meu_jogador)
+                    print(f"\n{Fore.GREEN}Você equipou {item_selecionado.nome}!{Style.RESET_ALL}")
+                    time.sleep(1)
+                
+                abrir_mochila()
+            
+            elif acao == "desequipar":
+                if isinstance(item_selecionado, Armadura):
+                    meu_jogador.armadura = None
+                else:
+                    meu_jogador.item_equipado = None
+                
+                item_selecionado.equipado = False
+                calcular_atributos(meu_jogador)
+                print(f"\n{Fore.YELLOW}Você desequipou {item_selecionado.nome}!{Style.RESET_ALL}")
+                time.sleep(1)
+                abrir_mochila()
+            
+            elif acao == "usar" and item_selecionado.consumivel:
+                if item_selecionado.nome == 'Pocao de vida baixa':
+                    pocao_vida()
+                elif item_selecionado.nome == 'Pocao de vida media':
+                    pocao_vida_media()
+                elif item_selecionado.nome == 'Pocao de vida alta':
+                    pocao_vida_alta()
+                elif item_selecionado.nome == 'Pocao de mana baixa':
+                    pocao_mana()
+                elif item_selecionado.nome == 'Pocao de mana media':
+                    pocao_mana_media()
+                elif item_selecionado.nome == 'Pocao de mana alta':
+                    pocao_mana_alta()
+                elif item_selecionado.nome == 'Pocao de reparo':
+                    if meu_jogador.armadura:
+                        meu_jogador.armadura_vida = meu_jogador.armadura_vida_max
+                        print(f"\n{Fore.GREEN}Sua armadura foi reparada completamente!{Style.RESET_ALL}")
+                    else:
+                        print(f"\n{Fore.RED}Você não está usando armadura para reparar!{Style.RESET_ALL}")
+                
+                # Remove o item usado
+                meu_jogador.mochila.remove(item_selecionado)
+                time.sleep(1)
+                abrir_mochila()
+            
+            elif acao == "descarte" and not item_selecionado.especial:
+                confirmar = input(f"\nTem certeza que deseja descartar {item_selecionado.nome}? (s/n): ").lower()
+                if confirmar == 's':
+                    if item_selecionado.equipado:
+                        if isinstance(item_selecionado, Armadura):
+                            meu_jogador.armadura = None
+                        else:
+                            meu_jogador.item_equipado = None
+                    
+                    meu_jogador.mochila.remove(item_selecionado)
+                    print(f"\n{Fore.RED}Você descartou {item_selecionado.nome}!{Style.RESET_ALL}")
+                    time.sleep(1)
+                abrir_mochila()
+            
+            else:
+                print(Fore.RED + "\nAção inválida!" + Style.RESET_ALL)
+                time.sleep(1)
+                abrir_mochila()
+        
+        except ValueError:
+            print(Fore.RED + "\nEntrada inválida!" + Style.RESET_ALL)
+            time.sleep(1)
+            abrir_mochila()
+
+def reorganizar_mochila():
+    limpar_tela()
+    print("▬" * 50)
+    print(Fore.YELLOW + "   REORGANIZAR MOCHILA" + Style.RESET_ALL)
+    print("▬" * 50)
+    print("Escolha como organizar seus itens:")
+    print(Fore.LIGHTYELLOW_EX + "[1]" + Style.RESET_ALL + " - Por tipo (armas, armaduras, consumíveis)")
+    print(Fore.LIGHTYELLOW_EX + "[2]" + Style.RESET_ALL + " - Por nome (A-Z)")
+    print(Fore.LIGHTYELLOW_EX + "[3]" + Style.RESET_ALL + " - Por valor (mais caro primeiro)")
+    print(Fore.LIGHTYELLOW_EX + "[4]" + Style.RESET_ALL + " - Por peso (mais leve primeiro)")
+    print(Fore.LIGHTYELLOW_EX + "[voltar]" + Style.RESET_ALL + " - Voltar para a mochila")
+    
+    opcao = input(Fore.LIGHTYELLOW_EX + "\n>> " + Style.RESET_ALL).lower()
+    
+    if opcao == "voltar":
+        abrir_mochila()
+    elif opcao == "1":
+        # Organiza por tipo (já está implementado na função abrir_mochila)
+        print("\n" + Fore.GREEN + "Itens organizados por tipo!" + Style.RESET_ALL)
+        time.sleep(1)
+        abrir_mochila()
+    elif opcao == "2":
+        meu_jogador.mochila.sort(key=lambda x: x.nome)
+        print("\n" + Fore.GREEN + "Itens organizados por nome (A-Z)!" + Style.RESET_ALL)
+        time.sleep(1)
+        abrir_mochila()
+    elif opcao == "3":
+        meu_jogador.mochila.sort(key=lambda x: x.preco, reverse=True)
+        print("\n" + Fore.GREEN + "Itens organizados por valor (mais caro primeiro)!" + Style.RESET_ALL)
+        time.sleep(1)
+        abrir_mochila()
+    elif opcao == "4":
+        # Assumindo que todos os itens têm um atributo 'peso'
+        # Se não tiver, você precisará adicionar
+        print("\n" + Fore.RED + "Funcionalidade não implementada ainda!" + Style.RESET_ALL)
+        time.sleep(1)
+        reorganizar_mochila()
+    else:
+        print(Fore.RED + "\nOpção inválida!" + Style.RESET_ALL)
+        time.sleep(1)
+        reorganizar_mochila()
+
+def vender_item():
+    limpar_tela()
+    print("▬" * 50)
+    print(Fore.YELLOW + "   VENDER ITENS" + Style.RESET_ALL)
+    print("▬" * 50)
+    
+    # Filtra itens que podem ser vendidos (não especiais e não equipados)
+    itens_vendaveis = [item for item in meu_jogador.mochila 
+                      if not item.especial and not item.equipado]
+    
+    if not itens_vendaveis:
+        print(Fore.RED + "Nenhum item vendável na mochila!" + Style.RESET_ALL)
+        print("Itens equipados ou especiais não podem ser vendidos.")
+        print("\n" + "▬" * 50)
+        input(Fore.LIGHTYELLOW_EX + "\n[Pressione enter para voltar]" + Style.RESET_ALL)
+        abrir_mochila()
+    
+    # Mostra itens vendáveis
+    for i, item in enumerate(itens_vendaveis, 1):
+        print(f'{Fore.YELLOW}[{i}]{Style.RESET_ALL} {item.nome} | Valor: {item.preco} | {item.desc}')
+    
+    print("\n" + "▬" * 50)
+    print("Use os números para selecionar um item para vender ou digite:")
+    print(Fore.LIGHTYELLOW_EX + "[voltar]" + Style.RESET_ALL + " - Voltar para a mochila")
+    print(Fore.LIGHTYELLOW_EX + "[vender tudo]" + Style.RESET_ALL + " - Vender todos os itens vendáveis")
+    
+    escolha = input(Fore.LIGHTYELLOW_EX + "\n>> " + Style.RESET_ALL).lower()
+    
+    if escolha == "voltar":
+        abrir_mochila()
+    elif escolha == "vender tudo":
+        total = sum(item.preco for item in itens_vendaveis)
+        confirmar = input(f"\nVender TODOS os itens por {total} de ouro? (s/n): ").lower()
+        if confirmar == 's':
+            for item in itens_vendaveis:
+                meu_jogador.mochila.remove(item)
+            meu_jogador.ouro += total
+            print(f"\n{Fore.GREEN}Você vendeu todos os itens por {total} de ouro!{Style.RESET_ALL}")
+            time.sleep(1.5)
+        vender_item()
+    else:
+        try:
+            escolha = int(escolha) - 1
+            if escolha < 0 or escolha >= len(itens_vendaveis):
+                print(Fore.RED + "Item inválido!" + Style.RESET_ALL)
+                time.sleep(1)
+                vender_item()
+            
+            item_selecionado = itens_vendaveis[escolha]
+            confirmar = input(f"\nVender {item_selecionado.nome} por {item_selecionado.preco} de ouro? (s/n): ").lower()
+            
+            if confirmar == 's':
+                meu_jogador.mochila.remove(item_selecionado)
+                meu_jogador.ouro += item_selecionado.preco
+                print(f"\n{Fore.GREEN}Você vendeu {item_selecionado.nome} por {item_selecionado.preco} de ouro!{Style.RESET_ALL}")
+                time.sleep(1)
+            vender_item()
+        
+        except ValueError:
+            print(Fore.RED + "\nEntrada inválida!" + Style.RESET_ALL)
+            time.sleep(1)
+            vender_item()
 
 def luta(monstro, meu_jogador):
     print('▀█'+'▀'*50+'█▀')
@@ -1395,6 +1651,8 @@ def luta(monstro, meu_jogador):
         time.sleep(1.5)
         limpar_tela()
         luta(monstro, meu_jogador)
+    
+    # Ação: Atacar
     if acao == 'atacar':
         monstro.vida -= meu_jogador.atk_final
         ataque = f"você ataca {monstro.nome}\n"
@@ -1411,25 +1669,298 @@ def luta(monstro, meu_jogador):
                 aplicar_efeito(monstro)
             if monstro.pular_turno:
                 luta(monstro, meu_jogador)
+            
+            # Cálculo do dano recebido com sistema de armadura
+            dano = monstro.atk
+            dano_original = dano  # Guarda o dano original para exibição
+            
+            # Aplica redução de dano da armadura se existir
+            if meu_jogador.armadura and meu_jogador.armadura_resistencia > 0:
+                dano = max(1, int(dano * (1 - (meu_jogador.armadura_resistencia / 100))))
+                
+                # Exibe informações de redução de dano
+                print(f"Dano original: {dano_original} | Reduzido para: {dano} ({meu_jogador.armadura_resistencia}% de resistência)")
+            
+            # Aplica dano à armadura primeiro, se houver vida na armadura
+            if meu_jogador.armadura and meu_jogador.armadura_vida > 0:
+                vida_armadura_antes = meu_jogador.armadura_vida
+                meu_jogador.armadura_vida -= dano
+                
+                # Se a armadura quebrar, o dano excedente vai para a vida
+                if meu_jogador.armadura_vida < 0:
+                    dano_excedente = -meu_jogador.armadura_vida
+                    meu_jogador.vida -= dano_excedente
+                    meu_jogador.armadura_vida = 0
+                    print(f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)")
+                else:
+                    print(f"Sua armadura absorveu {dano} de dano")
+            else:
+                # Sem armadura ou armadura sem vida, todo dano vai para vida
+                meu_jogador.vida -= dano
+            
+            # Ataque especial do monstro a cada 3 turnos
             if monstro.atk_turnos >= 3:
-                meu_jogador.vida -= monstro.atk*2
-                print(f'O {monstro.nome} te ataca ferozmente')
-                time.sleep(1.5)
-                limpar_tela()
+                dano_especial = monstro.atk * 2
+                print(f'O {monstro.nome} te ataca ferozmente causando {dano_especial} de dano!')
+                
+                # Aplica redução de dano especial
+                if meu_jogador.armadura and meu_jogador.armadura_resistencia > 0:
+                    dano_especial = max(1, int(dano_especial * (1 - (meu_jogador.armadura_resistencia / 100))))
+                    print(f"Dano especial reduzido para: {dano_especial}")
+                
+                # Aplica dano especial
+                if meu_jogador.armadura and meu_jogador.armadura_vida > 0:
+                    vida_armadura_antes = meu_jogador.armadura_vida
+                    meu_jogador.armadura_vida -= dano_especial
+                    
+                    if meu_jogador.armadura_vida < 0:
+                        dano_excedente = -meu_jogador.armadura_vida
+                        meu_jogador.vida -= dano_excedente
+                        meu_jogador.armadura_vida = 0
+                        print(f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)")
+                    else:
+                        print(f"Sua armadura absorveu {dano_especial} de dano especial")
+                else:
+                    meu_jogador.vida -= dano_especial
+                
                 monstro.atk_turnos = 0
                 if monstro.atk_efeito:
                     meu_jogador.add_efeito(monstro.atk_efeito)
-                meu_jogador.add_efeito(monstro.atk_efeito)
+                time.sleep(1.5)
+                limpar_tela()
                 luta(monstro, meu_jogador)
-            meu_jogador.vida -= monstro.atk
-            ataque2 = f'\no {monstro.nome} te ataca\n'
+            
+            # Ataque normal do monstro
+            ataque2 = f'\no {monstro.nome} te ataca causando {dano} de dano\n'
             for caractere in ataque2:
                 sys.stdout.write(caractere)
                 sys.stdout.flush()
                 time.sleep(0.001)
             loading()
+            input("Pressione qualquer tecla para continuar...")
+        
         intervalo()
         limpar_tela()
+        
+    # Ação: Magia (mantido igual ao original)
+    elif acao == 'magia':
+        if meu_jogador.magias:
+            for i in range(len(meu_jogador.magias)):
+                magia = meu_jogador.magias[i]
+                print(f'{i+1}. {magia.nome} | DANO: {magia.dano} + DANO ADICIONAL: {meu_jogador.dano_magico} | custo de mana: {magia.mana_gasta} | desc: {magia.desc}')
+            print("Use números para escolher as magias")
+            escolha = input(">>")
+            try:
+                escolha = int(escolha)-1
+                if escolha not in range(0, len(meu_jogador.magias)):
+                    print(Fore.RED +'Magia inválida'+Style.RESET_ALL)
+                    time.sleep(1.5)
+                    limpar_tela()
+                    luta(monstro, meu_jogador)
+
+                if meu_jogador.mana < meu_jogador.magias[escolha].mana_gasta:
+                    print(Fore.RED+'**MANA INSUFICIENTE**'+Style.RESET_ALL)
+                    time.sleep(1.5)
+                    limpar_tela()
+                    luta(monstro, meu_jogador)
+
+                monstro.vida -= (meu_jogador.magias[escolha].dano + meu_jogador.dano_magico)
+                meu_jogador.mana -= meu_jogador.magias[escolha].mana_gasta
+                monstro.add_efeito(meu_jogador.magias[escolha].efeito)
+                magias = f'Você lança {meu_jogador.magias[escolha].nome} em {monstro.nome}'
+                for caractere in magias:
+                    sys.stdout.write(caractere)
+                    sys.stdout.flush()
+                    time.sleep(0.001)
+                loading()
+                intervalo()
+
+                if monstro.vida > 0:
+                    monstro.atk_turnos += 1
+                    if monstro.efeitos_status:
+                        aplicar_efeito(monstro)
+                    if monstro.pular_turno:
+                        limpar_tela()
+                        luta(monstro, meu_jogador)
+                    
+                    # Cálculo do dano recebido após magia (com sistema de armadura)
+                    dano = monstro.atk
+                    
+                    if meu_jogador.armadura and meu_jogador.armadura_resistencia > 0:
+                        dano = max(1, int(dano * (1 - (meu_jogador.armadura_resistencia / 100))))
+                    
+                    if meu_jogador.armadura and meu_jogador.armadura_vida > 0:
+                        vida_armadura_antes = meu_jogador.armadura_vida
+                        meu_jogador.armadura_vida -= dano
+                        
+                        if meu_jogador.armadura_vida < 0:
+                            dano_excedente = -meu_jogador.armadura_vida
+                            meu_jogador.vida -= dano_excedente
+                            meu_jogador.armadura_vida = 0
+                            print(f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)")
+                        else:
+                            print(f"Sua armadura absorveu {dano} de dano")
+                    else:
+                        meu_jogador.vida -= dano
+                    
+                    if monstro.atk_turnos >= 3:
+                        dano_especial = monstro.atk * 2
+                        print(f'\nO {monstro.nome} te ataca ferozmente causando {dano_especial} de dano!')
+                        
+                        if meu_jogador.armadura and meu_jogador.armadura_resistencia > 0:
+                            dano_especial = max(1, int(dano_especial * (1 - (meu_jogador.armadura_resistencia / 100))))
+                            print(f"Dano especial reduzido para: {dano_especial}")
+                        
+                        if meu_jogador.armadura and meu_jogador.armadura_vida > 0:
+                            vida_armadura_antes = meu_jogador.armadura_vida
+                            meu_jogador.armadura_vida -= dano_especial
+                            
+                            if meu_jogador.armadura_vida < 0:
+                                dano_excedente = -meu_jogador.armadura_vida
+                                meu_jogador.vida -= dano_excedente
+                                meu_jogador.armadura_vida = 0
+                                print(f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)")
+                            else:
+                                print(f"Sua armadura absorveu {dano_especial} de dano especial")
+                        else:
+                            meu_jogador.vida -= dano_especial
+                        
+                        monstro.atk_turnos = 0
+                        if monstro.atk_efeito:
+                            meu_jogador.add_efeito(monstro.atk_efeito)
+                        limpar_tela()
+                        luta(monstro, meu_jogador)
+
+                    ataque_monstro = Fore.RED+f'\no {monstro.nome} te ataca\n'+Style.RESET_ALL
+                    for caractere in ataque_monstro:
+                        sys.stdout.write(caractere)
+                        sys.stdout.flush()
+                        time.sleep(0.001)
+                    loading()
+                intervalo()
+                limpar_tela()
+            except:
+                print(Fore.RED+'\nComando inválido'+Style.RESET_ALL)
+                time.sleep(1.5)
+                limpar_tela()
+                luta(monstro, meu_jogador)
+        else:
+            print('Você ainda não aprendeu magias')
+            loading()
+            
+            # Dano recebido quando não tem magias (com sistema de armadura)
+            dano = monstro.atk
+            
+            if meu_jogador.armadura and meu_jogador.armadura_resistencia > 0:
+                dano = max(1, int(dano * (1 - (meu_jogador.armadura_resistencia / 100))))
+            
+            if meu_jogador.armadura and meu_jogador.armadura_vida > 0:
+                vida_armadura_antes = meu_jogador.armadura_vida
+                meu_jogador.armadura_vida -= dano
+                
+                if meu_jogador.armadura_vida < 0:
+                    dano_excedente = -meu_jogador.armadura_vida
+                    meu_jogador.vida -= dano_excedente
+                    meu_jogador.armadura_vida = 0
+                    print(f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)")
+                else:
+                    print(f"Sua armadura absorveu {dano} de dano")
+            else:
+                meu_jogador.vida -= dano
+            
+            print(f'o {monstro.nome} te ataca')
+            intervalo()
+            limpar_tela()
+    
+    # Ação: Mochila (mantido igual ao original)
+    elif acao == 'mochila':
+        consumiveis = []
+        for consumivel in meu_jogador.mochila:
+            if consumivel.consumivel:
+                consumiveis.append(consumivel)
+        if not consumivel:
+            print(Fore.RED+'Nenhum item para ser usado'+Style.RESET_ALL)
+            time.sleep(1.5)
+            limpar_tela()
+            luta(monstro, meu_jogador)
+        for i, consumivel in enumerate(consumiveis):
+            print(f'{i+1}. {consumivel.nome} | {consumivel.desc}')
+        print('Use os números para selecionar os itens')
+        escolha = input('>>').lower()
+        try:
+            escolha = int(escolha)-1
+            if escolha not in range(0, len(consumiveis)):
+                print(Fore.RED+'\nComando inválido'+Style.RESET_ALL)
+                limpar_tela()
+                luta(monstro, meu_jogador)
+            print(f'{consumiveis[escolha].nome} | {consumiveis[escolha].desc}')
+            print('[usar | voltar]')
+            acao = input('>>').lower()
+            if acao not in ['usar', 'voltar']:
+                print(Fore.RED+'\nComando inválido'+Style.RESET_ALL)
+                limpar_tela()
+                luta(monstro, meu_jogador)
+            if acao == 'usar':
+                if meu_jogador.mochila[escolha].nome == 'Pocao de vida baixa':
+                    pocao_vida()
+                elif meu_jogador.mochila[escolha].nome == 'Pocao de vida media':
+                    pocao_vida_media()
+                elif meu_jogador.mochila[escolha].nome == 'Pocao de vida alta':
+                    pocao_vida_alta()
+                elif meu_jogador.mochila[escolha].nome == 'Pocao de mana baixa':
+                    pocao_mana()
+                elif meu_jogador.mochila[escolha].nome == 'Pocao de mana media':
+                    pocao_mana_media()
+                elif meu_jogador.mochila[escolha].nome == 'Pocao de mana alta':
+                    pocao_mana_alta()
+                for i, item in enumerate(meu_jogador.mochila):
+                    if item.nome == consumiveis[escolha].nome:
+                        meu_jogador.mochila.pop(i)
+                limpar_tela()
+                luta(monstro, meu_jogador)
+            elif acao == 'voltar':
+                limpar_tela()
+                luta(monstro, meu_jogador)
+        except:
+            print(Fore.RED+'\nComando inválido'+Style.RESET_ALL)
+            limpar_tela()
+            luta(monstro, meu_jogador)
+    
+    # Ação: Fugir (mantido igual ao original)
+    elif acao == 'fugir':
+        fugir()
+    
+    # Verifica condições de vitória/derrota
+    if meu_jogador.vida > 0 and monstro.vida > 0:
+        limpar_tela()
+        luta(monstro, meu_jogador)
+        
+    # Jogador morre
+    if meu_jogador.vida <= 0:
+        meu_jogador.game_over = True
+        main_game_loop()
+
+    # Monstro morre
+    elif monstro.vida <= 0:
+        if meu_jogador.local == 'c2' and mapa['c2']['contador2'] == 0:
+            mapa['c2']['contador2'] += 1
+            limpar_tela()
+            print(f'VOCÊ DERROTOU {monstro.nome}')
+            experiencia(monstro)
+            time.sleep(1)
+            if monstro.boss == True:
+                mapa[meu_jogador.local]['SOLVED'] = True
+            drop(monstro)
+            corredor()
+        limpar_tela()
+        print(f'VOCÊ DERROTOU {monstro.nome}')
+        experiencia(monstro)
+        time.sleep(1)
+        if monstro.boss == True:
+            mapa[meu_jogador.local]['SOLVED'] = True
+        drop(monstro)
+        print_local()
+        main_game_loop()
         
     elif acao == 'magia':
         if meu_jogador.magias:
@@ -1682,6 +2213,14 @@ def mostrar_status(self):
     print(f'█             Nome: {self.nome} LVL:{self.nivel} XP: {self.xp}/{self.xp_max}            \n█')
     print('''█         Vida: '''+Fore.RED+f'''{self.vida}'''+Style.RESET_ALL+'''/'''+Fore.RED+f'''{self.vida_max}'''+Style.RESET_ALL+'''        ATK: '''+Fore.GREEN+f'''{self.atk}'''+Style.RESET_ALL+''' 
 █         Mana: '''+Fore.BLUE+f'''{self.mana}/{self.mana_max}'''+Style.RESET_ALL+'''      MAG.ATK: '''+Fore.LIGHTBLUE_EX+f'''{self.dano_magico}\n'''+Style.RESET_ALL+'█')
+    
+    # Adiciona informações da armadura
+    if self.armadura:
+        print(f'█         Armadura: {self.armadura.nome} DEF: {self.armadura.defesa} RES: {self.armadura.resistencia}%')
+        print(f'█         Vida Armadura: {self.armadura_vida}/{self.armadura_vida_max}')
+    else:
+        print('█         Armadura: Nenhuma equipada')
+    
     if self.item_equipado:
         print(f'█         arma: {self.item_equipado.nome} ATK: {self.item_equipado.atk}                ')
         for efeito in self.efeitos_status:
@@ -1916,10 +2455,18 @@ def setup_jogo():
     time.sleep(1.5)
 
     if meu_jogador.classe == 'guerreiro':
+        # Adicione as poções de vida
         pocao_vida_baixa = lista_consumiveis[0]
         pocao_vida_media = lista_consumiveis[1]
         pocao_vida_alta = lista_consumiveis[2]
+        
+        # Arma padrão
         arma_padrao = lista_armas[2]
+        
+        # Armadura inicial para guerreiro
+        armadura_inicial = lista_armaduras[0]
+        
+        # Atributos base
         meu_jogador.vida_base = 100
         meu_jogador.vida = meu_jogador.vida_base
         meu_jogador.vida_max = meu_jogador.vida
@@ -1928,13 +2475,64 @@ def setup_jogo():
         meu_jogador.mana_max = meu_jogador.mana
         meu_jogador.atk_base = 6
         meu_jogador.forca = 2
-        meu_jogador.atk = meu_jogador.atk_base
-        meu_jogador.item_equipado = Item(arma_padrao['nome'], arma_padrao['atk'], arma_padrao['desc'], True, arma_padrao['consumivel'], arma_padrao['preco'], arma_padrao['especial'])
+        
+        # Equipar arma
+        meu_jogador.item_equipado = Item(
+            arma_padrao['nome'], 
+            arma_padrao['atk'], 
+            arma_padrao['desc'], 
+            True, 
+            arma_padrao['consumivel'], 
+            arma_padrao['preco'], 
+            arma_padrao['especial']
+        )
+        
+        # Equipar armadura
+        meu_jogador.armadura = Armadura(
+            armadura_inicial['nome'],
+            armadura_inicial['defesa'],
+            armadura_inicial['vida_max'],
+            armadura_inicial['resistencia'],
+            armadura_inicial['desc'],
+            True,  # Já equipada
+            armadura_inicial['consumivel'],
+            armadura_inicial['preco'],
+            armadura_inicial['especial']
+        )
+        meu_jogador.armadura_vida = meu_jogador.armadura.vida_max
+        
+        # Adicionar itens à mochila
         meu_jogador.add_item(meu_jogador.item_equipado)
-        meu_jogador.atk_final = meu_jogador.atk + meu_jogador.item_equipado.atk
-        meu_jogador.add_item(Item(pocao_vida_baixa['nome'], pocao_vida_baixa['atk'], pocao_vida_baixa['desc'], pocao_vida_baixa['equipado'], pocao_vida_baixa['consumivel'], pocao_vida_baixa['preco'], pocao_vida_baixa['especial']))
-        meu_jogador.add_item(Item(pocao_vida_media['nome'], pocao_vida_media['atk'], pocao_vida_media['desc'], pocao_vida_media['equipado'], pocao_vida_media['consumivel'], pocao_vida_media['preco'], pocao_vida_media['especial']))
-        meu_jogador.add_item(Item(pocao_vida_alta['nome'], pocao_vida_alta['atk'], pocao_vida_alta['desc'], pocao_vida_alta['equipado'], pocao_vida_alta['consumivel'], pocao_vida_alta['preco'], pocao_vida_alta['especial']))
+        meu_jogador.add_item(meu_jogador.armadura)
+        meu_jogador.add_item(Item(
+            pocao_vida_baixa['nome'], 
+            pocao_vida_baixa['atk'], 
+            pocao_vida_baixa['desc'], 
+            pocao_vida_baixa['equipado'], 
+            pocao_vida_baixa['consumivel'], 
+            pocao_vida_baixa['preco'], 
+            pocao_vida_baixa['especial']
+        ))
+        meu_jogador.add_item(Item(
+            pocao_vida_media['nome'], 
+            pocao_vida_media['atk'], 
+            pocao_vida_media['desc'], 
+            pocao_vida_media['equipado'], 
+            pocao_vida_media['consumivel'], 
+            pocao_vida_media['preco'], 
+            pocao_vida_media['especial']
+        ))
+        meu_jogador.add_item(Item(
+            pocao_vida_alta['nome'], 
+            pocao_vida_alta['atk'], 
+            pocao_vida_alta['desc'], 
+            pocao_vida_alta['equipado'], 
+            pocao_vida_alta['consumivel'], 
+            pocao_vida_alta['preco'], 
+            pocao_vida_alta['especial']
+        ))
+        
+        # Calcular atributos finais
         calcular_atributos(meu_jogador)
 
     elif meu_jogador.classe == 'mago':
