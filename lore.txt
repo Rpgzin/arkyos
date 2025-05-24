@@ -141,7 +141,7 @@ Descrição:
 Uma vasta oficina abandonada,tomada por engrenagens enferrujadas que ainda giram lentamente.
 
 Ao Examinar:
-Pêndulos partidos oscilam no teto, e no centro há uma grande máquina quebrada com um rosto esculpido nela — 
+Pêndulos partidos oscilam no teto, e no centro da sala há uma grande máquina quebrada com um rosto esculpido nela — 
 uma máscara de dor esculpida no metal.
 O som das engrenagens forma palavras quase humanas. Um relógio gigante ao fundo gira... ao contrário.
 ====================================================================================================================================
@@ -151,7 +151,7 @@ Se o jogador tentar consertar a máquina, poderá obter:
 
 Uma Armadura mecanica(Passiva da armadura: Escudo de vida com Base na Sua Mana Maxima)
 
-Se o jogador falhar no reparo, o Robo ativara uma defesa: um combate contra múltiplos pequenos autômatos instáveis.
+Se o jogador falhar no reparo, o Robo ativara uma defesa: um combate contra um robo grande.
 
 (NOTA:POR FAVOR COLOCAR PROPORÇÃO DE 80%PRA FALHAR E 20% PRA TER SUCESSO)
 

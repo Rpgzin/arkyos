@@ -373,11 +373,16 @@ lista_itens_especiais = [
     {'nome': 'Máscara da Medo', 'atk': 0, 'preco': 00, 'desc': 'Máscara pega no Salão das Vozes Vazias. O uso da mesma é desconhecido.', 'equipado': False, 'consumivel': False, 'especial': True},
     {'nome': 'Máscara da Alegria', 'atk': 0, 'preco': 00, 'desc': 'Máscara pega no Salão das Vozes Vazias. O uso da mesma é desconhecido.', 'equipado': False, 'consumivel': False, 'especial': True},
     {'nome': 'Máscara da Loucura', 'atk': 0, 'preco': 00, 'desc': 'Máscara pega no Salão das Vozes Vazias. O uso da mesma é desconhecido.', 'equipado': False, 'consumivel': False, 'especial': True},
+    {'nome': 'Núcleo de Robo', 'atk': 0, 'preco': 00, 'desc': 'Pode ser usado para dar vida a um robo', 'equipado': False, 'consumivel': False, 'especial': True},
 ]  
+
+lista_nucleo = [
+    {'nome': 'Núcleo de Robo', 'atk': 0, 'preco': 00, 'desc': 'Pode ser usado para dar vida a um robo', 'equipado': False, 'consumivel': False, 'especial': True},
+]
+
 lista_itens_bosses = [
     { 'nome': 'Pocao de vida baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de vida, cura 15 pontos de vida.', 'equipado': False, 'consumivel': True, 'especial': False},
     { 'nome': 'Pocao de mana baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de mana, cura 15 pontos de mana.', 'equipado': False, 'consumivel': True, 'especial': False},
-
 ] 
 
 lista_magias = [
@@ -392,16 +397,17 @@ lista_efeitos = [
 ]
 
 lista_monstros_normais = [
-    {'nome': 'slime', 'vida': 10, 'nivel': 1, 'atk': 2, 'xp': 150, 'ouro': 100, 'boss': False},
-    {'nome': 'goblin', 'vida': 20, 'nivel': 2, 'atk': 4, 'xp': 100, 'ouro': 200, 'boss': False},
-    {'nome': 'lobo selvagem', 'vida': 25, 'nivel': 3, 'atk': 5, 'xp': 15, 'ouro': 100, 'boss': False},
-    {'nome': 'esqueleto', 'vida': 30, 'nivel': 4, 'atk': 6, 'xp': 20, 'ouro': 200, 'boss': False},
-    {'nome': 'zumbi', 'vida': 35, 'nivel': 4, 'atk': 4, 'xp': 18, 'ouro': 100, 'boss': False},
-    {'nome': 'morcego gigante', 'vida': 28, 'nivel': 3, 'atk': 6, 'xp': 12, 'ouro': 200, 'boss': False},
-    {'nome': 'aranha venenosa', 'vida': 22, 'nivel': 2, 'atk': 7, 'xp': 14, 'ouro': 100, 'boss': False},
-    {'nome': 'orc', 'vida': 40, 'nivel': 5, 'atk': 8, 'xp': 25, 'ouro': 200, 'boss': False},
-    {'nome': 'troll da caverna', 'vida': 50, 'nivel': 6, 'atk': 10, 'xp': 30, 'ouro': 300, 'boss': False},
-    {'nome': 'gárgula', 'vida': 45, 'nivel': 5, 'atk': 9, 'xp': 28, 'ouro': 200, 'boss': False},
+    {'nome': 'slime', 'vida': 10, 'nivel': 1, 'atk': 2, 'xp': 150, 'ouro': 100, 'boss': False}, #0
+    {'nome': 'goblin', 'vida': 20, 'nivel': 2, 'atk': 4, 'xp': 100, 'ouro': 200, 'boss': False}, #1
+    {'nome': 'lobo selvagem', 'vida': 25, 'nivel': 3, 'atk': 5, 'xp': 15, 'ouro': 100, 'boss': False}, #2
+    {'nome': 'esqueleto', 'vida': 30, 'nivel': 4, 'atk': 6, 'xp': 20, 'ouro': 200, 'boss': False}, #3
+    {'nome': 'zumbi', 'vida': 35, 'nivel': 4, 'atk': 4, 'xp': 18, 'ouro': 100, 'boss': False}, #4
+    {'nome': 'morcego gigante', 'vida': 28, 'nivel': 3, 'atk': 6, 'xp': 12, 'ouro': 200, 'boss': False}, #5
+    {'nome': 'aranha venenosa', 'vida': 22, 'nivel': 2, 'atk': 7, 'xp': 14, 'ouro': 100, 'boss': False}, #6
+    {'nome': 'orc', 'vida': 40, 'nivel': 5, 'atk': 8, 'xp': 25, 'ouro': 200, 'boss': False}, #7
+    {'nome': 'troll da caverna', 'vida': 50, 'nivel': 6, 'atk': 10, 'xp': 30, 'ouro': 300, 'boss': False}, #8
+    {'nome': 'gárgula', 'vida': 45, 'nivel': 5, 'atk': 9, 'xp': 28, 'ouro': 200, 'boss': False}, #9
+    {'nome': 'Robô Gigante', 'vida': 25, 'nivel': 7, 'atk': 15, 'xp': 100, 'ouro': 70, 'boss': True}, #10
 ]
 
 lista_monstros_robo = [
@@ -409,7 +415,7 @@ lista_monstros_robo = [
     {'nome': 'Autômato', 'vida': 20, 'nivel': 2, 'atk': 6, 'xp': 30, 'ouro': 4, 'boss': False},
     {'nome': 'Autômato', 'vida': 20, 'nivel': 3, 'atk': 7, 'xp': 40, 'ouro': 6, 'boss': False},
     {'nome': 'Autômato', 'vida': 20, 'nivel': 4, 'atk': 8, 'xp': 50, 'ouro': 8, 'boss': False},
-    {'nome': 'Autômato', 'vida': 20, 'nivel': 5, 'atk': 9, 'xp': 60, 'ouro': 10, 'boss': False},
+    {'nome': 'Autômato', 'vida': 20, 'nivel': 5, 'atk': 9, 'xp': 60, 'ouro': 10,'boss': False},
 ]
 
 lista_monstros_invocacoes = [
@@ -496,9 +502,11 @@ def loucura():
 
 monstro = lista_monstros_fixos[0]
 monstro2 = lista_monstros_normais[1]
+automato = lista_monstros_normais[10]
 efeito_boss = Efeito(lista_efeitos[1]['nome'], lista_efeitos[1]['tipo'], lista_efeitos[1]['tempo'], lista_efeitos[1]['dano'])
 guardiao_enraizado = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'], monstro['ouro'], monstro['boss'], efeito_boss)
 monstro_exemplo2 = Monstro(monstro2['nome'], monstro2['vida'], monstro2['nivel'], monstro2['atk'], monstro2['xp'], monstro2['ouro'], monstro2['boss'])
+robot = Monstro(automato['nome'], automato['vida'], automato['nivel'], automato['atk'], automato['xp'], automato['ouro'], automato['boss'])
 
 guardiao_enraizado.drops = [
     {'item': Item(lista_itens_bosses[0]['nome'], lista_itens_bosses[0]['atk'],
@@ -731,17 +739,26 @@ Uma mensagem é escrita na parede "Derrame sangue no símbolo e acorde aqueles q
         'contador' : 0
     },
     'c2': {
-        'NOME_LOCAL': "Sala2 Terceiro andar",
-        'DESCRICAO': 'Descrição da sala c2.',
-        'EXAMINAR': 'Eco assustador.',
+        'NOME_LOCAL': "Oficina do Relógio Parado",
+        'DESCRICAO': 'Uma vasta oficina abandonada,tomada por engrenagens enferrujadas que ainda giram lentamente.',
+        'EXAMINAR': '''
+  Pêndulos partidos oscilam no teto, e no centro da sala há uma grande máquina quebrada com um rosto esculpido nela. 
+        O som das engrenagens forma palavras quase humanas. Um relógio gigante ao fundo gira ao contrário.
+          Um constructo quase completo permanesce a sua frente, apenas o seu núcleo está faltando.
+Ao olhar para a sua direita, há um corredor com paredes de ferro corroído e autômatos enferrujados, aparentemente desligados.
+                     Ao final deste corredor aparenta ter um báu de madeira.
+                    Deseja ir ao corredor ou Robo? (Digite corredor ou robo)
+                   ''',
         'SOLVED': False,
         'SUBIR': '',
         'DESCER': 'd1',
         'AVANÇAR': '',
         'RETORNAR': 'c1',
         'MONSTRO': '',
-        'LOCAIS': '',
-        'contador' : 0
+        'LOCAIS': ['corredor', 'robo'],
+        'contador' : 0,
+        'contador2' : 0,
+        'passagem' : True
     },
     'd1': {
         'NOME_LOCAL': "Sala1 Quarto andar",
@@ -902,7 +919,7 @@ def prompt():
 def locais():
     print(Fore.LIGHTYELLOW_EX + 'O que deseja fazer?' + Style.RESET_ALL)
     acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
-    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'],'raiva','medo','alegria','loucura', 'sair', 'pegar', 'invocar'
+    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'],'raiva','medo','alegria','loucura', 'sair', 'pegar', 'invocar', 'robo', 'corredor',
     
     while acao not in acoes_aceitas:
         print(Fore.RED + 'Acao inválida, tente novamente. (caso não tenha mais opções, digite sair)'+Style.RESET_ALL)
@@ -930,6 +947,10 @@ def locais():
         pegar()
     elif acao == 'invocar':
         encontro_aleatorio()
+    elif acao == 'robo':
+        robo()
+    elif acao == 'corredor':
+        corredor()
     else:
         print('Acao inválida, tente novamente.')
         locais()
@@ -998,6 +1019,78 @@ def boss_enraizado():
         main_game_loop()
     else:
         print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
+        main_game_loop()
+
+def robo():
+    nucleo_no_inventario = None
+    # Procura pelo núcleo no inventário
+    for item in meu_jogador.mochila:
+        if item.nome == 'Núcleo de Robo':
+            nucleo_no_inventario = item
+            break
+    
+    if nucleo_no_inventario:
+        print('Você usa o Núcleo de Robo para tentar restaurar o robô.')
+        # Remove o núcleo do inventário
+        meu_jogador.mochila.remove(nucleo_no_inventario)
+        
+        aleatorio = random.randint(1, 100)
+        if aleatorio >= 40:
+            print('O robô se restaurou. Ele se levanta e te dá um item.')
+            # Aqui você pode adicionar a lógica para dar um item ao jogador
+            time.sleep(1.5)
+            limpar_tela()
+            print_local()
+            main_game_loop()
+        else:
+            print('O robô se restaurou, mas com olhos vermelhos, e te ataca!')
+            time.sleep(1.5)
+            luta(robot, meu_jogador)
+    else:
+        print('Você não tem o Núcleo de Robo no inventário.')
+        time.sleep(1.5)
+        limpar_tela()
+        print_local()
+        main_game_loop()
+    
+def corredor():
+    if meu_jogador.local == 'c2':
+        item = lista_itens_especiais[5]
+        if mapa['c2']['passagem'] == True:
+            if mapa['c2']['contador2'] == 0:
+                print('Você adentra o corredor e passa por vários automatos desligados, porém um deles aparenta se mexer e te ataca.')
+                time.sleep(1.5)
+                limpar_tela()
+                luta(robot, meu_jogador)
+            elif meu_jogador.vida > 0:
+                print('''Você derrotou o automato e continua pelo corredor.
+        Você chega no final do corredor e encontra um baú.''')
+                escolha = input('Deseja abrir o baú? [s/n]\n>> ')
+                if escolha == 's':
+                    print('O baú abre e revela um item.')
+                    mapa['c2']['passagem'] = False
+                    meu_jogador.add_item(Item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'], item['preco'], item['especial']))
+                    time.sleep(1.5)
+                    limpar_tela()
+                    print_local()
+                    main_game_loop()          
+                if escolha == 'n':
+                    print('Você volta para o centro da sala.')
+                    time.sleep(1.5)
+                    limpar_tela()
+                    print_local()
+                    main_game_loop()
+        elif mapa['c2']['passagem'] == False:
+            print('Voce ja pegou o que estava no bau.')
+            time.sleep(1.5)
+            limpar_tela()
+            print_local()
+            main_game_loop()
+    else:
+        print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
+        time.sleep(1.5)
+        limpar_tela()
+        print_local()
         main_game_loop()
 
 def pegar():
@@ -1277,7 +1370,6 @@ def abrir_mochila():
         print(Fore.RED +"Mochila vazia"+Style.RESET_ALL)
 
 def luta(monstro, meu_jogador):
-    meu_jogador.combate = True
     print('▀█'+'▀'*50+'█▀')
     efeitos = ''
     for efeito in monstro.efeitos_status:
@@ -1485,6 +1577,16 @@ def luta(monstro, meu_jogador):
 
     # monstro morre
     elif monstro.vida <= 0:
+        if meu_jogador.local == 'c2' and mapa['c2']['contador2'] == 0:
+            mapa['c2']['contador2'] += 1
+            limpar_tela()
+            print(f'VOCÊ DERROTOU {monstro.nome}')
+            experiencia(monstro)
+            time.sleep(1)
+            if monstro.boss == True:
+                mapa[meu_jogador.local]['SOLVED'] = True
+            drop(monstro)
+            corredor()
         limpar_tela()
         print(f'VOCÊ DERROTOU {monstro.nome}')
         experiencia(monstro)
@@ -1526,6 +1628,12 @@ def drop(monstro):
             itens_que_droparam.append(drop['item'])
     
     if not itens_que_droparam:
+        if meu_jogador.local == 'c2' and mapa['c2']['contador2'] == 1:
+            print(f"\nO {monstro.nome} não dropou nenhum item.")
+            mapa[meu_jogador.local]['MONSTRO'] = ''
+            mapa['c2']['contador2'] += 1
+            limpar_tela()
+            corredor()
         print(f"\nO {monstro.nome} não dropou nenhum item.")
         mapa[meu_jogador.local]['MONSTRO'] = ''
         print_local()
