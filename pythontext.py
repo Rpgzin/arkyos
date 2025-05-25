@@ -132,7 +132,7 @@ def exibir_status(jogador):
         └───────────────────────────────────────────────────┘   
 '''.upper())
     print(f'Nome:{jogador.nome} LVL: {jogador.nivel}'+Style.RESET_ALL+f' XP: {jogador.xp}/{jogador.xp_max}')
-    print('vida:'+Fore.RED+f' {jogador.vida}/{jogador.vida_max}'+Style.RESET_ALL+ ' / MANA: '+Fore.BLUE+f'{jogador.mana}/{jogador.mana_max}'+Style.RESET_ALL+' / ATK: '+Fore.YELLOW+f'{jogador.atk}'+Style.RESET_ALL+' / MAG.ATK: '+Fore.LIGHTBLUE_EX+f'{jogador.dano_magico}')
+    print('vida:'+Fore.RED+f' {jogador.vida}/{jogador.vida_max}'+Style.RESET_ALL+ ' / MANA: '+Fore.BLUE+f'{jogador.mana}/{jogador.mana_max}'+Style.RESET_ALL+' / ATK: '+Fore.YELLOW+f'{jogador.atk}'+Style.RESET_ALL+' / MAG.ATK: '+Fore.LIGHTBLUE_EX+f'{jogador.dano_magico}'+Style.RESET_ALL)
     if jogador.item_equipado:
         print(f'arma: {jogador.item_equipado.nome} ATK: {jogador.item_equipado.atk}')
     else:
@@ -140,7 +140,7 @@ def exibir_status(jogador):
     print(f'forca: '+Fore.GREEN+f'{jogador.forca}'+Style.RESET_ALL+' fortitude: '+Fore.RED+f'{jogador.fortitude}'+Style.RESET_ALL+' inteligência: '+Fore.BLUE+f'{jogador.inteligencia}'+Style.RESET_ALL)
     if jogador.armadura:
         print(f'armadura: {jogador.armadura.nome} DEF: {jogador.armadura.defesa} RES: {jogador.armadura.resistencia}%')
-        print(f'vida da armadura: {jogador.armadura_vida}/{jogador.armadura_vida_max}')
+        print('vida da armadura: '+Fore.CYAN+f'{jogador.armadura_vida}'+Style.RESET_ALL+'/'+Fore.CYAN+f'{jogador.armadura_vida_max}'+Style.RESET_ALL)
     else:
         print('armadura: Nenhuma armadura equipada')
 
@@ -298,6 +298,11 @@ def pocao_vida_alta():
     if meu_jogador.vida > meu_jogador.vida_max:
         meu_jogador.vida = meu_jogador.vida_max
     print (Fore.LIGHTGREEN_EX+"Você bebeu a poção!!!"+Style.RESET_ALL)
+def carne_homunculo():
+    meu_jogador.vida += 80
+    if meu_jogador.vida > meu_jogador.vida_max:
+        meu_jogador.vida = meu_jogador.vida_max
+    print (Fore.LIGHTGREEN_EX+"Você comeu a carne do homunculo!!!"+Style.RESET_ALL)
 
 def pocao_mana():
     meu_jogador.mana += 15
@@ -351,7 +356,7 @@ lista_armaduras = [
     'nome': 'Armadura de Iniciante', 
     'defesa': 1, 
     'vida_max': 20, 
-    'resistencia': 5, 
+    'resistencia': 0, 
     'desc': 'Armadura básica para guerreiros iniciantes',
     'equipado': False, 
     'consumivel': False, 
@@ -363,7 +368,7 @@ lista_armaduras = [
         'nome': 'Armadura de Couro', 
         'defesa': 2, 
         'vida_max': 30, 
-        'resistencia': 10, 
+        'resistencia': 0, 
         'desc': 'Armadura leve feita de couro endurecido.', 
         'comprado': False, 
         'equipado': False, 
@@ -375,7 +380,7 @@ lista_armaduras = [
         'nome': 'Armadura de Ferro', 
         'defesa': 4, 
         'vida_max': 45, 
-        'resistencia': 15, 
+        'resistencia': 0, 
         'preco': 50, 
         'desc': 'Armadura média feita de placas de ferro.', 
         'comprado': False, 
@@ -387,7 +392,7 @@ lista_armaduras = [
         'nome': 'Armadura de Aço', 
         'defesa': 6, 
         'vida_max': 50, 
-        'resistencia': 50, 
+        'resistencia': 0, 
         'preco': 70, 
         'desc': 'Armadura pesada feita de aço temperado.', 
         'comprado': False, 
@@ -412,7 +417,19 @@ lista_nucleo = [
 lista_itens_bosses = [
     { 'nome': 'Pocao de vida baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de vida, cura 15 pontos de vida.', 'equipado': False, 'consumivel': True, 'especial': False},
     { 'nome': 'Pocao de mana baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de mana, cura 15 pontos de mana.', 'equipado': False, 'consumivel': True, 'especial': False},
-] 
+    { 'nome': 'Carne de Homunculo', 'atk': 0,'preco': 60, 'desc': 'Carne do Homunculo, cura 80 pontos de vida.', 'equipado': False, 'consumivel': True, 'especial': False},
+        { 
+        'nome': 'Armadura de Homunculo', 
+        'defesa': 3, 
+        'vida_max': 40, 
+        'resistencia': 20, 
+        'desc': 'Armadura leve feita do couro do Homunculo.', 
+        'comprado': False, 
+        'equipado': False, 
+        'consumivel': False,
+        'preco': 100, 
+        'especial': False},
+]
 
 lista_magias = [
     {'nome': 'Bola de fogo', 'dano': 200, 'desc':'A magia mais forte de um mago', 'mana_gasta': 30},
@@ -457,6 +474,7 @@ lista_monstros_invocacoes = [
 ]
 lista_monstros_fixos = [
     {'nome': 'Guardião Enraizado', 'vida': 100, 'nivel': 1, 'atk': 7, 'xp': 60, 'ouro': 50, 'boss': True},
+    {'nome': 'Homunculo Grotesco', 'vida': 50, 'nivel': 10, 'atk': 14, 'xp': 150, 'ouro': 100, 'boss': True},
 ]
 
 def raiva():
@@ -532,8 +550,10 @@ def loucura():
 monstro = lista_monstros_fixos[0]
 monstro2 = lista_monstros_normais[1]
 automato = lista_monstros_normais[10]
+monstro1 = lista_monstros_fixos[1]
 efeito_boss = Efeito(lista_efeitos[1]['nome'], lista_efeitos[1]['tipo'], lista_efeitos[1]['tempo'], lista_efeitos[1]['dano'])
 guardiao_enraizado = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'], monstro['ouro'], monstro['boss'], efeito_boss)
+homunculo = Monstro(monstro1['nome'], monstro1['vida'], monstro1['nivel'], monstro1['atk'], monstro1['xp'], monstro1['ouro'], monstro1['boss'])
 monstro_exemplo2 = Monstro(monstro2['nome'], monstro2['vida'], monstro2['nivel'], monstro2['atk'], monstro2['xp'], monstro2['ouro'], monstro2['boss'])
 robot = Monstro(automato['nome'], automato['vida'], automato['nivel'], automato['atk'], automato['xp'], automato['ouro'], automato['boss'])
 
@@ -549,6 +569,21 @@ guardiao_enraizado.drops = [
                  lista_itens_bosses[1]['consumivel'], lista_itens_bosses[1]['preco'],
                  lista_itens_bosses[1]['especial']),
      'chance': 1},   
+]
+
+homunculo.drops = [
+    {'item': Item(lista_itens_bosses[2]['nome'], lista_itens_bosses[2]['atk'],
+                 lista_itens_bosses[2]['desc'], lista_itens_bosses[2]['equipado'],
+                 lista_itens_bosses[2]['consumivel'], lista_itens_bosses[2]['preco'],
+                 lista_itens_bosses[2]['especial']),
+     'chance': 1},  
+     
+    {'item': Armadura(lista_itens_bosses[3]['nome'], lista_itens_bosses[3]['defesa'],
+                 lista_itens_bosses[3]['vida_max'], lista_itens_bosses[3]['resistencia'],
+                 lista_itens_bosses[3]['desc'], False,
+                 lista_itens_bosses[3]['consumivel'], lista_itens_bosses[3]['preco'],
+                 lista_itens_bosses[3]['especial']),
+     'chance': 0.3}, 
 ]
 
 ######### Tela de título #########
@@ -669,6 +704,7 @@ lugares_resolvidos = {
     'b1': False, 'b2': False,
     'c1': False, 'c2': False,
     'd1': False, 'd2': False,
+    'e1': False, 'e2': False,
 }
 
 mapa = {
@@ -695,8 +731,7 @@ mapa = {
                       Seus galhos têm formas humanoides penduradas, como se absorvessem ecos de vida.
                                                         .....
         Uma criatura — metade carne, metade madeira — jaz ajoelhada, presa por correntes de prata, seus olhos fechados.
-                       (para enfrentar o guardião Enraizado, digite 'enfrentar', para retornar digite sair)
-        ''',
+                       (para enfrentar o guardião Enraizado, digite 'enfrentar', para retornar digite sair)\n''',
         'SOLVED': False,
         'SUBIR': '',
         'DESCER': 'b1',
@@ -715,8 +750,7 @@ vozes que carregam seu nome, mas ditas por pessoas que você não lembra.
         'EXAMINAR': '''
 As paredes são cobertas por máscaras penduradas, cada uma com uma representação diferente sendo elas raiva, medo, alegria, loucura.
 Quando você se aproxima, elas viram lentamente... te observando. '
-(Digite raiva, medo, alegria ou loucura para ir até a máscara correspondente.)
-''',
+(Digite raiva, medo, alegria ou loucura para ir até a máscara correspondente.)\n''',
         'SOLVED': False,
         'SUBIR': 'a2',
         'DESCER': '',
@@ -737,8 +771,7 @@ Correntes quebradas o rodeiam, e marcas de garras riscam o chão como se algo ti
               Ao se aproximar, imagens distorcidas começam a surgir na água parada
                 são lembranças suas, mas... distorcidas, erradas, talvez falsas.
                       No fundo do poço você vê uma arma, deseja pegar? 
-                  (Para pegar digite 'pegar', para ignorar digite 'sair')
-                ''',
+                  (Para pegar digite 'pegar', para ignorar digite 'sair')\n''',
         'SOLVED': True,
         'SUBIR': '',
         'DESCER': 'c1',
@@ -756,8 +789,7 @@ Correntes quebradas o rodeiam, e marcas de garras riscam o chão como se algo ti
      Um corredor estreito com paredes de ferro corroído abriga autômatos enferrujados e imóveis. 
                   O ambiente é marcado por um enorme símbolo de uma engrenagem.
 Uma mensagem é escrita na parede "Derrame sangue no símbolo e acorde aqueles que não deveriam ser acordados."
-                          Deseja invocar um autômato? (Digite invocar)
-                          ''',
+                          Deseja invocar um autômato? (Digite invocar)\n''',
         'SOLVED': True,
         'SUBIR': 'b2',
         'DESCER': '',
@@ -776,9 +808,8 @@ Uma mensagem é escrita na parede "Derrame sangue no símbolo e acorde aqueles q
           Um constructo quase completo permanesce a sua frente, apenas o seu núcleo está faltando.
 Ao olhar para a sua direita, há um corredor com paredes de ferro corroído e autômatos enferrujados, aparentemente desligados.
                      Ao final deste corredor aparenta ter um báu de madeira.
-                    Deseja ir ao corredor ou Robo? (Digite corredor ou robo)
-                   ''',
-        'SOLVED': False,
+                    Deseja ir ao corredor ou Robo? (Digite corredor ou robo)\n''',
+        'SOLVED': True,
         'SUBIR': '',
         'DESCER': 'd1',
         'AVANÇAR': '',
@@ -790,27 +821,63 @@ Ao olhar para a sua direita, há um corredor com paredes de ferro corroído e au
         'passagem' : True
     },
     'd1': {
-        'NOME_LOCAL': "Sala1 Quarto andar",
-        'DESCRICAO': 'Descrição da sala d1.',
-        'EXAMINAR': 'Eco assustador.',
-        'SOLVED': False,
+        'NOME_LOCAL': "Câmara do Nascimento Invertido",
+        'DESCRICAO': 'A sala emana uma energia estranha, como se a vida seguisse seu curso ao contrário.',
+        'EXAMINAR': '''
+                         Uma gigantesca placenta fossilizada ocupa o centro. 
+           Cordões umbilicais petrificados se ligam a pequenos altares dispostos em círculo.
+Um círculo de sangue fresco é visível no chão, como se alguém tivesse realizado um ritual há pouco tempo.
+              Deseja completar o ritual? (Digite completar ou sair para voltar)\n''',
+        'SOLVED': True,
         'SUBIR': 'c2',
         'DESCER': '',
         'AVANÇAR': 'd2',
         'RETORNAR': '',
         'MONSTRO': '',
         'LOCAIS': '',
-        'contador' : 0
+        'contador' : 0,
+        'contador2' : 0
     },
     'd2': {
-        'NOME_LOCAL': "Sala2 Terceiro andar",
-        'DESCRICAO': 'Descrição da sala c2.',
-        'EXAMINAR': 'Eco assustador.',
+        'NOME_LOCAL': "Laboratório dos Deformados",
+        'DESCRICAO': 'O odor de carne podre e sangue cerca o ambiente.',
+        'EXAMINAR': '''
+                            Frascos, fórmulas e instrumentos cirúrgicos cobrem as mesas. 
+            No fundo da sala, tanques de vidro contêm corpos em decomposição. Alguns... ainda se movem.
+             Um dos tanques de vidro é destruido e o cadaver dentro dele começa a se regenerar, é como 
+                se a torre o tivesse despertado — um Homúnculo grotesco parado ao centro da sala.
+                                Digite atacar para atacar o Homúnculo.\n''',
+        'SOLVED': False,
+        'SUBIR': '',
+        'DESCER': 'e1',
+        'AVANÇAR': '',
+        'RETORNAR': 'd1',
+        'MONSTRO': '',
+        'LOCAIS': '',
+        'contador' : 0
+    },
+    'e1': {
+        'NOME_LOCAL': " ",
+        'DESCRICAO': ' ',
+        'EXAMINAR': ''' ''',
+        'SOLVED': False,
+        'SUBIR': '',
+        'DESCER': 'e1',
+        'AVANÇAR': '',
+        'RETORNAR': 'd1',
+        'MONSTRO': '',
+        'LOCAIS': '',
+        'contador' : 0
+    },
+    'e2': {
+        'NOME_LOCAL': "",
+        'DESCRICAO': '',
+        'EXAMINAR': ''' ''',
         'SOLVED': False,
         'SUBIR': '',
         'DESCER': '',
         'AVANÇAR': '',
-        'RETORNAR': 'd1',
+        'RETORNAR': 'e1',
         'MONSTRO': '',
         'LOCAIS': '',
         'contador' : 0
@@ -934,9 +1001,9 @@ def prompt():
         jogador_dormir()
     elif acao == 'mochila' and acao != 'sair':
         abrir_mochila()
-    elif acao == 'loja':
-        mostrar_loja()
-        acao_loja(input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower())
+    # elif acao == 'loja':
+    #     mostrar_loja()
+    #     acao_loja(input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower())
     elif acao == 'status':
         exibir_status(meu_jogador)
     elif acao == 'mapa':
@@ -948,7 +1015,7 @@ def prompt():
 def locais():
     print(Fore.LIGHTYELLOW_EX + 'O que deseja fazer?' + Style.RESET_ALL)
     acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
-    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'],'raiva','medo','alegria','loucura', 'sair', 'pegar', 'invocar', 'robo', 'corredor',
+    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'],'raiva','medo','alegria','loucura', 'sair', 'pegar', 'invocar', 'robo', 'corredor', 'completar', 'atacar',
     
     while acao not in acoes_aceitas:
         print(Fore.RED + 'Acao inválida, tente novamente. (caso não tenha mais opções, digite sair)'+Style.RESET_ALL)
@@ -979,7 +1046,11 @@ def locais():
     elif acao == 'robo':
         robo()
     elif acao == 'corredor':
-        corredor()
+        corredor()       
+    elif acao == 'completar':
+        ritual()
+    elif acao == 'atacar' :
+        boss_homunculo()
     else:
         print('Acao inválida, tente novamente.')
         locais()
@@ -1035,6 +1106,30 @@ def boss_enraizado():
             luta(guardiao_enraizado, meu_jogador)        
     elif meu_jogador.local == 'a2' and mapa[meu_jogador.local]['SOLVED'] == True:
         fala1 = Fore.LIGHTYELLOW_EX+'O monstro está caido morto bem a sua frente.'+Style.RESET_ALL
+        for fala in fala1:
+            sys.stdout.write(fala)
+            sys.stdout.flush()
+            time.sleep(0.01)
+        time.sleep(1.5)
+        limpar_tela()
+        main_game_loop()
+    else:
+        print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
+        main_game_loop()
+
+def boss_homunculo():
+    if meu_jogador == 'd2':
+        if mapa[meu_jogador.local]['SOLVED'] == False:
+            lutar = 'Você ataca o homunculo e inicia um combate'
+            for fala in lutar:
+                sys.stdout.write(fala)
+                sys.stdout.flush()
+                time.sleep(0.01)
+            time.sleep(1)
+            limpar_tela()
+            luta(homunculo, meu_jogador)
+    elif meu_jogador.local == 'a2' and mapa[meu_jogador.local]['SOLVED'] == True:
+        fala1 = Fore.LIGHTYELLOW_EX+'O Homunculo parou de se mexer.'+Style.RESET_ALL
         for fala in fala1:
             sys.stdout.write(fala)
             sys.stdout.flush()
@@ -1235,6 +1330,35 @@ def pegar():
         print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
         locais()
 
+def ritual():
+    if meu_jogador.local == 'd1' and mapa['d1']['contador2'] < 3:
+        aleatorio = random.randint(1,3)
+        if aleatorio == 1:
+            mapa['d1']['contador2'] += 1
+            print('Você executa o ritual com sucesso e ganha 1 lvl')
+            meu_jogador.xp += meu_jogador.xp_max
+            subi_nivel(meu_jogador)
+            time.sleep(1.5)
+            limpar_tela()
+            print_local()
+            main_game_loop()
+        else:
+            mapa['d1']['contador2'] += 1
+            print('O ritual falhou e você perdeu 10 de vida.')
+            meu_jogador.vida -= 10
+            time.sleep(1.5)
+            limpar_tela()
+            print_local()
+            main_game_loop()
+    elif meu_jogador.local == 'd1' and mapa['d1']['contador2'] >= 3:
+        print('Você exedeu o número de rituais que pode executar.')
+        time.sleep(1.5)
+        limpar_tela()
+        print_local()
+        main_game_loop()
+    else:
+        print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
+        locais()
 
 ########################################
 def comprar(escolha):
@@ -2077,6 +2201,8 @@ def luta(monstro, meu_jogador):
                     pocao_mana_media()
                 elif meu_jogador.mochila[escolha].nome == 'Pocao de mana alta':
                     pocao_mana_alta()
+                elif meu_jogador.mochila[escolha].nome == 'Carne de Homunculo':
+                    carne_homunculo()
                 for i, item in enumerate(meu_jogador.mochila):
                     if item.nome == consumiveis[escolha].nome:
                         meu_jogador.mochila.pop(i)
@@ -2216,8 +2342,8 @@ def mostrar_status(self):
     
     # Adiciona informações da armadura
     if self.armadura:
-        print(f'█         Armadura: {self.armadura.nome} DEF: {self.armadura.defesa} RES: {self.armadura.resistencia}%')
-        print(f'█         Vida Armadura: {self.armadura_vida}/{self.armadura_vida_max}')
+        print(f'█      Armadura: {self.armadura.nome} DEF: {self.armadura.defesa} RES: {self.armadura.resistencia}%')
+        print(f'█         Vida Armadura: '+Fore.CYAN+f'{self.armadura_vida}'+Style.RESET_ALL+'/'+Fore.CYAN+f'{self.armadura_vida_max}'+Style.RESET_ALL)
     else:
         print('█         Armadura: Nenhuma equipada')
     
@@ -2289,6 +2415,11 @@ Descer a escada ou retornar a sala anterior? (escreva: descer ou retornar)\n>>''
     elif meu_jogador.local in 'c1':
         pergunta = "Avançar ou subir a sala anterior? (escreva: avançar ou subir)\n>>"
     elif meu_jogador.local in 'c2':
+        pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
+    elif meu_jogador.local in 'd1':
+        pergunta = """A sua frente você vê uma porta feita de sangue e carne, você deseja abrir a porta para avançar ou subir as escadas e retornar a sala anterior? 
+        (escreva: avançar ou subir)\n>>"""
+    elif meu_jogador.local in 'd2':
         pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
     
     dest = input(pergunta).lower()

@@ -170,13 +170,7 @@ Cordões umbilicais petrificados se ligam a pequenos altares dispostos em círcu
 Um círculo de sangue fresco é visível no chão, como se alguém tivesse realizado um ritual há pouco tempo.
 ===================================================================================================================================
 Evento:
-O jogador pode completar ou desfazer o ritual.
-
-Completar: voce perde 5% da vida atual mas ganha um fragmento de vida(Aumenta o Hp Maximo), mas perde parte da sanidade.
-
-Desfazer: desperta a fúria da torre, fazendo o próximo andar ficar mais hostil.
-
-(NOTA:O SISTEMA DE SANIDADE SÓ SERA IMPLEMENTADO SE TIVERMOS TEMPO PARA FAZER)
+Caso o jogador deseja fazer o ritual, o mesmo ganha 1 lvl ou perde 10 de vida (proporção 1 para 3). podendo ser feito até 3 vezes
 ===================================================================================================================================
 Sala 2: Laboratório dos Deformados (SALÃO DE CHEFE)
 Descrição:O odor de carne podre e sangue cerca o ambiente.
