@@ -39,7 +39,7 @@ def remover_item(item, quantidade):
 
 def mostrar_inventario():
     print(
-        f"""
+        fr"""
  _____                             _                 _        
 |_   _|                           | |               (_)       
   | |   _ __  __   __  ___  _ __  | |_   __ _  _ __  _   ___  

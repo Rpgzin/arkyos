@@ -211,36 +211,15 @@ As paredes mostram símbolos pintados com sangue antigo. Você os reconhece… m
 ====================================================================================================================================
 Evento:Voce tem 2 opções, interagir com o tumor ou destruir ele.
 
-Interação com o Tumor:Recebe um dos itens a seguir
-
-Para o Guerreiro: Espada de sangue(passiva:cura o personagem 20% do dano causado)
-Em troca, perde parte da sanidade (descrições visuais e auditivas distorcidas nos próximos andares).
-
-Para o Mago: Cajado Grotesco (Passiva: Recupera 20% da mana utilizada)
-
-Para o Monge: Manoplas de Carne (Passiva: chance de causar sangramento[5% da vida por 3 turnos])
-
-
-
-Destruí-lo:O próximo andar se torna mais hostil — a torre reage como se você tivesse tocado algo íntimo.
-
-(NOTA:O SISTEMA DE SANIDADE SÓ SERA IMPLEMENTADO SE TIVERMOS TEMPO PARA FAZER)
-(NOTA2: O STATUS DAS ARMAS ESTAO A MERCE DE VOCES, POREM QUERO AS PASSIVAS""")
+Interação com os simbolos pode invocar monstros para farmar lvl.
 
 ====================================================================================================================================
-Sala 2: A Coluna Espinhal
-Descrição:O ambiente vibra com uma energia orgânica, como se fosse uma estrutura viva.
+Sala 2: Loja dos Esquecidos
+Descrição:Uma pequena loja escondida no fundo da torre. O vendedor, uma figura encapuzada, parece não se surpreender com sua presença.
+Nas prateleiras, itens estranhos brilham com energia mágica.
 
-Ao Examinar:
-Um salão estreito e vertical. No centro, uma espinha dorsal monumental flutua no ar, 
-sustentada por fios etéreos que se ligam às paredes como nervos.
-A cada pulsação, imagens cruzam sua mente — campos em chamas, gritos, um rosto... familiar demais para ser estranho.
-Mas tudo passa em segundos. A dor fica.
 ===================================================================================================================================
-Evento:
-Tocar a coluna: Recebe uma magia(A Criatividade é com vcs) 
-
-Inicia combate contra o Sentinela Cordado, um ser que arrasta vértebras atrás de si e fala frases que você não lembra ter dito.
+Evento:uma loja
 ====================================================================================================================================
 5º Andar — O Salão das Sombras Esquecidas (ANDAR COM SISTEMA DE SUMMON NA 1º SALA)
 Um salão escuro onde sombras parecem ganhar vida, sussurrando segredos antigos e distorcendo a realidade ao seu redor.
