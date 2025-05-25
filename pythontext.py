@@ -333,6 +333,41 @@ def pocao_mana_alta():
         meu_jogador.mana = meu_jogador.mana_max
     print (Fore.LIGHTGREEN_EX+"Você bebeu a poção!!!"+Style.RESET_ALL)
 
+def pocao_vida_lendaria():
+    meu_jogador.vida += 100
+    if meu_jogador.vida > meu_jogador.vida_max:
+        meu_jogador.vida = meu_jogador.vida_max
+    print(Fore.LIGHTGREEN_EX + "\nVocê bebeu a Poção de Vida Lendária e recuperou 100 de vida!" + Style.RESET_ALL)
+    time.sleep(1.5)
+
+def pocao_mana_lendaria():
+    meu_jogador.mana += 100
+    if meu_jogador.mana > meu_jogador.mana_max:
+        meu_jogador.mana = meu_jogador.mana_max
+    print(Fore.LIGHTBLUE_EX + "\nVocê bebeu a Poção de Mana Lendária e recuperou 100 de mana!" + Style.RESET_ALL)
+    time.sleep(1.5)
+
+def usar_pergaminho_apocalipse():
+    magia_apocalipse = Magia(
+        nome="Apocalipse",
+        dano=100,
+        desc="Invoca um poder ancestral que causa dano massivo e queima o inimigo por 3 turnos",
+        mana_gasta=50,
+        efeito=Efeito(
+            nome="chamas do fim",
+            tipo="dano",
+            tempo=3,
+            dano=10
+        )
+    )
+    
+    # Adiciona à lista de magias do jogador
+    meu_jogador.magias.append(magia_apocalipse)
+    
+    print(Fore.MAGENTA + "\nAo usar o pergaminho, conhecimento ancestral invade sua mente!" + Style.RESET_ALL)
+    print(Fore.LIGHTBLUE_EX + "Você aprendeu a magia: APOCALIPSE!" + Style.RESET_ALL)
+    time.sleep(2)
+
 lista_itens_loja = [
     { 
         'nome': 'Poção de Vida Lendária', 
@@ -935,10 +970,10 @@ Uma pequena loja escondida no fundo da torre. O vendedor, uma figura encapuzada,
 O vendedor sussurra: "Encontrei alguns tesouros nos corpos dos que falharam... interesse em algum?"
                         (Digite 'loja' para ver os itens à venda)\n''',
         'SOLVED': True,
-        'SUBIR': 'e1',
+        'SUBIR': '',
         'DESCER': '',
         'AVANÇAR': '',
-        'RETORNAR': '',
+        'RETORNAR': 'e1',
         'MONSTRO': '',
         'LOCAIS': 'loja',
         'contador' : 0
@@ -1693,7 +1728,13 @@ def abrir_mochila():
                 abrir_mochila()
             
             elif acao == "usar" and item_selecionado.consumivel:
-                if item_selecionado.nome == 'Pocao de vida baixa':
+                if item_selecionado.nome == 'Poção de Vida Lendária':
+                    pocao_vida_lendaria()
+                elif item_selecionado.nome == 'Poção de Mana Lendária':
+                    pocao_mana_lendaria()
+                elif item_selecionado.nome == 'Pergaminho do Apocalipse':
+                    usar_pergaminho_apocalipse()
+                elif item_selecionado.nome == 'Pocao de vida baixa':
                     pocao_vida()
                 elif item_selecionado.nome == 'Pocao de vida media':
                     pocao_vida_media()
@@ -1847,7 +1888,7 @@ def loja_e2():
     print('"Tudo tem um preço... até mesmo a salvação."\n')
     
     # Mostra itens disponíveis
-    for i, item in enumerate(lista_itens_loja, 1):
+    for i, item in enumerate(lista_itens_loja_e2, 1):
         if 'defesa' in item:  # Se for armadura
             print(f"{i}. {item['nome']} | DEF: {item['defesa']} | VIDA: {item['vida_max']} | RES: {item['resistencia']}% | Preço: {item['preco']}")
             print(f"   {item['desc']}\n")
@@ -1873,11 +1914,11 @@ def loja_e2():
         
         try:
             escolha = int(escolha) - 1
-            if escolha < 0 or escolha >= len(lista_itens_loja):
+            if escolha < 0 or escolha >= len(lista_itens_loja_e2):
                 print(Fore.RED + 'Item inválido!' + Style.RESET_ALL)
                 continue
                 
-            item = lista_itens_loja[escolha]
+            item = lista_itens_loja_e2[escolha]
             
             if meu_jogador.ouro < item['preco']:
                 print(Fore.RED + '\n"Você não tem ouro suficiente para isso."' + Style.RESET_ALL)
@@ -1919,8 +1960,12 @@ def loja_e2():
                 print(Fore.GREEN + f'\nVocê comprou {item["nome"]}!' + Style.RESET_ALL)
                 time.sleep(1)
                 
-                # Pergunta se quer equipar imediatamente
-                if not item['consumivel'] and not item['especial']:
+                # Se for o pergaminho, ativa efeito especial
+                if item['nome'] == 'Pergaminho do Apocalipse':
+                    usar_pergaminho_apocalipse()
+                
+                # Pergunta se quer equipar imediatamente (para não consumíveis)
+                elif not item['consumivel'] and not item['especial']:
                     print('\nDeseja equipar agora? (s/n)')
                     equipar = input('>> ').lower()
                     if equipar == 's':
