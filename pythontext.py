@@ -131,10 +131,13 @@ def exibir_status(jogador):
         │╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚══════╝│
         └───────────────────────────────────────────────────┘   
 '''.upper())
+    dano_magico_arma = 0
+    if meu_jogador.item_equipado.dano_magico:
+        dano_magico_arma = meu_jogador.item_equipado.dano_magico
     print(f'Nome:{jogador.nome} LVL: {jogador.nivel}'+Style.RESET_ALL+f' XP: {jogador.xp}/{jogador.xp_max}')
-    print('vida:'+Fore.RED+f' {jogador.vida}/{jogador.vida_max}'+Style.RESET_ALL+ ' / MANA: '+Fore.BLUE+f'{jogador.mana}/{jogador.mana_max}'+Style.RESET_ALL+' / ATK: '+Fore.YELLOW+f'{jogador.atk}'+Style.RESET_ALL+' / MAG.ATK: '+Fore.LIGHTBLUE_EX+f'{jogador.dano_magico}'+Style.RESET_ALL)
+    print('vida:'+Fore.RED+f' {jogador.vida}/{jogador.vida_max}'+Style.RESET_ALL+ ' / MANA: '+Fore.BLUE+f'{jogador.mana}/{jogador.mana_max}'+Style.RESET_ALL+' / ATK: '+Fore.YELLOW+f'{jogador.atk}'+Style.RESET_ALL+' / MAG.ATK: '+Fore.LIGHTBLUE_EX+f'{jogador.dano_magico+dano_magico_arma}'+Style.RESET_ALL)
     if jogador.item_equipado:
-        print(f'arma: {jogador.item_equipado.nome} ATK: {jogador.item_equipado.atk}')
+        print(f'arma: {jogador.item_equipado.nome}')
     else:
         print('arma: Nenhuma arma equipada')
     print(f'forca: '+Fore.GREEN+f'{jogador.forca}'+Style.RESET_ALL+' fortitude: '+Fore.RED+f'{jogador.fortitude}'+Style.RESET_ALL+' inteligência: '+Fore.BLUE+f'{jogador.inteligencia}'+Style.RESET_ALL)
@@ -216,6 +219,10 @@ class Armadura(Item):
         self.vida_max = vida_max
         self.resistencia = resistencia
 
+class ArmaMagica(Item):
+    def __init__(self, dano_magico, nome, atk, desc, equipado, consumivel, preco, especial):
+        super().__init__(nome, atk, desc, equipado, consumivel, preco, especial)
+        self.dano_magico = dano_magico
 class Magia:
     def __init__(self, nome, dano, desc, mana_gasta, efeito=None):
         self.nome = nome
@@ -429,9 +436,12 @@ lista_consumiveis = [
 
 lista_armas = [
     {'nome': 'Adaga enferrujada', 'atk': 3, 'preco': 100, 'desc': 'Parece ser bem antiga', 'equipado': False, 'consumivel': False, 'especial': False},
-    {'nome': 'Varinha capenga', 'atk': 3, 'preco': 100, 'desc': 'É nova, mas bem barata', 'equipado': False, 'consumivel': False, 'especial': False},
     {'nome': 'Espada longa', 'atk': 4, 'preco': 100, 'desc': 'A espada de todo guerreiro.', 'equipado': False, 'consumivel': False, 'especial': False},
-    {'nome': 'Grimório', 'atk': 2, 'preco': 100, 'desc': 'O grimório de um mago, o local de sua sabedoria.', 'equipado': False, 'consumivel': False, 'especial': False},
+]
+lista_armas_magicas = [
+    {'nome': 'Varinha capenga', 'dano_magico': 2,'atk': 0, 'preco': 100, 'desc': 'É nova, mas bem barata', 'equipado': False, 'consumivel': False, 'especial': False},
+    {'nome': 'Grimório ', 'dano_magico': 4,'atk': 2, 'preco': 100, 'desc': 'O grimório de um mago, o local de sua sabedoria.', 'equipado': False, 'consumivel': False, 'especial': False},
+
 ]
 lista_armas_especiais = [
     {'nome': 'Manoplas de ferro', 'atk': 20, 'preco': 150, 'desc': 'Usada a muito tempo por um exímio monge, as manoplas de ferro são uma das mais fortes armas de um monge', 'equipado': False, 'consumivel': False, 'especial': False},
@@ -1624,7 +1634,7 @@ def robo():
                 lista_armaduras[1],  # Armadura média
                 lista_consumiveis[3],  # Poção de mana
                 lista_itens_especiais[5],  # Núcleo de Robô (para reparar outro)
-                lista_armas[2]  # Espada longa
+                lista_armas[1]  # Espada longa
             ]
             
             # Escolhe um item aleatório
@@ -1900,7 +1910,10 @@ def abrir_mochila():
         print(Fore.LIGHTRED_EX + "ARMAS:" + Style.RESET_ALL)
         for arma in armas:
             equipado = "(EQUIPADO)" if arma.equipado else ""
-            print(f'{Fore.YELLOW}[{contador_global}]{Style.RESET_ALL} {arma.nome} | ATK: {arma.atk} | {arma.desc} {equipado}')
+            if arma.dano_magico:
+                print(f'{Fore.YELLOW}[{contador_global}]{Style.RESET_ALL} {arma.nome} | dano Magico: {arma.dano_magico} | {arma.desc} {equipado}')
+            else:
+                print(f'{Fore.YELLOW}[{contador_global}]{Style.RESET_ALL} {arma.nome} | ATK: {arma.atk} | {arma.desc} {equipado}')
             itens_exibidos.append(arma)
             contador_global += 1
         print()
@@ -2446,9 +2459,12 @@ def luta(monstro, meu_jogador):
     # Ação: Magia (mantido igual ao original)
     elif acao == 'magia':
         if meu_jogador.magias:
+            dano_magico_arma = 0
+            if meu_jogador.item_equipado.dano_magico:
+                dano_magico_arma = meu_jogador.item_equipado.dano_magico
             for i in range(len(meu_jogador.magias)):
                 magia = meu_jogador.magias[i]
-                print(f'{i+1}. {magia.nome} | DANO: {magia.dano} + DANO ADICIONAL: {meu_jogador.dano_magico} | custo de mana: {magia.mana_gasta} | desc: {magia.desc}')
+                print(f'{i+1}. {magia.nome} | DANO: {magia.dano} + DANO ADICIONAL: {meu_jogador.dano_magico+dano_magico_arma} | custo de mana: {magia.mana_gasta} | desc: {magia.desc}')
             print("Use números para escolher as magias")
             escolha = input(">>")
             try:
@@ -2464,8 +2480,8 @@ def luta(monstro, meu_jogador):
                     time.sleep(1.5)
                     limpar_tela()
                     luta(monstro, meu_jogador)
-
-                monstro.vida -= (meu_jogador.magias[escolha].dano + meu_jogador.dano_magico)
+                dano_magia = (meu_jogador.magias[escolha].dano + meu_jogador.dano_magico + dano_magico_arma)
+                monstro.vida -= dano_magia
                 meu_jogador.mana -= meu_jogador.magias[escolha].mana_gasta
                 monstro.add_efeito(meu_jogador.magias[escolha].efeito)
                 magias = f'Você lança {meu_jogador.magias[escolha].nome} em {monstro.nome}'
@@ -2924,10 +2940,14 @@ def fugir():
     main_game_loop()
 
 def mostrar_status(self):
+    dano_magico_arma = 0
+    if meu_jogador.item_equipado:
+        if meu_jogador.item_equipado.dano_magico:
+            dano_magico_arma = meu_jogador.item_equipado.dano_magico
     print('\n'+'█'+'▀'*50+'█')
     print(f'█             Nome: {self.nome} LVL:{self.nivel} XP: {self.xp}/{self.xp_max}            \n█')
     print('''█         Vida: '''+Fore.RED+f'''{self.vida}'''+Style.RESET_ALL+'''/'''+Fore.RED+f'''{self.vida_max}'''+Style.RESET_ALL+'''        ATK: '''+Fore.GREEN+f'''{self.atk}'''+Style.RESET_ALL+''' 
-█         Mana: '''+Fore.BLUE+f'''{self.mana}/{self.mana_max}'''+Style.RESET_ALL+'''      MAG.ATK: '''+Fore.LIGHTBLUE_EX+f'''{self.dano_magico}\n'''+Style.RESET_ALL+'█')
+█         Mana: '''+Fore.BLUE+f'''{self.mana}/{self.mana_max}'''+Style.RESET_ALL+'''      MAG.ATK: '''+Fore.LIGHTBLUE_EX+f'''{self.dano_magico+dano_magico_arma}\n'''+Style.RESET_ALL+'█')
     
     # Adiciona informações da armadura
     if self.armadura:
@@ -2937,7 +2957,7 @@ def mostrar_status(self):
         print('█         Armadura: Nenhuma equipada')
     
     if self.item_equipado:
-        print(f'█         arma: {self.item_equipado.nome} ATK: {self.item_equipado.atk}                ')
+        print(f'█         arma: {self.item_equipado.nome}               ')
         for efeito in self.efeitos_status:
             print(f'█         efeitos de status: {efeito.nome}', end=' ')
             print('')
@@ -3187,7 +3207,7 @@ def setup_jogo():
         pocao_vida_alta = lista_consumiveis[2]
         
         # Arma padrão
-        arma_padrao = lista_armas[2]
+        arma_padrao = lista_armas[1]
         
         # Armadura inicial para guerreiro
         armadura_inicial = lista_armaduras[0]
@@ -3262,6 +3282,7 @@ def setup_jogo():
         calcular_atributos(meu_jogador)
 
     elif meu_jogador.classe == 'mago':
+        arma_basica = lista_armas_magicas[0]
         magia_basica = lista_magias[0]
         magia_basica1 = lista_magias[1]
         efeito = Efeito(lista_efeitos[0]['nome'], lista_efeitos[0]['tipo'], lista_efeitos[0]['tempo'], lista_efeitos[0]['dano'])
@@ -3275,6 +3296,11 @@ def setup_jogo():
         meu_jogador.atk_base = 2
         meu_jogador.inteligencia = 3
         meu_jogador.atk = meu_jogador.atk_base
+        meu_jogador.add_item(ArmaMagica(
+            arma_basica['dano_magico'], arma_basica['nome'], arma_basica['atk'],
+            arma_basica['desc'], arma_basica['equipado'], arma_basica['consumivel'],
+            arma_basica['preco'], arma_basica['especial']
+        ))
         meu_jogador.magias.append(Magia(magia_basica['nome'], magia_basica['dano'], magia_basica['desc'], magia_basica['mana_gasta'], efeito))
         meu_jogador.magias.append(Magia(magia_basica1['nome'], magia_basica1['dano'], magia_basica1['desc'], magia_basica1['mana_gasta'], efeito1))
         calcular_atributos(meu_jogador)
