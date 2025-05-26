@@ -226,31 +226,35 @@ Um salão escuro onde sombras parecem ganhar vida, sussurrando segredos antigos 
 ====================================================================================================================================
 Sala 1:Galeria dos Pactos Perdidos
 Descrição: 
-Corredor amplo com retratos escurecidos nas paredes. Cada quadro emite uma sombra pulsante que parece observar quem passa.
+Corredor amplo com três quadros no final dele. Cada quadro emite uma sombra pulsante que parece observar quem passa.
 
 Ao Examinar:
-Cada quadro emite uma sombra pulsante que parece observar quem passa.
-À medida que o jogador avança, uma sombra salta de um dos quadros e toma forma — uma entidade invocada de um pacto esquecido.
+                   Você se aproxima dos quadros, sentindo as sombras pulsantes intensificarem seus sussurros. Cada quadro exala uma presença distinta:
+             O quadro da esquerda retrata uma figura musculosa, coberta de cicatrizes e erguendo uma espada quebrada. A sombra ao redor pulsa forte e agressiva.
+            O quadro do centro mostra um ser encapuzado, de olhar enigmático, rodeado por símbolos arcanos indecifráveis. Sua sombra emana uma calma perturbadora.
+O quadro da direita revela um guerreiro com o corpo perfurado por lanças, mas que ainda permanece de pé, encarando o horizonte com olhar inabalável. Sua sombra vibra com resistência.
+                                        Deseja tocar em um dos quadros? (digite sim para tocar e não para voltar)
 
-(NOTA:ESSE EVENTO É O SEGUINTE, VOCÊ PODE FICAR ENFRENTANDO INFINITOS OS MONSTROS PARA FARMAR JA QUE É UMA AREA DE SUMMON,
-OU SO AVANÇE DE SALA SEM RESTRIÇÕES)
 
 ====================================================================================================================================
-Sala:O Caminhar das Sombras
+Sala: Salão da Coroa Quebrada
 Descrição:
-Um corredor estreito e enevoado, onde sussurros e sombras distorcidas confundem a mente. 
+Você adentra um salão vasto e silencioso, onde as colunas de pedra rachadas sustentam um teto coberto por raízes secas e pendentes como garras mortas.
+ No centro, um trono destroçado jaz tombado, e diante dele, uma figura permanece ajoelhada, um cavaleiro envolto em uma armadura corroída e marcada por cicatrizes de batalhas antigas.
+  A lâmina ao seu lado está quebrada, mas sua presença exala uma fúria adormecida, como uma fogueira sufocada por cinzas.
+  Um guardião que impede a passagem daqueles que querem fazer mal ao seu rei.
+
+O ar é frio, pesado... e cada passo ecoa como um desafio lançado ao vazio.
 
 Ao Examinar:
-Quatro portas se erguem em cada direção, todas idênticas e envoltas em sombras pulsantes.
+Você se aproxima cautelosamente da figura caída. 
+Quando seus olhos se fixam na fenda do elmo, percebe um brilho espectral pulsando ali dentro, como um fragmento de alma incapaz de descansar.
+Antes que possa recuar, o cavaleiro ergue lentamente a cabeça, o metal rangendo com um som que mistura dor e ira. A mão se fecha com força sobre a empunhadura da lâmina quebrada.
+Sem necessidade de palavras, você entende: não há como evitar a batalha.
+A sombra do Cavaleiro Caído se ergue à sua frente, pronto para medir forças até o fim.
 ====================================================================================================================================
-Evento: O jogador tera que escolher uma das portas.
-1º Porta: voce toma um dano massivo(pode botar firme na porcentagem de vida atual do jogador)
-2º Porta: Você encontra um bau com poções de vida
-3º Porta: Voce Avança para a Proxima sala.
-4º Porta: Você é teleportado para o Andar Anterior.
-
-(NOTA: A IDEIA AQUI É COLOCAR AS PORTAS DE AVANÇO DE ANDAR E VOLTA UM ANDAR COMO RANDOM, 
-E AS OUTRAS 2 PORTAS SE VOCE JA ACESSOU OCULTE ELAS PARA NAO SER REPETIDO)
+Evento: O jogador vai lutar contra um cavaleiro caido, caso o jogador vença terá um drop de 100% da armadura do cavaleiro caido, 50% da espada do cavaleiro caido
+e 40% das manoplas do cavaleiro caido
 
 
 ====================================================================================================================================

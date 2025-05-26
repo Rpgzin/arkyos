@@ -18,6 +18,94 @@ colorama.init()
 '''
 Drop de itens especificos de boss
 '''
+######## Titulo e afins ########
+def tela_titulo():
+    limpar_tela()
+    titulo ='''
+             _____                                                                                 _____ 
+            ( ___ )                                                                               ( ___ )
+             |   |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|   | 
+             |   |                                                                                 |   | 
+             |   |    █████████   ███████████   █████   ████ █████ █████    ███████     █████████  |   | 
+             |   |   ███░░░░░███ ░░███░░░░░███ ░░███   ███░ ░░███ ░░███   ███░░░░░███  ███░░░░░███ |   | 
+             |   |  ░███    ░███  ░███    ░███  ░███  ███    ░░███ ███   ███     ░░███░███    ░░░  |   | 
+             |   |  ░███████████  ░██████████   ░███████      ░░█████   ░███      ░███░░█████████  |   | 
+             |   |  ░███░░░░░███  ░███░░░░░███  ░███░░███      ░░███    ░███      ░███ ░░░░░░░░███ |   | 
+             |   |  ░███    ░███  ░███    ░███  ░███ ░░███      ░███    ░░███     ███  ███    ░███ |   | 
+             |   |  █████   █████ █████   █████ █████ ░░████    █████    ░░░███████░  ░░█████████  |   | 
+             |   | ░░░░░   ░░░░░ ░░░░░   ░░░░░ ░░░░░   ░░░░    ░░░░░       ░░░░░░░     ░░░░░░░░░   |   | 
+             |   |                                                                                 |   | 
+             |___|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|___| 
+            (_____)                                                                               (_____)
+                                            ────────────────────────────────
+                                                 Uma torre esquecida...
+                                             Onde magia e trevas se colidem
+                                            ────────────────────────────────
+ '''
+    opcoes = Fore.YELLOW + '''
+                                                     [@] Jogar
+                                                     [@] Ajuda''' + Style.RESET_ALL
+    Sair = Fore.RED + '''                            
+                                                     [@] Sair      
+            
+          ''' + Style.RESET_ALL
+    for titulo1 in titulo:
+        sys.stdout.write(titulo1)
+        sys.stdout.flush()
+        time.sleep(0.0001)
+    for opcao in [opcoes, Sair]:
+        sys.stdout.write(opcao)
+        sys.stdout.flush()
+        time.sleep(0.01)
+
+    navegação_tela_titulo()
+
+def ajuda_menu():
+    limpar_tela()
+    print('''
+             _____                                                                                 _____ 
+            ( ___ )                                                                               ( ___ )
+             |   |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|   | 
+             |   |                                                                                 |   | 
+             |   |    █████████   ███████████   █████   ████ █████ █████    ███████     █████████  |   | 
+             |   |   ███░░░░░███ ░░███░░░░░███ ░░███   ███░ ░░███ ░░███   ███░░░░░███  ███░░░░░███ |   | 
+             |   |  ░███    ░███  ░███    ░███  ░███  ███    ░░███ ███   ███     ░░███░███    ░░░  |   | 
+             |   |  ░███████████  ░██████████   ░███████      ░░█████   ░███      ░███░░█████████  |   | 
+             |   |  ░███░░░░░███  ░███░░░░░███  ░███░░███      ░░███    ░███      ░███ ░░░░░░░░███ |   | 
+             |   |  ░███    ░███  ░███    ░███  ░███ ░░███      ░███    ░░███     ███  ███    ░███ |   | 
+             |   |  █████   █████ █████   █████ █████ ░░████    █████    ░░░███████░  ░░█████████  |   | 
+             |   | ░░░░░   ░░░░░ ░░░░░   ░░░░░ ░░░░░   ░░░░    ░░░░░       ░░░░░░░     ░░░░░░░░░   |   | 
+             |   |                                                                                 |   | 
+             |___|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|___| 
+            (_____)                                                                               (_____)''')
+    print(Fore.YELLOW + '''
+          
+                        [@]principais comandos: [mover / olhar / mochila / status / mapa]
+          
+                    [@] Digite seus comandos para executá-los
+                    [@] Digite mover para se movimentar
+                    [@] Use o comando "olhar" para examinar a área
+                    [@] Use o comando "mochila" para abrir a mochila
+                    [@] Use o comando "status" para ver seus status
+                    [@] Use o comando "mapa" para ver o mapa
+                    [@] Boa sorte e não morra :p
+          ''' + Style.RESET_ALL)
+    
+    if meu_jogador.nome != '':
+        print(Fore.CYAN + 'Voltar ao game? [s/n]'+Style.RESET_ALL)
+        voltar_game = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
+        if voltar_game != 's':
+            limpar_tela()
+            ajuda_menu()
+        print_local()
+        main_game_loop()
+    print(Fore.CYAN + "- voltar ao MENU? [s/n]"+Style.RESET_ALL)
+    voltar_menu = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
+    if voltar_menu != 's':
+        limpar_tela()
+        ajuda_menu()
+    tela_titulo()
+#####################################
 
 ######### Setup do jogador ########
 class Player:
@@ -131,13 +219,10 @@ def exibir_status(jogador):
         │╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚══════╝│
         └───────────────────────────────────────────────────┘   
 '''.upper())
-    dano_magico_arma = 0
-    if meu_jogador.item_equipado.dano_magico:
-        dano_magico_arma = meu_jogador.item_equipado.dano_magico
     print(f'Nome:{jogador.nome} LVL: {jogador.nivel}'+Style.RESET_ALL+f' XP: {jogador.xp}/{jogador.xp_max}')
-    print('vida:'+Fore.RED+f' {jogador.vida}/{jogador.vida_max}'+Style.RESET_ALL+ ' / MANA: '+Fore.BLUE+f'{jogador.mana}/{jogador.mana_max}'+Style.RESET_ALL+' / ATK: '+Fore.YELLOW+f'{jogador.atk}'+Style.RESET_ALL+' / MAG.ATK: '+Fore.LIGHTBLUE_EX+f'{jogador.dano_magico+dano_magico_arma}'+Style.RESET_ALL)
+    print('vida:'+Fore.RED+f' {jogador.vida}/{jogador.vida_max}'+Style.RESET_ALL+ ' / MANA: '+Fore.BLUE+f'{jogador.mana}/{jogador.mana_max}'+Style.RESET_ALL+' / ATK: '+Fore.YELLOW+f'{jogador.atk}'+Style.RESET_ALL+' / MAG.ATK: '+Fore.LIGHTBLUE_EX+f'{jogador.dano_magico}'+Style.RESET_ALL)
     if jogador.item_equipado:
-        print(f'arma: {jogador.item_equipado.nome}')
+        print(f'arma: {jogador.item_equipado.nome} ATK: {jogador.item_equipado.atk}')
     else:
         print('arma: Nenhuma arma equipada')
     print(f'forca: '+Fore.GREEN+f'{jogador.forca}'+Style.RESET_ALL+' fortitude: '+Fore.RED+f'{jogador.fortitude}'+Style.RESET_ALL+' inteligência: '+Fore.BLUE+f'{jogador.inteligencia}'+Style.RESET_ALL)
@@ -147,6 +232,15 @@ def exibir_status(jogador):
     else:
         print('armadura: Nenhuma armadura equipada')
 
+
+def experiencia(monstro):
+    meu_jogador.xp += monstro.xp
+    if meu_jogador.xp >= meu_jogador.xp_max:
+        subi_nivel(meu_jogador)
+
+################################################################
+
+############## MONSTROS  ##############
 class Monstro:
     def __init__(self, nome, vida, nivel, atk, xp, ouro, boss, atk_efeito=None, drops=None):
         self.nome = nome
@@ -196,10 +290,7 @@ def invocacao_aleatoria():
     monstro = random.choice(lista_monstros_invocacoes)
     return Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'], monstro['ouro'], monstro['boss'])
 
-def experiencia(monstro):
-    meu_jogador.xp += monstro.xp
-    if meu_jogador.xp >= meu_jogador.xp_max:
-        subi_nivel(meu_jogador)
+#######################################################################
 
 class Item:
     def __init__(self, nome, atk, desc, equipado, consumivel, preco, especial):
@@ -219,10 +310,6 @@ class Armadura(Item):
         self.vida_max = vida_max
         self.resistencia = resistencia
 
-class ArmaMagica(Item):
-    def __init__(self, dano_magico, nome, atk, desc, equipado, consumivel, preco, especial):
-        super().__init__(nome, atk, desc, equipado, consumivel, preco, especial)
-        self.dano_magico = dano_magico
 class Magia:
     def __init__(self, nome, dano, desc, mana_gasta, efeito=None):
         self.nome = nome
@@ -436,16 +523,13 @@ lista_consumiveis = [
 
 lista_armas = [
     {'nome': 'Adaga enferrujada', 'atk': 3, 'preco': 100, 'desc': 'Parece ser bem antiga', 'equipado': False, 'consumivel': False, 'especial': False},
+    {'nome': 'Varinha capenga', 'atk': 3, 'preco': 100, 'desc': 'É nova, mas bem barata', 'equipado': False, 'consumivel': False, 'especial': False},
     {'nome': 'Espada longa', 'atk': 4, 'preco': 100, 'desc': 'A espada de todo guerreiro.', 'equipado': False, 'consumivel': False, 'especial': False},
-]
-lista_armas_magicas = [
-    {'nome': 'Varinha capenga', 'dano_magico': 2,'atk': 0, 'preco': 100, 'desc': 'É nova, mas bem barata', 'equipado': False, 'consumivel': False, 'especial': False},
-    {'nome': 'Grimório ', 'dano_magico': 4,'atk': 2, 'preco': 100, 'desc': 'O grimório de um mago, o local de sua sabedoria.', 'equipado': False, 'consumivel': False, 'especial': False},
-
+    {'nome': 'Grimório', 'atk': 2, 'preco': 100, 'desc': 'O grimório de um mago, o local de sua sabedoria.', 'equipado': False, 'consumivel': False, 'especial': False},
 ]
 lista_armas_especiais = [
     {'nome': 'Manoplas de ferro', 'atk': 20, 'preco': 150, 'desc': 'Usada a muito tempo por um exímio monge, as manoplas de ferro são uma das mais fortes armas de um monge', 'equipado': False, 'consumivel': False, 'especial': False},
-    {'nome': 'Espada do guerreiro impetuoso', 'atk': 15, 'preco': 150, 'desc': 'espada usada por um guerreiro impetuoso, ela tem um grande poder de ataque', 'equipado': False, 'consumivel': False, 'especial': False},
+    {'nome': 'Espada do guerreiro impetuoso', 'atk': 12, 'preco': 150, 'desc': 'espada usada por um guerreiro impetuoso, ela tem um grande poder de ataque', 'equipado': False, 'consumivel': False, 'especial': False},
     {'nome': 'Grimório Morbius', 'atk': 0, 'preco': 150, 'desc': 'Um grimório desconhecido e com um grande potencial', 'equipado': False, 'consumivel': False, 'especial': False},    
 ]
 lista_armaduras = [
@@ -464,7 +548,7 @@ lista_armaduras = [
     { 
         'nome': 'Armadura de Couro', 
         'defesa': 2, 
-        'vida_max': 30, 
+        'vida_max': 25, 
         'resistencia': 0, 
         'desc': 'Armadura leve feita de couro endurecido.', 
         'comprado': False, 
@@ -475,8 +559,8 @@ lista_armaduras = [
 
     { 
         'nome': 'Armadura de Ferro', 
-        'defesa': 4, 
-        'vida_max': 45, 
+        'defesa': 3, 
+        'vida_max': 30, 
         'resistencia': 0, 
         'preco': 50, 
         'desc': 'Armadura média feita de placas de ferro.', 
@@ -487,8 +571,8 @@ lista_armaduras = [
 
     { 
         'nome': 'Armadura de Aço', 
-        'defesa': 6, 
-        'vida_max': 50, 
+        'defesa': 4, 
+        'vida_max': 45, 
         'resistencia': 0, 
         'preco': 70, 
         'desc': 'Armadura pesada feita de aço temperado.', 
@@ -512,20 +596,48 @@ lista_nucleo = [
 ]
 
 lista_itens_bosses = [
-    { 'nome': 'Pocao de vida baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de vida, cura 15 pontos de vida.', 'equipado': False, 'consumivel': True, 'especial': False},
-    { 'nome': 'Pocao de mana baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de mana, cura 15 pontos de mana.', 'equipado': False, 'consumivel': True, 'especial': False},
-    { 'nome': 'Carne de Homunculo', 'atk': 0,'preco': 60, 'desc': 'Carne do Homunculo, cura 80 pontos de vida.', 'equipado': False, 'consumivel': True, 'especial': False},
+    { 'nome': 'Pocao de vida baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de vida, cura 15 pontos de vida.', 'equipado': False, 'consumivel': True, 'especial': False},#0
+    { 'nome': 'Pocao de mana baixa', 'atk': 0,'preco': 50, 'desc': 'Uma pocao de mana, cura 15 pontos de mana.', 'equipado': False, 'consumivel': True, 'especial': False},#1
+    { 'nome': 'Carne de Homunculo', 'atk': 0,'preco': 60, 'desc': 'Carne do Homunculo, cura 80 pontos de vida.', 'equipado': False, 'consumivel': True, 'especial': False},#2
         { 
         'nome': 'Armadura de Homunculo', 
-        'defesa': 3, 
-        'vida_max': 40, 
-        'resistencia': 20, 
+        'defesa': 5, 
+        'vida_max': 20, 
+        'resistencia': 10, 
         'desc': 'Armadura leve feita do couro do Homunculo.', 
         'comprado': False, 
         'equipado': False, 
         'consumivel': False,
         'preco': 100, 
-        'especial': False},
+        'especial': False}, #3
+        { 
+        'nome': 'Armadura do Cavaleiro Caido', 
+        'defesa': 2, 
+        'vida_max': 50, 
+        'resistencia': 30, 
+        'desc': 'Armadura pesada feita de aço temperado. Armadura usada pelo Cavaleiro Caido.', 
+        'comprado': False, 
+        'equipado': False, 
+        'consumivel': False,
+        'preco': 200, 
+        'especial': False}, #4
+
+        {'nome': 'Espada do Cavaleiro Caido', 
+         'atk': 20, 
+         'preco': 150, 
+         'desc': 'Espada usada pelo Cavaleiro Caido.', 
+         'equipado': False,
+         'consumivel': False, 
+         'especial': False}, #5
+
+        {'nome': 'Manoplas do Cavaleiro Caido', 
+         'atk': 25, 
+         'preco': 150, 
+         'desc': 'Manoplas usadas pelo Cavaleiro Caido.', 
+         'equipado': False,
+         'consumivel': False, 
+         'especial': False}, #6
+    
 ]
 
 lista_magias = [
@@ -570,8 +682,11 @@ lista_monstros_invocacoes = [
     {'nome': 'Demoníaco', 'vida': 30, 'nivel': 8, 'atk': 13, 'xp': 100, 'ouro': 35, 'boss': False},
 ]
 lista_monstros_fixos = [
-    {'nome': 'Guardião Enraizado', 'vida': 100, 'nivel': 1, 'atk': 7, 'xp': 60, 'ouro': 50, 'boss': True},
-    {'nome': 'Homunculo Grotesco', 'vida': 50, 'nivel': 10, 'atk': 14, 'xp': 150, 'ouro': 100, 'boss': True},
+    {'nome': 'Guardião Enraizado', 'vida': 100, 'nivel': 1, 'atk': 7, 'xp': 100, 'ouro': 50, 'boss': True},
+    {'nome': 'Homunculo Grotesco', 'vida': 50, 'nivel': 10, 'atk': 14, 'xp': 200, 'ouro': 100, 'boss': True},
+]
+lista_monstros_semi_boss = [
+    {'nome': 'Cavaleiro Caido', 'vida': 25, 'nivel': 12, 'atk': 10, 'xp': 150, 'ouro': 150, 'boss': True},
 ]
 
 def raiva():
@@ -648,11 +763,13 @@ monstro = lista_monstros_fixos[0]
 monstro2 = lista_monstros_normais[1]
 automato = lista_monstros_normais[10]
 monstro1 = lista_monstros_fixos[1]
+cavaleiro = lista_monstros_semi_boss[0]
 efeito_boss = Efeito(lista_efeitos[1]['nome'], lista_efeitos[1]['tipo'], lista_efeitos[1]['tempo'], lista_efeitos[1]['dano'])
 guardiao_enraizado = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'], monstro['ouro'], monstro['boss'], efeito_boss)
 homunculo = Monstro(monstro1['nome'], monstro1['vida'], monstro1['nivel'], monstro1['atk'], monstro1['xp'], monstro1['ouro'], monstro1['boss'], efeito_boss)
 monstro_exemplo2 = Monstro(monstro2['nome'], monstro2['vida'], monstro2['nivel'], monstro2['atk'], monstro2['xp'], monstro2['ouro'], monstro2['boss'])
 robot = Monstro(automato['nome'], automato['vida'], automato['nivel'], automato['atk'], automato['xp'], automato['ouro'], automato['boss'])
+cavaleiro_caido = Monstro(cavaleiro['nome'], cavaleiro['vida'], cavaleiro['nivel'], cavaleiro['atk'], cavaleiro['xp'], cavaleiro['ouro'], cavaleiro['boss'])
 
 guardiao_enraizado.drops = [
     {'item': Item(lista_itens_bosses[0]['nome'], lista_itens_bosses[0]['atk'],
@@ -683,6 +800,28 @@ homunculo.drops = [
      'chance': 0.3}, 
 ]
 
+cavaleiro_caido.drops = [
+    {'item': Armadura(lista_itens_bosses[4]['nome'], lista_itens_bosses[4]['defesa'],
+                 lista_itens_bosses[4]['vida_max'], lista_itens_bosses[4]['resistencia'],
+                 lista_itens_bosses[4]['desc'], False,
+                 lista_itens_bosses[4]['consumivel'], lista_itens_bosses[4]['preco'],
+                 lista_itens_bosses[4]['especial']),
+     'chance': 1},
+
+    {'item': Item(lista_itens_bosses[5]['nome'], lista_itens_bosses[5]['atk'],
+                 lista_itens_bosses[5]['desc'], lista_itens_bosses[5]['equipado'],
+                 lista_itens_bosses[5]['consumivel'], lista_itens_bosses[5]['preco'],
+                 lista_itens_bosses[5]['especial']),
+     'chance': 0.4},
+
+    {'item': Item(lista_itens_bosses[6]['nome'], lista_itens_bosses[6]['atk'],
+                 lista_itens_bosses[6]['desc'], lista_itens_bosses[6]['equipado'],
+                 lista_itens_bosses[6]['consumivel'], lista_itens_bosses[6]['preco'],
+                 lista_itens_bosses[6]['especial']),
+     'chance': 0.3},
+
+]
+
 ######### Tela de título #########
 def navegação_tela_titulo():
     opção = input(">>").lower()
@@ -696,92 +835,7 @@ def navegação_tela_titulo():
     elif opção == "sair":
         sair()
 
-def tela_titulo():
-    limpar_tela()
-    titulo ='''
-             _____                                                                                 _____ 
-            ( ___ )                                                                               ( ___ )
-             |   |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|   | 
-             |   |                                                                                 |   | 
-             |   |    █████████   ███████████   █████   ████ █████ █████    ███████     █████████  |   | 
-             |   |   ███░░░░░███ ░░███░░░░░███ ░░███   ███░ ░░███ ░░███   ███░░░░░███  ███░░░░░███ |   | 
-             |   |  ░███    ░███  ░███    ░███  ░███  ███    ░░███ ███   ███     ░░███░███    ░░░  |   | 
-             |   |  ░███████████  ░██████████   ░███████      ░░█████   ░███      ░███░░█████████  |   | 
-             |   |  ░███░░░░░███  ░███░░░░░███  ░███░░███      ░░███    ░███      ░███ ░░░░░░░░███ |   | 
-             |   |  ░███    ░███  ░███    ░███  ░███ ░░███      ░███    ░░███     ███  ███    ░███ |   | 
-             |   |  █████   █████ █████   █████ █████ ░░████    █████    ░░░███████░  ░░█████████  |   | 
-             |   | ░░░░░   ░░░░░ ░░░░░   ░░░░░ ░░░░░   ░░░░    ░░░░░       ░░░░░░░     ░░░░░░░░░   |   | 
-             |   |                                                                                 |   | 
-             |___|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|___| 
-            (_____)                                                                               (_____)
-                                            ────────────────────────────────
-                                                 Uma torre esquecida...
-                                             Onde magia e trevas se colidem
-                                            ────────────────────────────────
- '''
-    opcoes = Fore.YELLOW + '''
-                                                     [@] Jogar
-                                                     [@] Ajuda''' + Style.RESET_ALL
-    Sair = Fore.RED + '''                            
-                                                     [@] Sair      
-            
-          ''' + Style.RESET_ALL
-    for titulo1 in titulo:
-        sys.stdout.write(titulo1)
-        sys.stdout.flush()
-        time.sleep(0.0001)
-    for opcao in [opcoes, Sair]:
-        sys.stdout.write(opcao)
-        sys.stdout.flush()
-        time.sleep(0.01)
 
-    navegação_tela_titulo()
-
-def ajuda_menu():
-    limpar_tela()
-    print('''
-             _____                                                                                 _____ 
-            ( ___ )                                                                               ( ___ )
-             |   |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|   | 
-             |   |                                                                                 |   | 
-             |   |    █████████   ███████████   █████   ████ █████ █████    ███████     █████████  |   | 
-             |   |   ███░░░░░███ ░░███░░░░░███ ░░███   ███░ ░░███ ░░███   ███░░░░░███  ███░░░░░███ |   | 
-             |   |  ░███    ░███  ░███    ░███  ░███  ███    ░░███ ███   ███     ░░███░███    ░░░  |   | 
-             |   |  ░███████████  ░██████████   ░███████      ░░█████   ░███      ░███░░█████████  |   | 
-             |   |  ░███░░░░░███  ░███░░░░░███  ░███░░███      ░░███    ░███      ░███ ░░░░░░░░███ |   | 
-             |   |  ░███    ░███  ░███    ░███  ░███ ░░███      ░███    ░░███     ███  ███    ░███ |   | 
-             |   |  █████   █████ █████   █████ █████ ░░████    █████    ░░░███████░  ░░█████████  |   | 
-             |   | ░░░░░   ░░░░░ ░░░░░   ░░░░░ ░░░░░   ░░░░    ░░░░░       ░░░░░░░     ░░░░░░░░░   |   | 
-             |   |                                                                                 |   | 
-             |___|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|___| 
-            (_____)                                                                               (_____)''')
-    print(Fore.YELLOW + '''
-          
-                        [@]principais comandos: [mover / olhar / mochila / status / mapa]
-          
-                    [@] Digite seus comandos para executá-los
-                    [@] Digite mover para se movimentar
-                    [@] Use o comando "olhar" para examinar a área
-                    [@] Use o comando "mochila" para abrir a mochila
-                    [@] Use o comando "status" para ver seus status
-                    [@] Use o comando "mapa" para ver o mapa
-                    [@] Boa sorte e não morra :p
-          ''' + Style.RESET_ALL)
-    
-    if meu_jogador.nome != '':
-        print(Fore.CYAN + 'Voltar ao game? [s/n]'+Style.RESET_ALL)
-        voltar_game = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
-        if voltar_game != 's':
-            limpar_tela()
-            ajuda_menu()
-        print_local()
-        main_game_loop()
-    print(Fore.CYAN + "- voltar ao MENU? [s/n]"+Style.RESET_ALL)
-    voltar_menu = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
-    if voltar_menu != 's':
-        limpar_tela()
-        ajuda_menu()
-    tela_titulo()
 
 #### Funções do jogo ####
 def start_game():
@@ -802,6 +856,7 @@ lugares_resolvidos = {
     'c1': False, 'c2': False,
     'd1': False, 'd2': False,
     'e1': False, 'e2': False,
+    'f1': False, 'f2': False,
 }
 
 mapa = {
@@ -981,6 +1036,88 @@ O vendedor sussurra: "Encontrei alguns tesouros nos corpos dos que falharam... i
                         (Digite 'loja' para ver os itens à venda)\n''',
         'SOLVED': True,
         'SUBIR': '',
+        'DESCER': 'f1',
+        'AVANÇAR': '',
+        'RETORNAR': 'e1',
+        'MONSTRO': '',
+        'LOCAIS': 'loja',
+        'contador' : 0
+    },
+    'f1': {
+        'NOME_LOCAL': "Galeria dos Pactos Perdidos",
+        'DESCRICAO': 'Corredor amplo com três quadros no final dele. Cada quadro emite uma sombra pulsante que parece observar quem passa.',
+        'EXAMINAR': '''
+                   Você se aproxima dos quadros, sentindo as sombras pulsantes intensificarem seus sussurros. Cada quadro exala uma presença distinta:
+             O quadro da esquerda retrata uma figura musculosa, coberta de cicatrizes e erguendo uma espada quebrada. A sombra ao redor pulsa forte e agressiva.
+            O quadro do centro mostra um ser encapuzado, de olhar enigmático, rodeado por símbolos arcanos indecifráveis. Sua sombra emana uma calma perturbadora.
+O quadro da direita revela um guerreiro com o corpo perfurado por lanças, mas que ainda permanece de pé, encarando o horizonte com olhar inabalável. Sua sombra vibra com resistência.
+                                        Deseja tocar em um dos quadros? (digite sim para tocar e não para voltar)\n''',
+        'SOLVED': True,
+        'SUBIR': 'e2',
+        'DESCER': '',
+        'AVANÇAR': 'f2',
+        'RETORNAR': '',
+        'MONSTRO': '',
+        'LOCAIS': 'sim',
+        'contador' : 0,
+        'quadro' : False
+    },
+    'f2': {
+        'NOME_LOCAL': "Salão da Coroa Quebrada",
+        'DESCRICAO': '''
+Uma pequena loja escondida no fundo da torre. O vendedor, uma figura encapuzada, parece não se surpreender com sua presença.
+                           Nas prateleiras, itens estranhos brilham com energia mágica.
+''',
+        'EXAMINAR': '''
+                                          Você se aproxima cautelosamente da figura caída. 
+Quando seus olhos se fixam na fenda do elmo, percebe um brilho espectral pulsando ali dentro, como um fragmento de alma incapaz de descansar.
+           Antes que possa recuar, o cavaleiro ergue lentamente a cabeça, o metal rangendo com um som que mistura dor e ira. 
+                                A mão se fecha com força sobre a empunhadura da lâmina quebrada.
+                            Sem necessidade de palavras, você entende: não há como evitar a batalha.
+                    A sombra do Cavaleiro Caído se ergue à sua frente, pronto para medir forças até o fim.
+
+                                             Digite lutar para inicar o '''+Fore.RED+'''combate.'''+Style.RESET_ALL+'''\n''',
+        'SOLVED': False,
+        'SUBIR': '',
+        'DESCER': 'g1',
+        'AVANÇAR': '',
+        'RETORNAR': 'f1',
+        'MONSTRO': '',
+        'LOCAIS': 'lutar',
+        'contador' : 0
+    },
+    'g1': {
+        'NOME_LOCAL': "Salão",
+        'DESCRICAO': '''
+asdas
+''',
+        'EXAMINAR': '''tem nada\n''',
+        'SOLVED': False,
+        'SUBIR': 'f2',
+        'DESCER': '',
+        'AVANÇAR': 'g2',
+        'RETORNAR': '',
+        'MONSTRO': '',
+        'LOCAIS': 'loja',
+        'contador' : 0
+    },
+    'g2': {
+        'NOME_LOCAL': "Salão da Coroa Quebrada",
+        'DESCRICAO': '''
+Uma pequena loja escondida no fundo da torre. O vendedor, uma figura encapuzada, parece não se surpreender com sua presença.
+                           Nas prateleiras, itens estranhos brilham com energia mágica.
+''',
+        'EXAMINAR': '''
+                                          Você se aproxima cautelosamente da figura caída. 
+Quando seus olhos se fixam na fenda do elmo, percebe um brilho espectral pulsando ali dentro, como um fragmento de alma incapaz de descansar.
+           Antes que possa recuar, o cavaleiro ergue lentamente a cabeça, o metal rangendo com um som que mistura dor e ira. 
+                                A mão se fecha com força sobre a empunhadura da lâmina quebrada.
+                            Sem necessidade de palavras, você entende: não há como evitar a batalha.
+                    A sombra do Cavaleiro Caído se ergue à sua frente, pronto para medir forças até o fim.
+
+                                             Digite lutar para inicar o '''+Fore.RED+'''combate.'''+Style.RESET_ALL+'''\n''',
+        'SOLVED': False,
+        'SUBIR': '',
         'DESCER': '',
         'AVANÇAR': '',
         'RETORNAR': 'e1',
@@ -1003,7 +1140,7 @@ def mostrar_mapa():
             ████          ████
             ██████████████████
             ██  \●/ ██      ██
-            ██   |  ██      ██ 
+            ██   |  ██      ██  Você está na primeira sala do primeiro andar.
             ██  / \ ██      ██
             ██████████████████
             ██      ██      ██
@@ -1046,7 +1183,7 @@ def mostrar_mapa():
             ████          ████
             ██████████████████
             ██      ██ \●/  ██
-            ██      ██  |   ██ 
+            ██      ██  |   ██  Você está na segunda sala do primeiro andar.
             ██      ██ / \  ██
             ██████████████████
             ██      ██      ██
@@ -1093,7 +1230,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██  \●/ ██      ██
-            ██   |  ██      ██ 
+            ██   |  ██      ██  Você está na primeira sala do segundo andar andar.
             ██  / \ ██      ██
             ██████████████████
             ██      ██      ██
@@ -1136,7 +1273,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██      ██ \●/  ██
-            ██      ██  |   ██ 
+            ██      ██  |   ██  Você está na segunda sala do segundo andar.
             ██      ██ / \  ██
             ██████████████████
             ██      ██      ██
@@ -1183,7 +1320,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██  \●/ ██      ██
-            ██   |  ██      ██ 
+            ██   |  ██      ██  Você está na primeira sala do terceiro andar.
             ██  / \ ██      ██
             ██████████████████
             ██      ██      ██
@@ -1226,7 +1363,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██      ██ \●/  ██
-            ██      ██  |   ██ 
+            ██      ██  |   ██  Você está na segunda sala do terceiro andar.
             ██      ██ / \  ██
             ██████████████████
             ██      ██      ██
@@ -1273,7 +1410,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██  \●/ ██      ██
-            ██   |  ██      ██ 
+            ██   |  ██      ██  Voce está na primeira sala do quarto andar.
             ██  / \ ██      ██
             ██████████████████
             ██      ██      ██
@@ -1316,7 +1453,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██      ██ \●/  ██
-            ██      ██  |   ██ 
+            ██      ██  |   ██  Voce está na segunda sala do quarto andar.
             ██      ██ / \  ██
             ██████████████████
             ██      ██      ██
@@ -1363,7 +1500,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██  \●/ ██      ██
-            ██   |  ██      ██ 
+            ██   |  ██      ██  Voce está na primeira sala do quinto andar.
             ██  / \ ██      ██
             ██████████████████
             ██      ██      ██
@@ -1406,12 +1543,98 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██      ██ \●/  ██
-            ██      ██  |   ██ 
+            ██      ██  |   ██  Voce está na segunda sala do quinto andar.
             ██      ██ / \  ██
             ██████████████████
             ██      ██      ██
             ██      ██      ██
             ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+''')
+    elif meu_jogador.local == 'f1':
+        limpar_tela()
+        print('Mapa:')
+        print(r''' 
+                    ██
+                  ██████
+                ████  ████
+              ████      ████
+            ████          ████
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██  \●/ ██      ██
+            ██   |  ██      ██  Voce está na primeira sala do sexto andar.
+            ██  / \ ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+              ''')
+    elif meu_jogador.local == 'f2':
+        limpar_tela()
+        print('Mapa:')
+        print(r''' 
+                    ██
+                  ██████
+                ████  ████
+              ████      ████
+            ████          ████
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██ \●/  ██
+            ██      ██  |   ██  Voce está na segunda sala do sexto andar.
+            ██      ██ / \  ██
             ██████████████████
             ██      ██      ██
             ██      ██      ██
@@ -1455,8 +1678,12 @@ def prompt():
         acao = input(Fore.YELLOW +">> "+Style.RESET_ALL).lower()
     if acao == 'sair':
         sair()
-    if acao in ['mover', 'teleportar']:
+    if acao == 'mover':
         jogador_mover()
+    elif acao == 'teleportar':
+        meu_jogador.local = 'f1'
+        print_local()
+        main_game_loop()
     elif acao == 'ajuda':
         ajuda_menu()
     elif acao in ['olhar', 'inspecionar']:
@@ -1476,7 +1703,7 @@ def prompt():
 def locais():
     print(Fore.LIGHTYELLOW_EX + 'O que deseja fazer?' + Style.RESET_ALL)
     acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
-    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'], 'derramar','raiva','medo','alegria','loucura', 'sair', 'pegar', 'invocar', 'robo', 'corredor', 'completar', 'atacar', 'loja',
+    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'], 'derramar','raiva','medo','alegria','loucura', 'sair', 'pegar', 'invocar', 'robo', 'corredor', 'completar', 'atacar', 'loja', 'sim', 'lutar',
     
     while acao not in acoes_aceitas:
         print(Fore.RED + 'Acao inválida, tente novamente. (caso não tenha mais opções, digite sair)'+Style.RESET_ALL)
@@ -1514,8 +1741,12 @@ def locais():
         boss_homunculo()
     elif acao == 'derramar':
         invocacao()
+    elif acao == 'sim':
+        quadros()
     elif meu_jogador.local == 'e2' and acao == 'loja':
         loja_e2()
+    elif acao == 'lutar':
+        semi_boss_cavaleiro()
     else:
         print('Acao inválida, tente novamente.')
         locais()
@@ -1582,8 +1813,6 @@ def boss_enraizado():
         print(Fore.RED + 'Comando inválido.'+Style.RESET_ALL)
         main_game_loop()
 
-
-
 def boss_homunculo():
     if meu_jogador.local == 'd2':
         if mapa[meu_jogador.local]['SOLVED'] == False:
@@ -1608,6 +1837,29 @@ def boss_homunculo():
         print(Fore.RED + 'Comando inválido.'+Style.RESET_ALL)
         main_game_loop()
 
+def semi_boss_cavaleiro():
+    if meu_jogador.local == 'f2':
+        if mapa[meu_jogador.local]['SOLVED'] == False:
+            lutar = 'Você encara o cavaleiro de frente e inicia um combate.'
+            for fala in lutar:
+                sys.stdout.write(fala)
+                sys.stdout.flush()
+                time.sleep(0.01)
+            time.sleep(1)
+            limpar_tela()
+            luta(cavaleiro_caido, meu_jogador)
+    elif meu_jogador.local == 'f2' and mapa['f2']['SOLVED'] == True:
+        fala1 = Fore.LIGHTYELLOW_EX+'O Cavaleiro está no chão, nenhum sinal de vida é encontrado no corpo.'+Style.RESET_ALL
+        for fala in fala1:
+            sys.stdout.write(fala)
+            sys.stdout.flush()
+            time.sleep(0.01)
+        time.sleep(1.5)
+        limpar_tela()
+        main_game_loop()
+    else:
+        print(Fore.RED + 'Comando inválido.'+Style.RESET_ALL)
+        main_game_loop()
 
 def robo():
     nucleo_no_inventario = None
@@ -1634,7 +1886,7 @@ def robo():
                 lista_armaduras[1],  # Armadura média
                 lista_consumiveis[3],  # Poção de mana
                 lista_itens_especiais[5],  # Núcleo de Robô (para reparar outro)
-                lista_armas[1]  # Espada longa
+                lista_armas[2]  # Espada longa
             ]
             
             # Escolhe um item aleatório
@@ -1828,6 +2080,70 @@ def ritual():
         print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
         locais()
 
+def quadros():
+    if mapa[meu_jogador.local]['quadro'] == False and meu_jogador.local == 'f1':
+        escolha = input('''em qual quadro deseja tocar?
+    [1] quadro da esquerda.
+    [2] quadro do centro.
+    [3] quadro da direita.
+    >>''')
+        for caractere in escolha:
+            sys.stdout.write(caractere)
+            sys.stdout.flush()
+            time.sleep(0.001)
+        if escolha == '1':
+            forca = 'Ao tocar a figura musculosa, sente uma descarga de energia percorrer seus braços. Sua '+Fore.GREEN+'Força'+Style.RESET_ALL+' aumenta.'
+            meu_jogador.forca += 2
+            for caractere in forca:
+                sys.stdout.write(caractere)
+                sys.stdout.flush()
+                time.sleep(0.001)
+            time.sleep(1.5)
+            mapa['f1']['quadro'] = True
+            atualizar_atributos(meu_jogador)
+            limpar_tela()
+            print_local()
+            main_game_loop()
+        elif escolha == '2':
+            inteligencia = ' Ao repousar a mão sobre os símbolos arcanos, uma onda de compreensão obscurecida atravessa sua mente. Sua '+Fore.BLUE+'Inteligência'+Style.RESET_ALL+' aumenta.'
+            meu_jogador.inteligencia += 2
+            for caractere in inteligencia:
+                sys.stdout.write(caractere)
+                sys.stdout.flush()
+                time.sleep(0.001)
+            time.sleep(1.5)
+            mapa['f1']['quadro'] = True
+            atualizar_atributos(meu_jogador)
+            limpar_tela()
+            print_local()
+            main_game_loop()
+        elif escolha == '3':
+            fortitude = 'Ao encostar na imagem do guerreiro ferido, um frio cortante envolve seu corpo, seguido de uma resistência silenciosa. Sua '+Fore.RED+'Fortitude'+Style.RESET_ALL+' aumenta.'
+            meu_jogador.fortitude += 2
+            for caractere in fortitude:
+                sys.stdout.write(caractere)
+                sys.stdout.flush()
+                time.sleep(0.001)
+            time.sleep(1.5)
+            mapa['f1']['quadro'] = True
+            atualizar_atributos(meu_jogador)
+            limpar_tela()
+            print_local()
+            main_game_loop()
+    elif mapa[meu_jogador.local]['quadro'] == True and meu_jogador.local == 'f1':
+        quadro = 'Você já escolheu um quadro.'
+        for caractere in quadro:
+            sys.stdout.write(caractere)
+            sys.stdout.flush()
+            time.sleep(0.001)
+        time.sleep(1.5)
+        limpar_tela()
+        print_local()
+        main_game_loop()
+    else:
+        print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
+        locais()
+
 ########################################
 def comprar(escolha):
         lista_itens_loja[escolha]['comprado'] = True
@@ -1910,10 +2226,7 @@ def abrir_mochila():
         print(Fore.LIGHTRED_EX + "ARMAS:" + Style.RESET_ALL)
         for arma in armas:
             equipado = "(EQUIPADO)" if arma.equipado else ""
-            if arma.dano_magico:
-                print(f'{Fore.YELLOW}[{contador_global}]{Style.RESET_ALL} {arma.nome} | dano Magico: {arma.dano_magico} | {arma.desc} {equipado}')
-            else:
-                print(f'{Fore.YELLOW}[{contador_global}]{Style.RESET_ALL} {arma.nome} | ATK: {arma.atk} | {arma.desc} {equipado}')
+            print(f'{Fore.YELLOW}[{contador_global}]{Style.RESET_ALL} {arma.nome} | ATK: {arma.atk} | {arma.desc} {equipado}')
             itens_exibidos.append(arma)
             contador_global += 1
         print()
@@ -2459,12 +2772,9 @@ def luta(monstro, meu_jogador):
     # Ação: Magia (mantido igual ao original)
     elif acao == 'magia':
         if meu_jogador.magias:
-            dano_magico_arma = 0
-            if meu_jogador.item_equipado.dano_magico:
-                dano_magico_arma = meu_jogador.item_equipado.dano_magico
             for i in range(len(meu_jogador.magias)):
                 magia = meu_jogador.magias[i]
-                print(f'{i+1}. {magia.nome} | DANO: {magia.dano} + DANO ADICIONAL: {meu_jogador.dano_magico+dano_magico_arma} | custo de mana: {magia.mana_gasta} | desc: {magia.desc}')
+                print(f'{i+1}. {magia.nome} | DANO: {magia.dano} + DANO ADICIONAL: {meu_jogador.dano_magico} | custo de mana: {magia.mana_gasta} | desc: {magia.desc}')
             print("Use números para escolher as magias")
             escolha = input(">>")
             try:
@@ -2480,8 +2790,8 @@ def luta(monstro, meu_jogador):
                     time.sleep(1.5)
                     limpar_tela()
                     luta(monstro, meu_jogador)
-                dano_magia = (meu_jogador.magias[escolha].dano + meu_jogador.dano_magico + dano_magico_arma)
-                monstro.vida -= dano_magia
+
+                monstro.vida -= (meu_jogador.magias[escolha].dano + meu_jogador.dano_magico)
                 meu_jogador.mana -= meu_jogador.magias[escolha].mana_gasta
                 monstro.add_efeito(meu_jogador.magias[escolha].efeito)
                 magias = f'Você lança {meu_jogador.magias[escolha].nome} em {monstro.nome}'
@@ -2940,14 +3250,10 @@ def fugir():
     main_game_loop()
 
 def mostrar_status(self):
-    dano_magico_arma = 0
-    if meu_jogador.item_equipado:
-        if meu_jogador.item_equipado.dano_magico:
-            dano_magico_arma = meu_jogador.item_equipado.dano_magico
     print('\n'+'█'+'▀'*50+'█')
     print(f'█             Nome: {self.nome} LVL:{self.nivel} XP: {self.xp}/{self.xp_max}            \n█')
     print('''█         Vida: '''+Fore.RED+f'''{self.vida}'''+Style.RESET_ALL+'''/'''+Fore.RED+f'''{self.vida_max}'''+Style.RESET_ALL+'''        ATK: '''+Fore.GREEN+f'''{self.atk}'''+Style.RESET_ALL+''' 
-█         Mana: '''+Fore.BLUE+f'''{self.mana}/{self.mana_max}'''+Style.RESET_ALL+'''      MAG.ATK: '''+Fore.LIGHTBLUE_EX+f'''{self.dano_magico+dano_magico_arma}\n'''+Style.RESET_ALL+'█')
+█         Mana: '''+Fore.BLUE+f'''{self.mana}/{self.mana_max}'''+Style.RESET_ALL+'''      MAG.ATK: '''+Fore.LIGHTBLUE_EX+f'''{self.dano_magico}\n'''+Style.RESET_ALL+'█')
     
     # Adiciona informações da armadura
     if self.armadura:
@@ -2957,7 +3263,7 @@ def mostrar_status(self):
         print('█         Armadura: Nenhuma equipada')
     
     if self.item_equipado:
-        print(f'█         arma: {self.item_equipado.nome}               ')
+        print(f'█         arma: {self.item_equipado.nome} ATK: {self.item_equipado.atk}                ')
         for efeito in self.efeitos_status:
             print(f'█         efeitos de status: {efeito.nome}', end=' ')
             print('')
@@ -3035,6 +3341,10 @@ Descer a escada ou retornar a sala anterior? (escreva: descer ou retornar)\n>>''
     elif meu_jogador.local in 'e1':
         pergunta = "Avançar ou subir a sala anterior? (escreva: avançar ou subir)\n>>"
     elif meu_jogador.local in 'e2':
+        pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
+    elif meu_jogador.local in 'f1':
+        pergunta = "Avançar ou subir a sala anterior? (escreva: avançar ou subir)\n>>"
+    elif meu_jogador.local in 'f2':
         pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
     
     dest = input(pergunta).lower()
@@ -3207,7 +3517,7 @@ def setup_jogo():
         pocao_vida_alta = lista_consumiveis[2]
         
         # Arma padrão
-        arma_padrao = lista_armas[1]
+        arma_padrao = lista_armas[2]
         
         # Armadura inicial para guerreiro
         armadura_inicial = lista_armaduras[0]
@@ -3282,7 +3592,6 @@ def setup_jogo():
         calcular_atributos(meu_jogador)
 
     elif meu_jogador.classe == 'mago':
-        arma_basica = lista_armas_magicas[0]
         magia_basica = lista_magias[0]
         magia_basica1 = lista_magias[1]
         efeito = Efeito(lista_efeitos[0]['nome'], lista_efeitos[0]['tipo'], lista_efeitos[0]['tempo'], lista_efeitos[0]['dano'])
@@ -3296,11 +3605,6 @@ def setup_jogo():
         meu_jogador.atk_base = 2
         meu_jogador.inteligencia = 3
         meu_jogador.atk = meu_jogador.atk_base
-        meu_jogador.add_item(ArmaMagica(
-            arma_basica['dano_magico'], arma_basica['nome'], arma_basica['atk'],
-            arma_basica['desc'], arma_basica['equipado'], arma_basica['consumivel'],
-            arma_basica['preco'], arma_basica['especial']
-        ))
         meu_jogador.magias.append(Magia(magia_basica['nome'], magia_basica['dano'], magia_basica['desc'], magia_basica['mana_gasta'], efeito))
         meu_jogador.magias.append(Magia(magia_basica1['nome'], magia_basica1['dano'], magia_basica1['desc'], magia_basica1['mana_gasta'], efeito1))
         calcular_atributos(meu_jogador)
