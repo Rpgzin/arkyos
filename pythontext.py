@@ -220,8 +220,9 @@ def exibir_status(jogador):
         └───────────────────────────────────────────────────┘   
 '''.upper())
     dano_magico_arma = 0
-    if meu_jogador.item_equipado.dano_magico:
-        dano_magico_arma = meu_jogador.item_equipado.dano_magico
+    if meu_jogador.item_equipado:
+        if meu_jogador.item_equipado.dano_magico:
+            dano_magico_arma = meu_jogador.item_equipado.dano_magico
     print(f'Nome:{jogador.nome} LVL: {jogador.nivel}'+Style.RESET_ALL+f' XP: {jogador.xp}/{jogador.xp_max}')
     print('vida:'+Fore.RED+f' {jogador.vida}/{jogador.vida_max}'+Style.RESET_ALL+ ' / MANA: '+Fore.BLUE+f'{jogador.mana}/{jogador.mana_max}'+Style.RESET_ALL+' / ATK: '+Fore.YELLOW+f'{jogador.atk}'+Style.RESET_ALL+' / MAG.ATK: '+Fore.LIGHTBLUE_EX+f'{jogador.dano_magico+dano_magico_arma}'+Style.RESET_ALL)
     if jogador.item_equipado:
@@ -789,7 +790,7 @@ lista_magias = [
 
 lista_efeitos = [
     {'nome': 'queimação', 'tipo': 'dano', 'tempo': 2, 'dano': 5},
-    {'nome': 'envenamento', 'tipo': 'dano', 'tempo': 3, 'dano': 4},
+    {'nome': 'envenamento', 'tipo': 'dano', 'tempo': 2, 'dano': 4},
     {'nome': 'congelamento', 'tipo': 'pular', 'tempo': 3},
     {'nome': 'atordoamento', 'tipo': 'skip', 'tempo': 1},
 ]
@@ -1130,7 +1131,7 @@ Uma mensagem é escrita na parede "Derrame sangue no símbolo e acorde aqueles q
 Ao olhar para a sua direita, há um corredor com paredes de ferro corroído e autômatos enferrujados, aparentemente desligados.
                      Ao final deste corredor aparenta ter um báu de madeira.
                     Deseja ir ao corredor ou Robo? (Digite corredor ou robo)\n''',
-        'SOLVED': True,
+        'SOLVED': False,
         'SUBIR': '',
         'DESCER': 'd1',
         'AVANÇAR': '',
@@ -1941,6 +1942,7 @@ def trono():
             sys.stdout.write(fala)
             sys.stdout.flush()
             time.sleep(0.01)
+        input(Fore.YELLOW+'[Press Enter]'+Style.RESET_ALL)
         print('\n', '▬'*100)
         mapa[meu_jogador.local]['SOLVED'] = True
         time.sleep(1.5)
@@ -2042,6 +2044,7 @@ def robo():
             break
     
     if nucleo_no_inventario:
+        mapa['c2']['SOLVED'] = True
         print('Você usa o Núcleo de Robo para tentar restaurar o robô.')
         # Remove o núcleo do inventário
         meu_jogador.mochila.remove(nucleo_no_inventario)
@@ -2141,6 +2144,7 @@ def corredor():
             if mapa['c2']['contador2'] == 0:
                 print('Você adentra o corredor e passa por vários automatos desligados, porém um deles aparenta se mexer e te ataca.')
                 time.sleep(1.5)
+                input(Fore.YELLOW+'\n[Press Enter]'+Style.RESET_ALL)
                 limpar_tela()
                 luta(robot, meu_jogador)
             elif meu_jogador.vida > 0:
@@ -2188,7 +2192,7 @@ def pegar():
                 sys.stdout.flush()
                 time.sleep(0.01)
             time.sleep(1)
-            input('\nPressione enter para continuar...')
+            input(Fore.YELLOW+'\n[Press Enter]'+Style.RESET_ALL)
             limpar_tela()
             print_local()
             main_game_loop()
@@ -2536,7 +2540,7 @@ def abrir_mochila():
                     # Equipa nova armadura
                     meu_jogador.armadura = item_selecionado
                     item_selecionado.equipado = True
-                    calcular_atributos(meu_jogador)
+                    atualizar_atributos(meu_jogador)
                     print(f"\n{Fore.GREEN}Você equipou {item_selecionado.nome}!{Style.RESET_ALL}")
                     time.sleep(1)
                 
@@ -2548,7 +2552,7 @@ def abrir_mochila():
                     # Equipa nova arma
                     meu_jogador.item_equipado = item_selecionado
                     item_selecionado.equipado = True
-                    calcular_atributos(meu_jogador)
+                    atualizar_atributos(meu_jogador)
                     print(f"\n{Fore.GREEN}Você equipou {item_selecionado.nome}!{Style.RESET_ALL}")
                     time.sleep(1)
                 
@@ -2561,7 +2565,7 @@ def abrir_mochila():
                     meu_jogador.item_equipado = None
                 
                 item_selecionado.equipado = False
-                calcular_atributos(meu_jogador)
+                atualizar_atributos(meu_jogador)
                 print(f"\n{Fore.YELLOW}Você desequipou {item_selecionado.nome}!{Style.RESET_ALL}")
                 time.sleep(1)
                 abrir_mochila()
@@ -2824,7 +2828,7 @@ def loja_e2():
                                 meu_jogador.item_equipado.equipado = False
                             meu_jogador.item_equipado = novo_item
                         novo_item.equipado = True
-                        calcular_atributos(meu_jogador)
+                        atualizar_atributos(meu_jogador)
                         print(Fore.GREEN + f'{item["nome"]} equipado!' + Style.RESET_ALL)
                         time.sleep(1)
             
@@ -2835,6 +2839,11 @@ def loja_e2():
             print(Fore.RED + 'Digite um número válido ou "sair"' + Style.RESET_ALL)
 
 def luta(monstro, meu_jogador):
+        # Jogador morre
+    if meu_jogador.vida <= 0:
+        meu_jogador.game_over = True
+        main_game_loop()
+        
     print('▀█'+'▀'*50+'█▀')
     efeitos = ''
     for efeito in monstro.efeitos_status:
@@ -2955,8 +2964,9 @@ def luta(monstro, meu_jogador):
     elif acao == 'magia':
         if meu_jogador.magias:
             dano_magico_arma = 0
-            if meu_jogador.item_equipado.dano_magico:
-                dano_magico_arma = meu_jogador.item_equipado.dano_magico
+            if meu_jogador.item_equipado:
+                if meu_jogador.item_equipado.dano_magico:
+                    dano_magico_arma = meu_jogador.item_equipado.dano_magico
             for i in range(len(meu_jogador.magias)):
                 magia = meu_jogador.magias[i]
                 print(f'{i+1}. {magia.nome} | DANO: {magia.dano} + DANO ADICIONAL: {meu_jogador.dano_magico+dano_magico_arma} | custo de mana: {magia.mana_gasta} | desc: {magia.desc}')
@@ -3449,6 +3459,18 @@ def fugir():
         meu_jogador.local = 'b2'
     elif meu_jogador.local == 'c2':
         meu_jogador.local = 'c1'
+    elif meu_jogador.local == 'd1':
+        meu_jogador.local = 'c2'
+    elif meu_jogador.local == 'd2':
+        meu_jogador.local = 'd1'
+    elif meu_jogador.local == 'e1':
+        meu_jogador.local = 'd2'
+    elif meu_jogador.local == 'e2':
+        meu_jogador.local = 'e1'
+    elif meu_jogador.local == 'f1':
+        meu_jogador.local = 'e2'
+    elif meu_jogador.local == 'f2':
+        meu_jogador.local = 'f1'
     print('você voltou para a sala anterior')
     main_game_loop()
 
@@ -3524,6 +3546,14 @@ def jogador_mover():
             main_game_loop()
         elif meu_jogador.local == 'd2' and not mapa[meu_jogador.local]['SOLVED']:
             jogador_examinar()
+        elif meu_jogador.local == 'c2' and not mapa[meu_jogador.local]['SOLVED']:
+            fala3 = 'O robô está na frente da porta, é preciso um núcleo para ativa-lo e remove-lo da frente.'
+            for falas in fala3:
+                sys.stdout.write(falas)
+                sys.stdout.flush()
+                time.sleep(0.01)
+            time.sleep(1.5)
+            main_game_loop()
     elif meu_jogador.local == 'a1':
         pergunta = "Avançar em direção ao portão negro? (escreva avançar)\n >>"
     elif meu_jogador.local == 'a2':
@@ -3591,7 +3621,8 @@ a cada passo a dentro o ambiente é iluminado por tochas azuis que você sente q
                 sys.stdout.write(passagens)
                 sys.stdout.flush()
                 time.sleep(0.01)
-            time.sleep(2)
+            time.sleep(1)
+            input(Fore.YELLOW+'\n[Press Enter]'+Style.RESET_ALL)
         print_local()
 
     elif destino == 'b1':
@@ -3608,6 +3639,7 @@ Quando você se aproxima, uma delas vira lentamente... te observando.'''
                 sys.stdout.flush()
                 time.sleep(0.01)
             time.sleep(2)
+            input(Fore.YELLOW+'\n[Press Enter]'+Style.RESET_ALL)
             print_local()
     meu_jogador.local = destino
     print(f"\nVocê se moveu para {destino}.")
@@ -3878,7 +3910,8 @@ apocalíptica e por um silêncio que pesa como um túmulo.
             sys.stdout.write(caractere)
             sys.stdout.flush()
             time.sleep(0.001)
-    time.sleep(2)
+    time.sleep(1)
+    input(Fore.YELLOW+'\n[Press Enter]'+Style.RESET_ALL)
 
     os.system('clear' if os.name != 'nt' else 'cls')
     print ("▬"*100)
