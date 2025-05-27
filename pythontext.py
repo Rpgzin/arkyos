@@ -180,14 +180,14 @@ def atualizar_atributos(jogador):
     jogador.dano_magico = jogador.inteligencia * 2
 
 def subi_nivel(jogador):
-    jogador.nivel += 1
-    print(f'{jogador.nome} subiu de nivel para o LVL:'+Fore.GREEN+f'{jogador.nivel}'+Style.RESET_ALL+'!!!')
     pontos = 0
     while jogador.xp >= jogador.xp_max:
+        jogador.nivel += 1
         pontos += 3
         resto_xp = jogador.xp - jogador.xp_max
         jogador.xp = resto_xp
         jogador.xp_max +=50
+    print(f'{jogador.nome} subiu de nivel para o LVL:'+Fore.GREEN+f'{jogador.nivel}'+Style.RESET_ALL+'!!!')
     while pontos > 0:
         print(f'Pontos restantes: '+Fore.YELLOW+f'{pontos}')
         escolha = input(Fore.GREEN+"Aumentar Forca (for)"+Style.RESET_ALL+", "+Fore.RED+"Fortitude (fort)"+Style.RESET_ALL+" ou "+Fore.BLUE+"Inteligência (int)"+Style.RESET_ALL+": ").lower()
@@ -307,6 +307,7 @@ class Item:
         self.consumivel = consumivel
         self.preco = preco
         self.especial = especial
+        self.dano_magico = 0
     
 class Armadura(Item):
     def __init__(self, nome, defesa, vida_max, resistencia, desc, equipado, consumivel, preco, especial):
@@ -460,7 +461,7 @@ def usar_pergaminho_apocalipse():
             nome="chamas do fim",
             tipo="dano",
             tempo=3,
-            dano=10
+            dano= 40
         )
     )
     
@@ -470,6 +471,25 @@ def usar_pergaminho_apocalipse():
     print(Fore.MAGENTA + "\nAo usar o pergaminho, conhecimento ancestral invade sua mente!" + Style.RESET_ALL)
     print(Fore.LIGHTBLUE_EX + "Você aprendeu a magia: APOCALIPSE!" + Style.RESET_ALL)
     time.sleep(2)
+
+def usar_pergaminho_estilhaço_sismico():
+    magia_estilhaço = Magia(
+        nome="Estilhaço Sísmico",
+        dano=200,
+        desc="Você invoca um fragmento da terra que explode em estilhaços, lançando pedras afiadas contra seu inimigo.",
+        mana_gasta=70,
+        efeito=Efeito(
+            nome="",
+            tipo="skip",
+            tempo=0,
+        )
+    )
+    meu_jogador.magias.append(magia_estilhaço)
+    
+    print(Fore.MAGENTA + "\nAo usar o pergaminho, conhecimento ancestral invade sua mente!" + Style.RESET_ALL)
+    print(Fore.LIGHTBLUE_EX + "Você aprendeu a magia: Estilhaço Sísmico!" + Style.RESET_ALL)
+    time.sleep(2)
+    
 
 lista_itens_loja = [
     { 
@@ -730,6 +750,35 @@ lista_itens_bosses = [
          'equipado': False,
          'consumivel': False, 
          'especial': False}, #6
+
+        {'nome': 'Martelo de Guerra', 
+         'atk': 40, 
+         'preco': 300, 
+         'desc': 'Martelo usado pela Forjadora.', 
+         'equipado': False,
+         'consumivel': False, 
+         'especial': False}, #7
+
+        { 
+        'nome': 'Armadura de Ossos', 
+        'defesa': 5, 
+        'vida_max': 50, 
+        'resistencia': 40, 
+        'desc': 'Armadura pesada feita de aço temperado. Armadura usada pelo Cavaleiro Caido.', 
+        'comprado': False, 
+        'equipado': False, 
+        'consumivel': False,
+        'preco': 200, 
+        'especial': False}, #8
+
+            { 
+        'nome': 'Pergaminho do Estilhaço Sísmico', 
+        'atk': 0,
+        'preco': 0, 
+        'desc': 'Concede uma magia poderosa chamado Estilhaço Sísmico.', 
+        'equipado': False, 
+        'consumivel': True, 
+        'especial': True}, #9
     
 ]
 
@@ -742,6 +791,7 @@ lista_efeitos = [
     {'nome': 'queimação', 'tipo': 'dano', 'tempo': 2, 'dano': 5},
     {'nome': 'envenamento', 'tipo': 'dano', 'tempo': 3, 'dano': 4},
     {'nome': 'congelamento', 'tipo': 'pular', 'tempo': 3},
+    {'nome': 'atordoamento', 'tipo': 'skip', 'tempo': 1},
 ]
 
 lista_monstros_normais = [
@@ -777,6 +827,7 @@ lista_monstros_invocacoes = [
 lista_monstros_fixos = [
     {'nome': 'Guardião Enraizado', 'vida': 100, 'nivel': 1, 'atk': 7, 'xp': 100, 'ouro': 50, 'boss': True},
     {'nome': 'Homunculo Grotesco', 'vida': 50, 'nivel': 10, 'atk': 14, 'xp': 200, 'ouro': 100, 'boss': True},
+    {'nome': 'A Forjadora', 'vida': 50, 'nivel': 30, 'atk': 20, 'xp': 3000, 'ouro': 600, 'boss': True},
 ]
 lista_monstros_semi_boss = [
     {'nome': 'Cavaleiro Caido', 'vida': 25, 'nivel': 12, 'atk': 10, 'xp': 150, 'ouro': 150, 'boss': True},
@@ -856,13 +907,17 @@ monstro = lista_monstros_fixos[0]
 monstro2 = lista_monstros_normais[1]
 automato = lista_monstros_normais[10]
 monstro1 = lista_monstros_fixos[1]
+forjadora = lista_monstros_fixos[2]
 cavaleiro = lista_monstros_semi_boss[0]
+
 efeito_boss = Efeito(lista_efeitos[1]['nome'], lista_efeitos[1]['tipo'], lista_efeitos[1]['tempo'], lista_efeitos[1]['dano'])
+
 guardiao_enraizado = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'], monstro['ouro'], monstro['boss'], efeito_boss)
 homunculo = Monstro(monstro1['nome'], monstro1['vida'], monstro1['nivel'], monstro1['atk'], monstro1['xp'], monstro1['ouro'], monstro1['boss'], efeito_boss)
 monstro_exemplo2 = Monstro(monstro2['nome'], monstro2['vida'], monstro2['nivel'], monstro2['atk'], monstro2['xp'], monstro2['ouro'], monstro2['boss'])
 robot = Monstro(automato['nome'], automato['vida'], automato['nivel'], automato['atk'], automato['xp'], automato['ouro'], automato['boss'])
 cavaleiro_caido = Monstro(cavaleiro['nome'], cavaleiro['vida'], cavaleiro['nivel'], cavaleiro['atk'], cavaleiro['xp'], cavaleiro['ouro'], cavaleiro['boss'])
+forjadora_de_ossos = Monstro(forjadora['nome'], forjadora['vida'], forjadora['nivel'], forjadora['atk'], forjadora['xp'], forjadora['ouro'], forjadora['boss'])
 
 guardiao_enraizado.drops = [
     {'item': Item(lista_itens_bosses[0]['nome'], lista_itens_bosses[0]['atk'],
@@ -911,6 +966,27 @@ cavaleiro_caido.drops = [
                  lista_itens_bosses[6]['desc'], lista_itens_bosses[6]['equipado'],
                  lista_itens_bosses[6]['consumivel'], lista_itens_bosses[6]['preco'],
                  lista_itens_bosses[6]['especial']),
+     'chance': 0.3},
+]
+
+forjadora_de_ossos.drops = [
+    {'item': Item(lista_itens_bosses[7]['nome'], lista_itens_bosses[7]['atk'],
+                 lista_itens_bosses[7]['desc'], lista_itens_bosses[7]['equipado'],
+                 lista_itens_bosses[7]['consumivel'], lista_itens_bosses[7]['preco'],
+                 lista_itens_bosses[7]['especial']),
+     'chance': 0.3},
+
+    {'item': Armadura(lista_itens_bosses[8]['nome'], lista_itens_bosses[8]['defesa'],
+                 lista_itens_bosses[8]['vida_max'], lista_itens_bosses[8]['resistencia'],
+                 lista_itens_bosses[8]['desc'], False,
+                 lista_itens_bosses[8]['consumivel'], lista_itens_bosses[8]['preco'],
+                 lista_itens_bosses[8]['especial']),
+     'chance': 0.3},
+
+    {'item': Item(lista_itens_bosses[9]['nome'], lista_itens_bosses[9]['atk'],
+                 lista_itens_bosses[9]['desc'], lista_itens_bosses[9]['equipado'],
+                 lista_itens_bosses[9]['consumivel'], lista_itens_bosses[9]['preco'],
+                 lista_itens_bosses[9]['especial']),
      'chance': 0.3},
 
 ]
@@ -1158,8 +1234,10 @@ O quadro da direita revela um guerreiro com o corpo perfurado por lanças, mas q
     'f2': {
         'NOME_LOCAL': "Salão da Coroa Quebrada",
         'DESCRICAO': '''
-Uma pequena loja escondida no fundo da torre. O vendedor, uma figura encapuzada, parece não se surpreender com sua presença.
-                           Nas prateleiras, itens estranhos brilham com energia mágica.
+         Você adentra um salão vasto e silencioso, onde as colunas de pedra rachadas sustentam um teto coberto por raízes secas e pendentes como garras mortas.
+No centro, um trono destroçado jaz tombado, e diante dele, uma figura permanece ajoelhada um cavaleiro envolto em uma armadura corroída e marcada por cicatrizes de batalhas antigas.
+                        A lâmina ao seu lado está quebrada, mas sua presença exala uma fúria adormecida, como uma fogueira sufocada por cinzas.
+                                             O ar é frio, pesado... e cada passo ecoa como um desafio lançado ao vazio.
 ''',
         'EXAMINAR': '''
                                           Você se aproxima cautelosamente da figura caída. 
@@ -1188,7 +1266,7 @@ Uma pequena loja escondida no fundo da torre. O vendedor, uma figura encapuzada,
         'EXAMINAR': '''
         O vendedor sussurra: "Encontrei alguns tesouros nos corpos dos que falharam... interesse em algum?"
                            (Digite 'loja' para ver os itens à venda)\n''',
-        'SOLVED': False,
+        'SOLVED': True,
         'SUBIR': 'f2',
         'DESCER': '',
         'AVANÇAR': 'g2',
@@ -1198,20 +1276,18 @@ Uma pequena loja escondida no fundo da torre. O vendedor, uma figura encapuzada,
         'contador' : 0
     },
     'g2': {
-        'NOME_LOCAL': "Salão da Coroa Quebrada",
+        'NOME_LOCAL': "O Coliseu dos Ecos Caídos",
         'DESCRICAO': '''
-Uma pequena loja escondida no fundo da torre. O vendedor, uma figura encapuzada, parece não se surpreender com sua presença.
-                           Nas prateleiras, itens estranhos brilham com energia mágica.
+        Um coliseu em ruínas, com pilares estilhaçados e o chão enegrecido por cinzas, ossos e aço corroído.
+Cada pedra carrega o peso de batalhas esquecidas, enquanto o ar denso sussurra a memória de uma guerra que nunca terminou.
+                            O silêncio opressivo torna-se o prelúdio para o próximo massacre.
 ''',
         'EXAMINAR': '''
-                                          Você se aproxima cautelosamente da figura caída. 
-Quando seus olhos se fixam na fenda do elmo, percebe um brilho espectral pulsando ali dentro, como um fragmento de alma incapaz de descansar.
-           Antes que possa recuar, o cavaleiro ergue lentamente a cabeça, o metal rangendo com um som que mistura dor e ira. 
-                                A mão se fecha com força sobre a empunhadura da lâmina quebrada.
-                            Sem necessidade de palavras, você entende: não há como evitar a batalha.
-                    A sombra do Cavaleiro Caído se ergue à sua frente, pronto para medir forças até o fim.
+ Das sombras surge A Forjadora de Ossos, uma imensa guerreira vestida com a armadura dos mortos, erguendo sua marreta grotesca feita de ferro e ossos.
+                                      Seus passos fazem o chão tremer, enquanto o eco metálico anuncia:
+                                                    "Venha… e seja parte da minha forja!"
+                                    Ela avança sem piedade, o olhar vazio e frio como a morte que carrega.''',
 
-                                             Digite lutar para inicar o '''+Fore.RED+'''combate.'''+Style.RESET_ALL+'''\n''',
         'SOLVED': False,
         'SUBIR': '',
         'DESCER': '',
@@ -2495,8 +2571,7 @@ def abrir_mochila():
                     pocao_vida_lendaria()
                 elif item_selecionado.nome == 'Poção de Mana Lendária':
                     pocao_mana_lendaria()
-                elif item_selecionado.nome == 'Pergaminho do Apocalipse':
-                    usar_pergaminho_apocalipse()
+
                 elif item_selecionado.nome == 'Pocao de vida baixa':
                     pocao_vida()
                 elif item_selecionado.nome == 'Pocao de vida media':
@@ -2511,7 +2586,10 @@ def abrir_mochila():
                     pocao_mana_alta()
                 elif item_selecionado.nome == 'Carne de Homunculo':
                     carne_homunculo()
-                
+                elif item_selecionado.nome == 'Pergaminho do Apocalipse':
+                    usar_pergaminho_apocalipse()
+                elif item_selecionado.nome == 'Pergaminho do Estilhaço Sísmico':
+                    usar_pergaminho_estilhaço_sismico()
                 # Remove o item usado
                 meu_jogador.mochila.remove(item_selecionado)
                 time.sleep(1)
@@ -3295,6 +3373,24 @@ def aplicar_efeito(alvo):
                 sys.stdout.write(congelados)
                 sys.stdout.flush()
                 time.sleep(0.001)
+
+        elif efeito.tipo == 'skip':
+            alvo.pular_turno = True
+            chance = random.randint(1,100)
+            if chance <= 40:
+                alvo.efeitos_status[i].tempo -= 1
+                if alvo.efeitos_status[i].tempo == 0:
+                    alvo.efeitos_status.pop(i)
+                alvo.pular_turno = False
+            else:
+                stunado = Fore.LIGHTBLUE_EX+f'{alvo.nome} está atordoado e não pode atacar'+Style.RESET_ALL
+                for caractere in stunado:
+                    sys.stdout.write(caractere)
+                    sys.stdout.flush()
+                    time.sleep(0.001)
+                input(Fore.LIGHTYELLOW_EX + "\n[Pressione Enter]" + Style.RESET_ALL)
+                
+
 def drop(monstro):
     print('Você ganhou '+Fore.YELLOW+f'{monstro.ouro}'+Style.RESET_ALL+' de ouro!')
     meu_jogador.ouro += monstro.ouro
@@ -3460,6 +3556,10 @@ Descer a escada ou retornar a sala anterior? (escreva: descer ou retornar)\n>>''
         pergunta = "Avançar ou subir a sala anterior? (escreva: avançar ou subir)\n>>"
     elif meu_jogador.local in 'f2':
         pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
+    elif meu_jogador.local in 'g1':
+        pergunta = "Avançar ou subir a sala anterior? (escreva: avançar ou subir)\n>>"
+    elif meu_jogador.local in 'g2':
+        pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
     
     dest = input(pergunta).lower()
     direcoes_validas = ['subir', 'descer', 'avançar', 'retornar', 'loja']
@@ -3555,6 +3655,10 @@ Você já pegou o item de dentro do poço.
             sys.stdout.write(examina)
             sys.stdout.flush()
             time.sleep(0.01)
+        if meu_jogador.local == 'g2' and mapa['g2']['SOLVED'] == False:
+            input(Fore.LIGHTYELLOW_EX + "\n[Pressione Enter]" + Style.RESET_ALL)
+            limpar_tela()
+            luta(forjadora_de_ossos, meu_jogador)
         
     locais()
 
@@ -3709,6 +3813,7 @@ def setup_jogo():
         arma_basica = lista_armas_magicas[0]
         magia_basica = lista_magias[0]
         magia_basica1 = lista_magias[1]
+        magia_basica2 = lista_itens_bosses[9]
         efeito = Efeito(lista_efeitos[0]['nome'], lista_efeitos[0]['tipo'], lista_efeitos[0]['tempo'], lista_efeitos[0]['dano'])
         efeito1 = Efeito(lista_efeitos[2]['nome'], lista_efeitos[2]['tipo'], lista_efeitos[2]['tempo'], lista_efeitos[0]['dano'])
         meu_jogador.vida_base = 50
@@ -3720,6 +3825,15 @@ def setup_jogo():
         meu_jogador.atk_base = 2
         meu_jogador.inteligencia = 3
         meu_jogador.atk = meu_jogador.atk_base
+        meu_jogador.add_item(Item(
+            magia_basica2['nome'],
+            magia_basica2.get('atk', 0),
+            magia_basica2['desc'],
+            False,
+            magia_basica2['consumivel'],
+            magia_basica2['preco'],
+            magia_basica2['especial']
+                    ))
         meu_jogador.add_item(ArmaMagica(
             arma_basica['dano_magico'], arma_basica['nome'], arma_basica['atk'],
             arma_basica['desc'], arma_basica['equipado'], arma_basica['consumivel'],
