@@ -251,6 +251,7 @@ Você se aproxima cautelosamente da figura caída.
 Quando seus olhos se fixam na fenda do elmo, percebe um brilho espectral pulsando ali dentro, como um fragmento de alma incapaz de descansar.
 Antes que possa recuar, o cavaleiro ergue lentamente a cabeça, o metal rangendo com um som que mistura dor e ira. A mão se fecha com força sobre a empunhadura da lâmina quebrada.
 Sem necessidade de palavras, você entende: não há como evitar a batalha.
+
 A sombra do Cavaleiro Caído se ergue à sua frente, pronto para medir forças até o fim.
 ====================================================================================================================================
 Evento: O jogador vai lutar contra um cavaleiro caido, caso o jogador vença terá um drop de 100% da armadura do cavaleiro caido, 50% da espada do cavaleiro caido
@@ -262,17 +263,13 @@ e 40% das manoplas do cavaleiro caido
 O ar cheira a ferro queimado. As pedras do chão ainda estão aquecidas. As cicatrizes do combate ainda ardem…
 Mesmo que não saiba quem lutou aqui.
 ====================================================================================================================================
-Sala 1: O Campo Silenciado
+Sala 1: Loja dos mercenários
 Descrição:
 Espadas cravadas em corpos cristalizados. Escudos partidos. Ninguém respira, mas os olhos… alguns olhos ainda seguem seus movimentos.
 Há uma lança dourada quebrada no centro, que brilha fracamente quando você se aproxima. Ela pulsa com sua presença.
 
-Evento Duplo:
-Tocar a lança:Libera uma Habilidade Marcada pelo Conflito (pode ser uma skill de ataque ou suporte, à escolha do jogador).
-
-Ativa um eco de batalha: combatentes espectrais revivem, lutando entre si. Você pode observar... ou se envolver.
-(se só observar voce ganha nada mas se voce se envolver voce luta contra fantasmas 
-e é recompensado com uma magia de buff de defesa e dano, as porcentagens ficam com voces)
+examinar:  O vendedor sussurra: "Encontrei alguns tesouros nos corpos dos que falharam... interesse em algum?"
+                           (Digite 'loja' para ver os itens à venda)
 ====================================================================================================================================
 Sala 2: O Coliseu dos Ecos Caídos
 Um Coliseu destruído, com pilares rachadas e chão coberto por cinzas e restos de batalha.

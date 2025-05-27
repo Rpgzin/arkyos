@@ -128,7 +128,7 @@ class Player:
         self.atk_base = 0
         self.atk = 0
         self.dano_magico = 0
-        self.ouro = 0
+        self.ouro = 1000000
         self.atk_final = self.atk
         self.item_equipado = None
         self.mochila = []
@@ -475,7 +475,7 @@ lista_itens_loja = [
     { 
         'nome': 'Poção de Vida Lendária', 
         'atk': 0,
-        'preco': 300, 
+        'preco': 130, 
         'desc': 'Cura 100 pontos de vida', 
         'equipado': False, 
         'consumivel': True, 
@@ -484,7 +484,7 @@ lista_itens_loja = [
     { 
         'nome': 'Poção de Mana Lendária', 
         'atk': 0,
-        'preco': 300, 
+        'preco': 130, 
         'desc': 'Restaura 100 pontos de mana', 
         'equipado': False, 
         'consumivel': True, 
@@ -492,7 +492,7 @@ lista_itens_loja = [
     },
     { 
         'nome': 'Espada do Abismo', 
-        'atk': 25, 
+        'atk': 40, 
         'preco': 500, 
         'desc': 'Uma espada que emana energia sombria', 
         'equipado': False, 
@@ -513,12 +513,93 @@ lista_itens_loja = [
     { 
         'nome': 'Pergaminho do Apocalipse', 
         'atk': 0,
-        'preco': 800, 
+        'preco': 500, 
         'desc': 'Concede uma magia poderosa temporariamente', 
         'equipado': False, 
         'consumivel': True, 
         'especial': True
     }
+]
+
+lista_itens_loja_g1 = [
+    { 
+        'nome': 'Pocao de vida baixa', 
+        'atk': 0,
+        'preco': 25, 
+        'desc': 'Uma pocao de vida, cura 15 pontos de vida.', 
+        'equipado': False, 
+        'consumivel': True, 
+        'especial': False},
+
+     { 
+        'nome': 'Pocao de vida media', 
+        'atk': 0,
+        'preco': 45, 
+        'desc': 'Uma pocao de vida media, cura 30 pontos de vida.', 
+        'comprado': False, 
+        'equipado': False, 
+        'consumivel': True, 
+        'especial': False},
+
+    { 
+        'nome': 'Pocao de vida alta', 
+        'atk': 0,'preco': 85, 
+        'desc': 'Uma pocao de vida alta, cura 60 pontos de vida.', 
+        'comprado': False, 
+        'equipado': False, 
+        'consumivel': True, 
+        'especial': False},
+     { 
+        'nome': 'Pocao de mana baixa', 
+        'atk': 0,
+        'preco': 25, 
+        'desc': 'Uma pocao de mana, cura 15 pontos de mana.', 
+        'equipado': False, 
+        'consumivel': True,
+        'especial': False},
+
+    { 
+        'nome': 'Pocao de mana media', 
+        'atk': 0,
+        'preco': 45, 
+        'desc': 'Uma pocao de mana media, cura 30 pontos de mana.', 
+        'comprado': False, 
+        'equipado': False, 
+        'consumivel': True, 
+        'especial': False},
+
+    { 
+        'nome': 'Pocao de mana alta', 
+        'atk': 0,
+        'preco': 85, 
+        'desc': 'Uma pocao de mana alta, cura 60 pontos de mana.', 
+        'comprado': False, 
+        'equipado': False, 
+        'consumivel': True, 
+        'especial': False},
+
+    { 
+        'nome': 'Armadura de Couro', 
+        'defesa': 2, 
+        'vida_max': 25, 
+        'resistencia': 0, 
+        'desc': 'Armadura leve feita de couro endurecido.', 
+        'comprado': False, 
+        'equipado': False, 
+        'consumivel': False,
+        'preco': 50, 
+        'especial': False},
+    { 
+        'nome': 'Armadura de Ferro', 
+        'defesa': 3, 
+        'vida_max': 30, 
+        'resistencia': 10, 
+        'preco': 50, 
+        'desc': 'Armadura média feita de placas de ferro.', 
+        'comprado': False, 
+        'equipado': False, 
+        'consumivel': False, 
+        'especial': False},
 ]
 
 lista_consumiveis = [
@@ -818,7 +899,7 @@ cavaleiro_caido.drops = [
                  lista_itens_bosses[4]['desc'], False,
                  lista_itens_bosses[4]['consumivel'], lista_itens_bosses[4]['preco'],
                  lista_itens_bosses[4]['especial']),
-     'chance': 1},
+     'chance': 0.5},
 
     {'item': Item(lista_itens_bosses[5]['nome'], lista_itens_bosses[5]['atk'],
                  lista_itens_bosses[5]['desc'], lista_itens_bosses[5]['equipado'],
@@ -1099,11 +1180,14 @@ Quando seus olhos se fixam na fenda do elmo, percebe um brilho espectral pulsand
         'contador' : 0
     },
     'g1': {
-        'NOME_LOCAL': "Salão",
+        'NOME_LOCAL': "Loja dos mercenários",
         'DESCRICAO': '''
-asdas
+Uma pequena loja escondida no fundo da torre. O vendedor, uma figura encapuzada, parece não se surpreender com sua presença.
+                        Nas prateleiras, itens estranhos, espolios de guerras e dentre outros itens.
 ''',
-        'EXAMINAR': '''tem nada\n''',
+        'EXAMINAR': '''
+        O vendedor sussurra: "Encontrei alguns tesouros nos corpos dos que falharam... interesse em algum?"
+                           (Digite 'loja' para ver os itens à venda)\n''',
         'SOLVED': False,
         'SUBIR': 'f2',
         'DESCER': '',
@@ -1693,7 +1777,7 @@ def prompt():
     if acao == 'mover':
         jogador_mover()
     elif acao == 'teleportar':
-        meu_jogador.local = 'f1'
+        meu_jogador.local = 'g1'
         print_local()
         main_game_loop()
     elif acao == 'ajuda':
@@ -1755,7 +1839,7 @@ def locais():
         invocacao()
     elif acao == 'sim':
         quadros()
-    elif meu_jogador.local == 'e2' and acao == 'loja':
+    elif meu_jogador.local in ['e2', 'g1'] and acao == 'loja':
         loja_e2()
     elif acao == 'lutar':
         semi_boss_cavaleiro()
@@ -2556,18 +2640,23 @@ def vender_item():
             vender_item()
 
 def loja_e2():
-    if meu_jogador.local != 'e2':
-        print('Você não está na Loja dos Esquecidos!')
+    if meu_jogador.local not in ['e2', 'g1']:
+        print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
         return
-    
+    lista = None
     limpar_tela()
     print('▬'*50)
-    print(Fore.YELLOW + '          LOJA DOS ESQUECIDOS' + Style.RESET_ALL)
+    if meu_jogador.local == 'e2':
+        print(Fore.YELLOW + '          LOJA DOS ESQUECIDOS' + Style.RESET_ALL)
+        lista = lista_itens_loja
+    elif meu_jogador.local == 'g1':
+        print(Fore.YELLOW + '          LOJA DOS MERCENÁRIOS' + Style.RESET_ALL)
+        lista = lista_itens_loja_g1
     print('▬'*50)
     print('"Tudo tem um preço... até mesmo a salvação."\n')
     
     # Mostra itens disponíveis
-    for i, item in enumerate(lista_itens_loja, 1):
+    for i, item in enumerate(lista, 1):
         if 'defesa' in item:  # Se for armadura
             print(f"{i}. {item['nome']} | DEF: {item['defesa']} | VIDA: {item['vida_max']} | RES: {item['resistencia']}% | Preço: {item['preco']}")
             print(f"   {item['desc']}\n")
@@ -2593,11 +2682,11 @@ def loja_e2():
         
         try:
             escolha = int(escolha) - 1
-            if escolha < 0 or escolha >= len(lista_itens_loja):
+            if escolha < 0 or escolha >= len(lista):
                 print(Fore.RED + 'Item inválido!' + Style.RESET_ALL)
                 continue
                 
-            item = lista_itens_loja[escolha]
+            item = lista[escolha]
             
             if meu_jogador.ouro < item['preco']:
                 print(Fore.RED + '\n"Você não tem ouro suficiente para isso."' + Style.RESET_ALL)
