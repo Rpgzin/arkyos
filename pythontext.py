@@ -2743,7 +2743,7 @@ def descansar():
                 sys.stdout.flush()
                 time.sleep(0.01)
             time.sleep(1.5)
-            print('''\n
+            print(r'''\n
                 ########        ########                                        
                #######++++################                                      
                   #########+++##############                                    
@@ -3396,6 +3396,16 @@ def luta(monstro, meu_jogador):
             dano = monstro.atk
             dano_original = dano  # Guarda o dano original para exibição
             
+            if meu_jogador.armadura:
+                dano = max(1, dano - meu_jogador.armadura.defesa)  # Redução fixa
+                print(f"Dano reduzido por DEF: {dano_original} -> {dano} (DEF: {meu_jogador.armadura.defesa})")
+            
+            # Aplica redução percentual depois
+                if meu_jogador.armadura_resistencia > 0:
+                    dano_reduzido = max(1, int(dano * (1 - (meu_jogador.armadura_resistencia / 100))))
+                    print(f"Dano reduzido por RES: {dano} -> {dano_reduzido} ({meu_jogador.armadura_resistencia}% RES)")
+                    dano = dano_reduzido
+
             # Aplica redução de dano da armadura se existir
             if meu_jogador.armadura and meu_jogador.armadura_resistencia > 0:
                 dano = max(1, int(dano * (1 - (meu_jogador.armadura_resistencia / 100))))
