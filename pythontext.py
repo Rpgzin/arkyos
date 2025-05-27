@@ -128,7 +128,7 @@ class Player:
         self.atk_base = 0
         self.atk = 0
         self.dano_magico = 0
-        self.ouro = 1000000
+        self.ouro = 0
         self.atk_final = self.atk
         self.item_equipado = None
         self.mochila = []
@@ -272,13 +272,17 @@ class Monstro:
         self.efeitos_status.append(efeito)
 
 def encontro_aleatorio():
-    if meu_jogador.local != 'c1':
+    if meu_jogador.local not in ['c1', 'h1']:
         print('Você não está em um circulo de invocação!')
         limpar_tela()
         print_local()
         main_game_loop()
-    print('Um monstro apareceu!')
-    luta(robo_aleatorio(), meu_jogador)
+    if meu_jogador.local == 'c1':
+        print('Um monstro apareceu!')
+        luta(robo_aleatorio(), meu_jogador)
+    elif meu_jogador.local == 'h1':
+        fala = 'Você encosta na estátua e sente os espiritos se movendo em volta de você, logo eles entram na estátua que cria vida e te ataca.'
+        luta(estatua, meu_jogador)
 
 def robo_aleatorio():
     monstro_robo = random.choice(lista_monstros_robo)
@@ -462,7 +466,7 @@ def usar_pergaminho_apocalipse():
             nome="chamas do fim",
             tipo="dano",
             tempo=3,
-            dano= 40
+            dano= 50
         )
     )
     
@@ -490,7 +494,58 @@ def usar_pergaminho_estilhaço_sismico():
     print(Fore.MAGENTA + "\nAo usar o pergaminho, conhecimento ancestral invade sua mente!" + Style.RESET_ALL)
     print(Fore.LIGHTBLUE_EX + "Você aprendeu a magia: Estilhaço Sísmico!" + Style.RESET_ALL)
     time.sleep(2)
+
+def usar_pergaminho_cometa_pedrilhante():
+    magia_cometa = Magia(
+        nome="Cometa Pedrilhante",
+        dano=50,
+        desc="O usuário lança um cometa azul que causa dano ao inimigo.",
+        mana_gasta=40,
+    )
+    meu_jogador.magias.append(magia_cometa)
     
+    print(Fore.MAGENTA + "\nAo usar o pergaminho, conhecimento ancestral invade sua mente!" + Style.RESET_ALL)
+    print(Fore.LIGHTBLUE_EX + "Você aprendeu a magia: Cometa Pedrilhante!" + Style.RESET_ALL)
+    time.sleep(2)
+    
+def usar_pergaminho_raizes():
+ 
+    magia_raizes = Magia(
+        nome="Raizes da Morte",
+        dano=10,
+        desc="O usuário invoca raizes do chão que grudão em seu alvo e aplicam efeito de envenenamento.",
+        mana_gasta=15,
+        efeito=Efeito(
+            nome="Envenenado",
+            tipo="dano",
+            tempo=3,
+            dano= 10
+        ))
+    meu_jogador.magias.append(magia_raizes)
+    
+    print(Fore.MAGENTA + "\nAo usar o pergaminho, conhecimento ancestral invade sua mente!" + Style.RESET_ALL)
+    print(Fore.LIGHTBLUE_EX + "Você aprendeu a magia: Raizes da Morte!" + Style.RESET_ALL)
+    time.sleep(2)
+
+def usar_pergaminho_absorcao():
+    magia_absorção = Magia(
+        nome="Absorção de Sangue",
+        dano= 30,
+        desc="O usuário lança uma magia de sangue que absorve 30 pontos de vida do alvo.",
+        mana_gasta=30,
+        efeito=Efeito(
+            nome="",
+            tipo="absorção",
+            tempo=0
+        )
+    )
+
+
+    meu_jogador.magias.append(magia_absorção)
+    
+    print(Fore.MAGENTA + "\nAo usar o pergaminho, conhecimento ancestral invade sua mente!" + Style.RESET_ALL)
+    print(Fore.LIGHTBLUE_EX + "Você aprendeu a magia: Absorção de Sangue!" + Style.RESET_ALL)
+    time.sleep(2)
 
 lista_itens_loja = [
     { 
@@ -621,6 +676,16 @@ lista_itens_loja_g1 = [
         'equipado': False, 
         'consumivel': False, 
         'especial': False},
+
+    { 
+        'nome': 'Pergaminho do Cometa Pedrilhante', 
+        'atk': 0,
+        'preco': 100, 
+        'desc': 'Concede uma magia poderosa chamada Cometa Pedrilhante', 
+        'equipado': False, 
+        'consumivel': True, 
+        'especial': True
+    }
 ]
 
 lista_consumiveis = [
@@ -780,11 +845,64 @@ lista_itens_bosses = [
         'equipado': False, 
         'consumivel': True, 
         'especial': True}, #9
-    
+            { 
+        'nome': 'Pergaminho das Raizes da Morte', 
+        'atk': 0,
+        'preco': 0, 
+        'desc': 'Concede uma magia poderosa chamado Raizes da morte.', 
+        'equipado': False, 
+        'consumivel': True, 
+        'especial': True}, #10
+            { 
+        'nome': 'Pergaminho da Absorção de Sangue', 
+        'atk': 0,
+        'preco': 0, 
+        'desc': 'Concede uma magia poderosa chamado Absorção de Sangue.', 
+        'equipado': False, 
+        'consumivel': True, 
+        'especial': True}, #11
+
+        {'nome': 'Cajado do Sábio', 
+         'dano_magico': 40,
+         'atk': 0, 
+         'preco': 350, 
+         'desc': 'Cajado feito de pedras de mana, emana uma energia estranha.', 
+         'equipado': False, 
+         'consumivel': False, 
+         'especial': False}, #12
+
+        {'nome': 'Zweihander', 
+         'atk': 50, 
+         'preco': 350, 
+         'desc': 'A arma fiel de todos os jogadores de SoulsLike.', 
+         'equipado': False,
+         'consumivel': False, 
+         'especial': False}, #13
+
+        {'nome': 'Punhos de Shiva', 
+         'atk': 65, 
+         'preco': 350, 
+         'desc': 'As mãos de Shiva lhe concede poder para bater em todos os monstros.', 
+         'equipado': False,
+         'consumivel': False, 
+         'especial': False}, #14
+
+        { 
+        'nome': 'Armadura de Escamas de Dragão', 
+        'defesa': 10, 
+        'vida_max': 100, 
+        'resistencia': 50, 
+        'desc': 'Uma armadura dígna de um heroi.', 
+        'comprado': False, 
+        'equipado': False, 
+        'consumivel': False,
+        'preco': 200, 
+        'especial': False}, #15
+
 ]
 
 lista_magias = [
-    {'nome': 'Bola de fogo', 'dano': 200, 'desc':'A magia mais forte de um mago', 'mana_gasta': 30},
+    {'nome': 'Bola de fogo', 'dano': 2000, 'desc':'A magia mais forte de um mago', 'mana_gasta': 30},
     {'nome': 'Rajada de Gelo', 'dano': 10, 'desc':'Esfrio né', 'mana_gasta': 35},
 ]
 
@@ -805,33 +923,35 @@ lista_monstros_normais = [
     {'nome': 'aranha venenosa', 'vida': 22, 'nivel': 2, 'atk': 7, 'xp': 14, 'ouro': 100, 'boss': False}, #6
     {'nome': 'orc', 'vida': 40, 'nivel': 5, 'atk': 8, 'xp': 25, 'ouro': 200, 'boss': False}, #7
     {'nome': 'troll da caverna', 'vida': 50, 'nivel': 6, 'atk': 10, 'xp': 30, 'ouro': 300, 'boss': False}, #8
-    {'nome': 'gárgula', 'vida': 45, 'nivel': 5, 'atk': 9, 'xp': 28, 'ouro': 200, 'boss': False}, #9
+    {'nome': 'estatua', 'vida': 25, 'nivel': 35, 'atk': 20, 'xp': 150, 'ouro': 100, 'boss': False}, #9
     {'nome': 'Robô Gigante', 'vida': 25, 'nivel': 7, 'atk': 15, 'xp': 100, 'ouro': 70, 'boss': True}, #10
 ]
 
 lista_monstros_robo = [
-    {'nome': 'Autômato', 'vida': 20, 'nivel': 1, 'atk': 5, 'xp': 20, 'ouro': 2, 'boss': False},
-    {'nome': 'Autômato', 'vida': 20, 'nivel': 2, 'atk': 6, 'xp': 30, 'ouro': 4, 'boss': False},
-    {'nome': 'Autômato', 'vida': 20, 'nivel': 3, 'atk': 7, 'xp': 40, 'ouro': 6, 'boss': False},
-    {'nome': 'Autômato', 'vida': 20, 'nivel': 4, 'atk': 8, 'xp': 50, 'ouro': 8, 'boss': False},
-    {'nome': 'Autômato', 'vida': 20, 'nivel': 5, 'atk': 9, 'xp': 60, 'ouro': 10,'boss': False},
+    {'nome': 'Autômato', 'vida': 20, 'nivel': 1, 'atk': 5, 'xp': 50, 'ouro': 2, 'boss': False},
+    {'nome': 'Autômato', 'vida': 20, 'nivel': 2, 'atk': 6, 'xp': 60, 'ouro': 4, 'boss': False},
+    {'nome': 'Autômato', 'vida': 20, 'nivel': 3, 'atk': 7, 'xp': 70, 'ouro': 6, 'boss': False},
+    {'nome': 'Autômato', 'vida': 20, 'nivel': 4, 'atk': 8, 'xp': 80, 'ouro': 8, 'boss': False},
+    {'nome': 'Autômato', 'vida': 20, 'nivel': 5, 'atk': 9, 'xp': 90, 'ouro': 10,'boss': False},
 ]
 
 lista_monstros_invocacoes = [
-    {'nome': 'Tieflíngs', 'vida': 30, 'nivel': 3, 'atk': 8, 'xp': 50, 'ouro': 10, 'boss': False},
-    {'nome': 'Tieflíngs', 'vida': 30, 'nivel': 4, 'atk': 9, 'xp': 60, 'ouro': 15, 'boss': False},
-    {'nome': 'Demônio Inferior', 'vida': 30, 'nivel': 10, 'atk': 7, 'xp': 70, 'ouro': 20, 'boss': False},
-    {'nome': 'Demônio Inferior', 'vida': 30, 'nivel': 11, 'atk': 8, 'xp': 80, 'ouro': 25, 'boss': False},
-    {'nome': 'Demoníaco', 'vida': 30, 'nivel': 7, 'atk': 12, 'xp': 90, 'ouro': 30, 'boss': False},
-    {'nome': 'Demoníaco', 'vida': 30, 'nivel': 8, 'atk': 13, 'xp': 100, 'ouro': 35, 'boss': False},
+    {'nome': 'Tieflíngs', 'vida': 30, 'nivel': 3, 'atk': 8, 'xp': 70, 'ouro': 10, 'boss': False},
+    {'nome': 'Tieflíngs', 'vida': 30, 'nivel': 4, 'atk': 9, 'xp': 80, 'ouro': 15, 'boss': False},
+    {'nome': 'Demônio Inferior', 'vida': 30, 'nivel': 10, 'atk': 7, 'xp': 90, 'ouro': 20, 'boss': False},
+    {'nome': 'Demônio Inferior', 'vida': 30, 'nivel': 11, 'atk': 8, 'xp': 100, 'ouro': 25, 'boss': False},
+    {'nome': 'Demoníaco', 'vida': 30, 'nivel': 7, 'atk': 12, 'xp': 110, 'ouro': 30, 'boss': False},
+    {'nome': 'Demoníaco', 'vida': 30, 'nivel': 8, 'atk': 13, 'xp': 120, 'ouro': 35, 'boss': False},
 ]
 lista_monstros_fixos = [
-    {'nome': 'Guardião Enraizado', 'vida': 100, 'nivel': 1, 'atk': 7, 'xp': 100, 'ouro': 50, 'boss': True},
-    {'nome': 'Homunculo Grotesco', 'vida': 50, 'nivel': 10, 'atk': 14, 'xp': 200, 'ouro': 100, 'boss': True},
-    {'nome': 'A Forjadora', 'vida': 50, 'nivel': 30, 'atk': 20, 'xp': 3000, 'ouro': 600, 'boss': True},
+    {'nome': 'Guardião Enraizado', 'vida': 100, 'nivel': 1, 'atk': 7, 'xp': 100, 'ouro': 100, 'boss': True},
+    {'nome': 'Homunculo Grotesco', 'vida': 50, 'nivel': 10, 'atk': 14, 'xp': 200, 'ouro': 200, 'boss': True},
+    {'nome': 'A Forjadora', 'vida': 50, 'nivel': 30, 'atk': 30, 'xp': 3000, 'ouro': 600, 'boss': True},
 ]
 lista_monstros_semi_boss = [
-    {'nome': 'Cavaleiro Caido', 'vida': 25, 'nivel': 12, 'atk': 10, 'xp': 150, 'ouro': 150, 'boss': True},
+    {'nome': 'Cavaleiro Caido', 'vida': 25, 'nivel': 20, 'atk': 10, 'xp': 400, 'ouro': 150, 'boss': True},
+    {'nome': 'Mímico', 'vida': 40, 'nivel': 40, 'atk': 35, 'xp': 3500, 'ouro': 700, 'boss': True},
+    {'nome': 'Crow Mauler', 'vida': 30, 'nivel': 40, 'atk': 40, 'xp': 3500, 'ouro': 700, 'boss': True},
 ]
 
 def raiva():
@@ -904,21 +1024,43 @@ def loucura():
         print(Fore.RED +'Comando inválido.'+Style.RESET_ALL)
         locais()
 
+######### cada monstro recebe seus atributos #########
 monstro = lista_monstros_fixos[0]
 monstro2 = lista_monstros_normais[1]
 automato = lista_monstros_normais[10]
 monstro1 = lista_monstros_fixos[1]
 forjadora = lista_monstros_fixos[2]
 cavaleiro = lista_monstros_semi_boss[0]
-
+estatua_ossuario = lista_monstros_normais[9]
+monstro_mimico = lista_monstros_semi_boss[1]
+corvo = lista_monstros_semi_boss[2]
 efeito_boss = Efeito(lista_efeitos[1]['nome'], lista_efeitos[1]['tipo'], lista_efeitos[1]['tempo'], lista_efeitos[1]['dano'])
 
-guardiao_enraizado = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'], monstro['ouro'], monstro['boss'], efeito_boss)
-homunculo = Monstro(monstro1['nome'], monstro1['vida'], monstro1['nivel'], monstro1['atk'], monstro1['xp'], monstro1['ouro'], monstro1['boss'], efeito_boss)
+#######################################################
+
+######################### NORMAIS #####################
+
+estatua = Monstro(estatua_ossuario['nome'], estatua_ossuario['vida'], estatua_ossuario['nivel'], estatua_ossuario['atk'], estatua_ossuario['xp'], estatua_ossuario['ouro'], estatua_ossuario['boss'])
 monstro_exemplo2 = Monstro(monstro2['nome'], monstro2['vida'], monstro2['nivel'], monstro2['atk'], monstro2['xp'], monstro2['ouro'], monstro2['boss'])
 robot = Monstro(automato['nome'], automato['vida'], automato['nivel'], automato['atk'], automato['xp'], automato['ouro'], automato['boss'])
+
+####################### SEMI BOSS ######################
+
 cavaleiro_caido = Monstro(cavaleiro['nome'], cavaleiro['vida'], cavaleiro['nivel'], cavaleiro['atk'], cavaleiro['xp'], cavaleiro['ouro'], cavaleiro['boss'])
+mimico = Monstro(monstro_mimico['nome'], monstro_mimico['vida'], monstro_mimico['nivel'], monstro_mimico['atk'], monstro_mimico['xp'], monstro_mimico['ouro'], monstro_mimico['boss'])
+Crow_Mauler = Monstro(corvo['nome'], corvo['vida'], corvo['nivel'], corvo['atk'], corvo['xp'], corvo['ouro'], corvo['boss'])
+
+########################################################
+
+####################### BOSSES  ########################
+
 forjadora_de_ossos = Monstro(forjadora['nome'], forjadora['vida'], forjadora['nivel'], forjadora['atk'], forjadora['xp'], forjadora['ouro'], forjadora['boss'])
+guardiao_enraizado = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'], monstro['ouro'], monstro['boss'], efeito_boss)
+homunculo = Monstro(monstro1['nome'], monstro1['vida'], monstro1['nivel'], monstro1['atk'], monstro1['xp'], monstro1['ouro'], monstro1['boss'], efeito_boss)
+
+########################################################
+
+####################### DROPS ##########################
 
 guardiao_enraizado.drops = [
     {'item': Item(lista_itens_bosses[0]['nome'], lista_itens_bosses[0]['atk'],
@@ -932,6 +1074,12 @@ guardiao_enraizado.drops = [
                  lista_itens_bosses[1]['consumivel'], lista_itens_bosses[1]['preco'],
                  lista_itens_bosses[1]['especial']),
      'chance': 1},   
+    {'item': Item(lista_itens_bosses[10]['nome'], lista_itens_bosses[10]['atk'],
+                 lista_itens_bosses[10]['desc'], lista_itens_bosses[10]['equipado'],
+                 lista_itens_bosses[10]['consumivel'], lista_itens_bosses[10]['preco'],
+                 lista_itens_bosses[10]['especial']),
+     'chance': 0.6},   
+
 ]
 
 homunculo.drops = [
@@ -940,6 +1088,11 @@ homunculo.drops = [
                  lista_itens_bosses[2]['consumivel'], lista_itens_bosses[2]['preco'],
                  lista_itens_bosses[2]['especial']),
      'chance': 1},  
+    {'item': Item(lista_itens_bosses[11]['nome'], lista_itens_bosses[11]['atk'],
+                 lista_itens_bosses[11]['desc'], lista_itens_bosses[11]['equipado'],
+                 lista_itens_bosses[11]['consumivel'], lista_itens_bosses[11]['preco'],
+                 lista_itens_bosses[11]['especial']),
+     'chance': 0.6},  
      
     {'item': Armadura(lista_itens_bosses[3]['nome'], lista_itens_bosses[3]['defesa'],
                  lista_itens_bosses[3]['vida_max'], lista_itens_bosses[3]['resistencia'],
@@ -992,6 +1145,38 @@ forjadora_de_ossos.drops = [
 
 ]
 
+mimico.drops = [
+
+]
+
+estatua.drops = [
+    {'item': ArmaMagica(lista_itens_bosses[12]['dano_magico'], lista_itens_bosses[12]['nome'], 
+                        lista_itens_bosses[12]['atk'], lista_itens_bosses[12]['desc'], 
+                        lista_itens_bosses[12]['equipado'], lista_itens_bosses[12]['consumivel'],
+                        lista_itens_bosses[12]['preco'], lista_itens_bosses[12]['especial']),
+     'chance': 0.5},
+
+    {'item': Item(lista_itens_bosses[13]['nome'], lista_itens_bosses[13]['atk'],
+                 lista_itens_bosses[13]['desc'], lista_itens_bosses[13]['equipado'],
+                 lista_itens_bosses[13]['consumivel'], lista_itens_bosses[13]['preco'],
+                 lista_itens_bosses[13]['especial']),
+     'chance': 0.5},
+    {'item': Item(lista_itens_bosses[14]['nome'], lista_itens_bosses[14]['atk'],
+                 lista_itens_bosses[14]['desc'], lista_itens_bosses[14]['equipado'],
+                 lista_itens_bosses[14]['consumivel'], lista_itens_bosses[14]['preco'],
+                 lista_itens_bosses[14]['especial']),
+     'chance': 0.5},
+     {'item': Armadura(lista_itens_bosses[15]['nome'], lista_itens_bosses[15]['defesa'],
+                 lista_itens_bosses[15]['vida_max'], lista_itens_bosses[15]['resistencia'],
+                 lista_itens_bosses[15]['desc'], False,
+                 lista_itens_bosses[15]['consumivel'], lista_itens_bosses[15]['preco'],
+                 lista_itens_bosses[15]['especial']),
+     'chance': 0.5},
+
+]
+
+########################################################
+
 ######### Tela de título #########
 def navegação_tela_titulo():
     opção = input(">>").lower()
@@ -1027,12 +1212,15 @@ lugares_resolvidos = {
     'd1': False, 'd2': False,
     'e1': False, 'e2': False,
     'f1': False, 'f2': False,
+    'h1': False, 'h2': False,
+    'i1': False, 'i2': False,
+    'j1': False, 'j2': False,
 }
 
 mapa = {
     'a1': {
-        'NOME_LOCAL': 'Sala do Trono',
-        'DESCRICAO': 'Uma sala grande e luxuosa, com uma grande mesa em frente ao trono.',
+        'NOME_LOCAL': 'Ossuário dos Silenciosos',
+        'DESCRICAO': '''Uma sala grande e luxuosa, com uma grande mesa em frente ao trono.''',
         'EXAMINAR': '\nTudo ao seu redor parece morto.\nPorem voce nota um brilho fraco vindo de frente de um trono destruido.\nDigite trono para examinar o trono.\n',
         'SOLVED': False,
         'SUBIR': '',
@@ -1291,9 +1479,126 @@ Cada pedra carrega o peso de batalhas esquecidas, enquanto o ar denso sussurra a
 
         'SOLVED': False,
         'SUBIR': '',
+        'DESCER': 'h1',
+        'AVANÇAR': '',
+        'RETORNAR': 'g1',
+        'MONSTRO': '',
+        'LOCAIS': 'loja',
+        'contador' : 0
+    },
+    'h1': {
+        'NOME_LOCAL': "Ossuário dos Silenciosos",
+        'DESCRICAO': '''
+Um salão onde milhares de ossos estão cuidadosamente empilhados, formando paredes e esculturas grotescas. 
+                     O silêncio aqui não é natural; abafa até os pensamentos. \n''',
+        'EXAMINAR': '''
+    Ao seguir pelo Ossuário você vê uma estátua feita inteiramente de crânios parece segui-lo com o olhar.
+             (Digite "invocar" para despertar o espírito do ossuário ou "sair" para recuar.) \n''',
+        'SOLVED': True,
+        'SUBIR': 'g2',
+        'DESCER': '',
+        'AVANÇAR': 'h2',
+        'RETORNAR': '',
+        'MONSTRO': '',
+        'LOCAIS': 'invocar',
+        'contador' : 0
+    },
+    'h2': {
+        'NOME_LOCAL': "Câmara do Arquivista",
+        'DESCRICAO': '''
+               Uma enorme biblioteca afundada, com livros podres e pergaminhos fossilizados. 
+No centro, uma figura esquelética presa a uma cadeira, seus olhos ainda vivos, lendo um livro interminável. ''',
+        'EXAMINAR': '''
+Olhando a sala você vê muitos livros empoerados e velhos, ao centro da sala jas um homem esquelético presa a uma cadeira.
+                           Seus olhos ainda vivos, lendo um livro interminável.
+                                Aquela figura olha para você e pergunta:
+                            "Oh, caro aventureiro, deseja ouvir uma historia?"
+
+                (Digite "ouvir" para ouvir a historia ou "sair" para continuar sua jornada)\n''',
+
+        'SOLVED': True,
+        'SUBIR': '',
+        'DESCER': 'i1',
+        'AVANÇAR': '',
+        'RETORNAR': 'h1',
+        'MONSTRO': '',
+        'LOCAIS': 'ouvir',
+        'contador' : 0,
+        'historia' : False
+    },
+    'i1': {
+        'NOME_LOCAL': "Salão Sintilante",
+        'DESCRICAO': '''
+ Um vasto espaço de pedras frias e lisas, onde nenhum som ecoa. As paredes são cobertas por tapeçarias antigas, desbotadas pelo tempo, 
+          e uma névoa tênue paira constantemente sobre o chão. No centro, um único candelabro apagado balança levemente,
+                                          como se movido por um vento que não existe. 
+                  A atmosfera é opressora, fazendo com que quem entra sinta o peso do silêncio absoluto. ''',
+        'EXAMINAR': ''' 
+No centro da sala tem um baú com marcas de arranhões e algumas lascas de madeira pelo chão.
+          Se aproximando do báu, você percebe que ele parece conter algo.
+          
+      (Digite "abrir" para abrir o báu ou "sair" para continuar sua jornada)\n''',
+
+        'SOLVED': True,
+        'SUBIR': 'h2',
+        'DESCER': '',
+        'AVANÇAR': 'i2',
+        'RETORNAR': '',
+        'MONSTRO': '',
+        'LOCAIS': 'loja',
+        'contador' : 0,
+        'mimico' : False
+    },
+    'i2': {
+        'NOME_LOCAL': "Salão do Descanso",
+        'DESCRICAO': ''' 
+Um refúgio acolhedor, onde o tempo parece desacelerar e a atmosfera respira tranquilidade. 
+     O salão é amplo, mas intimista, com luzes suaves que emitem um brilho âmbar, 
+         como se fossem velas tremulantes refletidas em cristais antigos.''',
+        'EXAMINAR': ''' 
+Os móveis são convidativos: poltronas e sofás macios, quase como nuvens, estofados em tecidos que variam entre veludo e linho, 
+                              em cores que lembram café com leite e pêssegos maduros. 
+                     Almofadas estrategicamente espalhadas completam o convite ao relaxamento, 
+                     algumas com bordados delicados, outras em padrões geométricos discretos.
+
+                (Digite "descansar" para curar toda a sua vida e mana, só pode ser usado uma vez)\n''',
+
+        'SOLVED': True,
+        'SUBIR': '',
+        'DESCER': 'j1',
+        'AVANÇAR': '',
+        'RETORNAR': 'i1',
+        'MONSTRO': '',
+        'LOCAIS': 'descansar',
+        'contador' : 0,
+        'descansar' : False
+    },
+    'j1': {
+        'NOME_LOCAL': "Loja do Temmie",
+        'DESCRICAO': '''
+Uma caverna feita de pedras negras e pequenas pedras brancas sintilantes, essa combinação faz com que o teto da caverna pareça uma noite estrelada.''',
+        'EXAMINAR': '''
+Olhando a sala você vê que ao funto tem uma placa branca escrito "Lojinha da TEMMIE"''',
+
+        'SOLVED': False,
+        'SUBIR': 'i2',
+        'DESCER': '',
+        'AVANÇAR': 'j2',
+        'RETORNAR': '',
+        'MONSTRO': '',
+        'LOCAIS': 'loja',
+        'contador' : 0
+    },
+    'j2': {
+        'NOME_LOCAL': "",
+        'DESCRICAO': ''' ''',
+        'EXAMINAR': ''' ''',
+
+        'SOLVED': False,
+        'SUBIR': '',
         'DESCER': '',
         'AVANÇAR': '',
-        'RETORNAR': 'e1',
+        'RETORNAR': 'j1',
         'MONSTRO': '',
         'LOCAIS': 'loja',
         'contador' : 0
@@ -1854,7 +2159,7 @@ def prompt():
     if acao == 'mover':
         jogador_mover()
     elif acao == 'teleportar':
-        meu_jogador.local = 'g1'
+        meu_jogador.local = 'i2'
         print_local()
         main_game_loop()
     elif acao == 'ajuda':
@@ -1876,7 +2181,7 @@ def prompt():
 def locais():
     print(Fore.LIGHTYELLOW_EX + 'O que deseja fazer?' + Style.RESET_ALL)
     acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
-    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'], 'derramar','raiva','medo','alegria','loucura', 'sair', 'pegar', 'invocar', 'robo', 'corredor', 'completar', 'atacar', 'loja', 'sim', 'lutar',
+    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'], 'derramar','raiva','medo','alegria','loucura', 'sair', 'pegar', 'invocar', 'robo', 'corredor', 'completar', 'atacar', 'loja', 'sim', 'lutar', 'ouvir', 'abrir', 'descansar',
     
     while acao not in acoes_aceitas:
         print(Fore.RED + 'Acao inválida, tente novamente. (caso não tenha mais opções, digite sair)'+Style.RESET_ALL)
@@ -1916,10 +2221,16 @@ def locais():
         invocacao()
     elif acao == 'sim':
         quadros()
+    elif acao == 'ouvir':
+        historia()
     elif meu_jogador.local in ['e2', 'g1'] and acao == 'loja':
         loja_e2()
     elif acao == 'lutar':
         semi_boss_cavaleiro()
+    elif acao == 'abrir':
+        mimico_monstro()
+    elif acao == 'descansar':
+        descansar()
     else:
         print('Acao inválida, tente novamente.')
         locais()
@@ -1927,6 +2238,7 @@ def locais():
 
 
 ### Objetos interativos dos andares ###
+
 def trono():
     print('▬'*100)
     if meu_jogador.local == 'a1' and mapa[meu_jogador.local]['SOLVED'] == False:
@@ -2320,6 +2632,192 @@ def quadros():
         print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
         locais()
 
+def historia():
+    if meu_jogador.local == 'h2' and mapa['h2']['historia'] == False:
+        historia = ''' 
+(Em voz rouca e pausada, o velho sábio começa a contar:)
+
+     “Há muito, muito tempo… erguia-se uma torre de dez andares, mais alta que qualquer montanha, mais antiga que qualquer reino.
+        No topo dessa torre, reinava um Lorde sombrio, mestre e carcereiro de criaturas que nem os pesadelos ousavam desenhar.
+ Mas então… um herói apareceu. Corajoso, puro… e forte. Subiu andar por andar, espada em punho, varrendo a escuridão com a luz de sua alma.
+                                  Monstros caíram, horrores se desfizeram… até restar apenas ele: o Lorde.
+  Ah… mas o Lorde era astuto. No seu suspiro final, proferiu um feitiço terrível: apagou a memória do herói e arrancou-lhe todos os dons.
+    Agora… perdido, frágil e sem nome… o herói desperta no topo da torre, olhando para o abismo de onde veio, sem saber sequer quem é. 
+            E para recuperar sua identidade… ele terá que descer, enfrentar novamente as criaturas que esqueceu ter vencido… 
+                                         e, quem sabe, lembrar… quem foi… e quem ainda pode ser.”
+
+(O velho sorri, fecha os olhos… o velho senhor não se mexe mais, após o conto o senhor faleceu concluindo seu objetivo, deixando a história pairar no ar.)
+'''
+
+        for caractere in historia:
+            sys.stdout.write(caractere)
+            sys.stdout.flush()
+            time.sleep(0.1)
+        input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
+        limpar_tela()
+        print_local()
+        main_game_loop()
+    elif meu_jogador.local == 'h2' and mapa['h2']['historia'] == True:
+        fala = 'O velho sábio está morto.'
+        for caractere in fala:
+            sys.stdout.write(caractere)
+            sys.stdout.flush()
+            time.sleep(0.001)
+        time.sleep(1.5)
+        limpar_tela()
+        print_local()
+        main_game_loop()
+    else:
+        print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
+        locais()
+
+def mimico_monstro():
+    if meu_jogador.local == 'i1' and mapa['i1']['mimico'] == False:
+        mapa['i1']['mimico'] = True
+        fala = 'Você encosta no baú para abrilo e ele se revela sendo um mímico. A criatura de morde causando 20 de dano.'
+        meu_jogador.vida -= 20
+        for caractere in fala:
+            sys.stdout.write(caractere)
+            sys.stdout.flush()
+            time.sleep(0.001)
+        time.sleep(1.5)
+        print(Fore.RED+r'''
+
+                        ############                                                        
+                    #####+++##############                                                
+                   ####++#-+++#+##################                                        
+                  ####++++#+###+##+###+##+##################                              
+                 ####+++###--#+##+#+#+######++########+++##########                       
+                ####+-+# ##+--+######+##-###+##+#+###++#+####################             
+                ###+-#   ###+-+################+###++#++###+#++++#+##########             
+             ####+-+#     ###--+#######################++#+##+#+##+##########             
+            #######        ##+-++################+++#####+++##++##+##+###++##             
+           ########         #####+#######################+#++##+++##+++###++#             
+          ##+#####          ##++#++################################++++####++             
+         ##++-##           #####---+##############################+-+#######+             
+        ##+--+#           ######+++-+############+################+++#######++            
+       ##++--+#          #######++#+++####+#####++++#############+++########+#            
+     ####+-.--##        ###########++#####+####++###++#########++++####### ##+#           
+    #####+++#--#       +#################+#####+###++##########++######### ###+#          
+  #######.-  #-+      ###+#+#+###########+######+++++##########++########   ##++          
+ ###++##+-  ##+       #####+#+##+++######+####+##++++###################     #+##         
+ ###++ #-+####       ####################+####+#++++#+##################    ##+++##       
+ ++###  ##             ##################++###++++++#+###+#++#+##+#######  ####+--+#      
+ #####   ##             #################++###-+++#+###+#####+#+#++######+ ###+++-+#+     
+    ##    ##              ###############++###++++#+############+###### ## #-+###+--++    
+     #                       #############++##-+++####################           #+#+#+   
+                                    ######+###+++++###################           #++++#   
+                                    ######+####++++#################             ####+#   
+                                    ######+###+++######  ##########               #+    
+                                     #####+###+++#                                  
+                                     #####+###+++#                               
+                                     #####+##+++#                                    
+                                     #####++#+++#                                  
+                                     #####+++++##                                  
+                                     ######++++#                                  
+                                     ###+#+-++##                                 
+                                    ###+##+-+##                               
+                                   ####+#++-##                              
+                                   ###+#+--##                             
+                                  ###+++--+#                                  
+                                 ###+#+--##                          
+                                ###+++-+#                            
+                                ####++#                           
+                                  ####           
+                   '''+Style.RESET_ALL)
+        input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
+        limpar_tela()
+        luta(mimico, meu_jogador)
+    else:
+        print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
+        locais()
+
+def descansar():
+    if meu_jogador.local == 'i2' and mapa['i2']['descansar'] == False:
+        aleatorio = random.randint(1, 100)
+        if aleatorio >= 20:
+            fala2 = 'Enquanto você dormia, um homem com cabeça de corvo e uma arma no lugar de seu braço te ataca.'
+            meu_jogador.vida -= 100
+            for caractere in fala2:
+                sys.stdout.write(caractere)
+                sys.stdout.flush()
+                time.sleep(0.01)
+            time.sleep(1.5)
+            print('''\n
+                ########        ########                                        
+               #######++++################                                      
+                  #########+++##############                                    
+                       #########+###+-+######                                   
+                          #################                                     
+                            #####+##########                                    
+                          ######++###########                                   
+                         ######++###########                                    
+                         ####+###############                                   
+                       #+######+-+##########++##                                
+                      #+#+##+++--##########+--+##                               
+                    ######+---++##########++-+++####                            
+                         +-------+++++++#--++----+-##                           
+                        #+---------------+-+++---++++#                          
+                        #++++------------++++++---+--+                          
+                        #-++-----------+++####+-+-+++#                          
+                        --+#+-----------++-++##++++--++                         
+                        --++#+----++--+-++++####------+                         
+                       ++-+++-----+++++-+++### #+---+-+#                        
+                      ##-++++-++--++++++-++#    #+--++++#                       
+                      #++#+------------++##      #+--+#+#                       
+                     #+--+--------++++++####      #+++++##                      
+                    ##+--+++++---+++++++###        ########                     
+                   +---++##+--+--++++-+#++###       #########                   
+                   ----+###+-----+++###++####       ######+##                   
+                  #----+###+++++++##++-+++####      #####+++##                  
+                  +--++###+-----+++---+++++###         #+#++####                
+                  +--+####+----------+++#######       #####++++#                
+                 #+-+####++-------++++##+++####          ###++##                
+                 #+++####+--------+###++++#####           ##+++#++#             
+                ##--+###+-----+-----+++++++###             ##+++###             
+               ##+---+##+--++-+++++++++++++###             ##++#+####           
+              #+--++-+#+++-++-++++++++++++++####           ####+#++###          
+              #+++##++#+++++++++++++++++++++###               #++#+#####        
+              ##++##+++++++++++++++++++++++++##              #++###+++#         
+              ##++##+++++++++++++++++##++++#####                ###++##         
+               ######+++++++++++#++++##+++++####                #+##+++##       
+                 ####+++++++++++#+++++##++++#####                ##++++##       
+                   ##+++++++++++##++++##+++++#####               #++++++###     
+                  ##++++++++++++##+++++#++++++####               ####+++++#     
+                  ##++++-+++-+++##+++++##++#+++#####               ##+++++#     
+                  #+++++-+++-+++##+++++##++##++######               #++#++###   
+                  #++++--+++++++#++++++##++##+++######            ##++##+++##   
+                 ##++++--++++++##+++++++#+++##+++######            ######+++##  
+                 ##++++-+++++++#++++++++++++##++++#####                #++####  
+                 ##++++-+++++++##+#+++++++++###+++#####                #+##+##  
+                 ##++#+-++++++++++#++++++++++###+++####                #######  
+                  #++#+++++++++++###+++++#+++####++++##                         
+                   +++++###++++++###+++++##+++####+++-+#                        
+                   #-+-++##++##+#####+++++########----+#                        
+                   #++--###          ##          #+----+#                       
+               #   #++++###         ######         +--++##                      
+                 ##++++##############################+-+####                    
+            +++++------++############################+---++######               
+          ###++--+++###+#############################+-+--+++#####              
+          ###############         #############################       ''')
+            input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
+            limpar_tela()
+            luta(Crow_Mauler, meu_jogador)
+        fala = 'Você se deitou no sofá e recuperou toda a sua vida e mana.'
+        meu_jogador.vida = meu_jogador.vida_max
+        meu_jogador.mana = meu_jogador.mana_max
+        for caractere in fala:
+            sys.stdout.write(caractere)
+            sys.stdout.flush()
+            time.sleep(0.01)
+        input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
+        limpar_tela()
+        print_local()
+        main_game_loop()
+    else:
+        print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
+        locais()
+
 ########################################
 def comprar(escolha):
         lista_itens_loja[escolha]['comprado'] = True
@@ -2594,6 +3092,12 @@ def abrir_mochila():
                     usar_pergaminho_apocalipse()
                 elif item_selecionado.nome == 'Pergaminho do Estilhaço Sísmico':
                     usar_pergaminho_estilhaço_sismico()
+                elif item_selecionado.nome == 'Pergaminho da Absorção de Sangue':
+                    usar_pergaminho_absorcao()
+                elif item_selecionado.nome == 'Pergaminho das Raizes da Morte':
+                    usar_pergaminho_raizes()
+                elif item_selecionado.nome == 'Pergaminho do Cometa Pedrilhante':
+                    usar_pergaminho_cometa_pedrilhante()
                 # Remove o item usado
                 meu_jogador.mochila.remove(item_selecionado)
                 time.sleep(1)
@@ -3399,6 +3903,16 @@ def aplicar_efeito(alvo):
                     sys.stdout.flush()
                     time.sleep(0.001)
                 input(Fore.LIGHTYELLOW_EX + "\n[Pressione Enter]" + Style.RESET_ALL)
+        elif efeito.tipo == 'absorção':
+            meu_jogador.vida += 30
+            if meu_jogador.vida > meu_jogador.vida_max:
+                meu_jogador.vida = meu_jogador.vida_max
+            stunado = Fore.LIGHTBLUE_EX+f'Você absorveu 30 pontos de vida de {alvo.nome}'+Style.RESET_ALL
+            for caractere in stunado:
+                sys.stdout.write(caractere)
+                sys.stdout.flush()
+                time.sleep(0.001)
+            input(Fore.LIGHTYELLOW_EX + "\n[Pressione Enter]" + Style.RESET_ALL)
                 
 
 def drop(monstro):
@@ -3590,6 +4104,18 @@ Descer a escada ou retornar a sala anterior? (escreva: descer ou retornar)\n>>''
         pergunta = "Avançar ou subir a sala anterior? (escreva: avançar ou subir)\n>>"
     elif meu_jogador.local in 'g2':
         pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
+    elif meu_jogador.local in 'h1':
+        pergunta = "Avançar ou subir a sala anterior? (escreva: avançar ou subir)\n>>"
+    elif meu_jogador.local in 'h2':
+        pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
+    elif meu_jogador.local in 'i1':
+        pergunta = "Avançar ou subir a sala anterior? (escreva: avançar ou subir)\n>>"
+    elif meu_jogador.local in 'i2':
+        pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
+    elif meu_jogador.local in 'j1':
+        pergunta = "Avançar ou subir a sala anterior? (escreva: avançar ou subir)\n>>"
+    elif meu_jogador.local in 'j2':
+        pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
     
     dest = input(pergunta).lower()
     direcoes_validas = ['subir', 'descer', 'avançar', 'retornar', 'loja']
@@ -3656,7 +4182,7 @@ A energia maligna está morrendo... mas algo abaixo desperta.
 
 Você se vira, encarando a única saída: um Portão Negro, que leva a uma proxima sala nas profundezas da torre. 
 A estrutura range como um animal faminto, esperando que você se mova.
-              '''
+'''
         for examina in examinar2:
             sys.stdout.write(examina)
             sys.stdout.flush()
@@ -3671,11 +4197,20 @@ As máscaras param de se mover e o som das vozes desaparece, o poder delas se ap
             sys.stdout.write(examina)
             sys.stdout.flush()
             time.sleep(0.01)
+    
+    elif meu_jogador.local == 'i1' and mapa['i1']['mimico'] == True:
+        examinar4 = '''
+A criatua está morta no chão. Você já pegou o item de dentro dela.\n
+'''
+        for examina in examinar4:
+            sys.stdout.write(examina)
+            sys.stdout.flush()
+            time.sleep(0.01)
+        time.sleep(1.5)
 
     elif meu_jogador.local == 'b2' and mapa['b2']['contador2'] == 1:
         examinar4 = '''
 Você já pegou o item de dentro do poço.
-
 '''
         for examina in examinar4:
             sys.stdout.write(examina)
@@ -3776,7 +4311,7 @@ def setup_jogo():
         meu_jogador.vida_base = 100
         meu_jogador.vida = meu_jogador.vida_base
         meu_jogador.vida_max = meu_jogador.vida
-        meu_jogador.mana_base = 30
+        meu_jogador.mana_base = 40
         meu_jogador.mana = meu_jogador.mana_base
         meu_jogador.mana_max = meu_jogador.mana
         meu_jogador.atk_base = 6
@@ -3845,7 +4380,6 @@ def setup_jogo():
         arma_basica = lista_armas_magicas[0]
         magia_basica = lista_magias[0]
         magia_basica1 = lista_magias[1]
-        magia_basica2 = lista_itens_bosses[9]
         efeito = Efeito(lista_efeitos[0]['nome'], lista_efeitos[0]['tipo'], lista_efeitos[0]['tempo'], lista_efeitos[0]['dano'])
         efeito1 = Efeito(lista_efeitos[2]['nome'], lista_efeitos[2]['tipo'], lista_efeitos[2]['tempo'], lista_efeitos[0]['dano'])
         meu_jogador.vida_base = 50
@@ -3857,15 +4391,6 @@ def setup_jogo():
         meu_jogador.atk_base = 2
         meu_jogador.inteligencia = 3
         meu_jogador.atk = meu_jogador.atk_base
-        meu_jogador.add_item(Item(
-            magia_basica2['nome'],
-            magia_basica2.get('atk', 0),
-            magia_basica2['desc'],
-            False,
-            magia_basica2['consumivel'],
-            magia_basica2['preco'],
-            magia_basica2['especial']
-                    ))
         meu_jogador.add_item(ArmaMagica(
             arma_basica['dano_magico'], arma_basica['nome'], arma_basica['atk'],
             arma_basica['desc'], arma_basica['equipado'], arma_basica['consumivel'],
