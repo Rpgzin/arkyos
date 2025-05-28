@@ -4674,7 +4674,15 @@ def luta(monstro, meu_jogador):
     
     # Ação: Mochila (mantido igual ao original)
     elif acao == 'mochila':
-        consumiveis = [item for item in meu_jogador.mochila if (item.consumivel and not item.especial and not item.armas)]
+        consumiveis = []
+        for item in meu_jogador.mochila:
+            if not hasattr(item, 'consumivel') or not hasattr(item, 'especial'):
+                print(f"Item inválido na mochila: {item}")
+                continue  # Pula para o próximo item
+        
+            if item.consumivel:
+                consumiveis.append(item)
+
         if not consumiveis:
             # print(Fore.RED+'Nenhum item para ser usado'+Style.RESET_ALL)
             time.sleep(1.5)
