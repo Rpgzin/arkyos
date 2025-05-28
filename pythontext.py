@@ -794,6 +794,10 @@ lista_consumiveis = [
     { 'nome': 'Pocao de mana alta', 'atk': 0,'preco': 150, 'desc': 'Uma pocao de mana alta, cura 60 pontos de mana.', 'comprado': False, 'equipado': False, 'consumivel': True, 'especial': False},
 ]
 
+lista_arma_ik = [
+    {'nome': 'Devoradora de estrelas', 'atk': 10000, 'preco': 999999, 'desc': 'Você não deveria ter acesso a isso.', 'equipado:': False, 'consumivel': False, 'especial': False}
+]
+
 lista_armas = [
     {'nome': 'Adaga enferrujada', 'atk': 3, 'preco': 100, 'desc': 'Parece ser bem antiga', 'equipado': False, 'consumivel': False, 'especial': False},
     {'nome': 'Espada longa', 'atk': 4, 'preco': 100, 'desc': 'A espada de todo guerreiro.', 'equipado': False, 'consumivel': False, 'especial': False},
@@ -1150,7 +1154,7 @@ boss_alegria = lista_monstros_mascara[2]
 boss_loucura = lista_monstros_mascara[3]
 
 efeito_boss = Efeito(lista_efeitos[1]['nome'], lista_efeitos[1]['tipo'], lista_efeitos[1]['tempo'], lista_efeitos[1]['dano'])
-
+efeito_alegria = Efeito(lista_efeitos[0]['nome'], lista_efeitos[0]['tipo'], lista_efeitos[0]['tempo'], lista_efeitos[0]['dano'])
 #######################################################
 
 ######################### NORMAIS #####################
@@ -1174,7 +1178,7 @@ guardiao_enraizado = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'],
 homunculo = Monstro(monstro1['nome'], monstro1['vida'], monstro1['nivel'], monstro1['atk'], monstro1['xp'], monstro1['ouro'], monstro1['boss'], efeito_boss)
 Raiva = Monstro(boss_raiva['nome'], boss_raiva['vida'], boss_raiva['nivel'], boss_raiva['atk'], boss_raiva['xp'], boss_raiva['ouro'], boss_raiva['boss'], efeito_boss)
 Medo = Monstro(boss_medo['nome'], boss_medo['vida'], boss_medo['nivel'], boss_medo['atk'], boss_medo['xp'], boss_medo['ouro'], boss_medo['boss'], efeito_boss)
-Alegria = Monstro(boss_alegria['nome'], boss_alegria['vida'], boss_alegria['nivel'], boss_alegria['atk'], boss_alegria['xp'], boss_alegria['ouro'], boss_alegria['boss'], efeito_boss)
+Alegria = Monstro(boss_alegria['nome'], boss_alegria['vida'], boss_alegria['nivel'], boss_alegria['atk'], boss_alegria['xp'], boss_alegria['ouro'], boss_alegria['boss'], efeito_alegria)
 Loucura = Monstro(boss_loucura['nome'], boss_loucura['vida'], boss_loucura['nivel'], boss_loucura['atk'], boss_loucura['xp'], boss_loucura['ouro'], boss_loucura['boss'], efeito_boss)
 
 ########################################################
@@ -1793,7 +1797,7 @@ def mostrar_mapa():
             ████          ████
             ██████████████████
             ██  \●/ ██      ██
-            ██   |  ██      ██  Você está na primeira sala do primeiro andar.
+            ██   |  ██      ██  Você está na primeira sala do 10º andar.
             ██  / \ ██      ██
             ██████████████████
             ██      ██      ██
@@ -1844,7 +1848,7 @@ def mostrar_mapa():
             ████          ████
             ██████████████████
             ██      ██ \●/  ██
-            ██      ██  |   ██  Você está na segunda sala do primeiro andar.
+            ██      ██  |   ██  Você está na segunda sala do 10º andar.
             ██      ██ / \  ██
             ██████████████████
             ██      ██      ██
@@ -1899,7 +1903,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██  \●/ ██      ██
-            ██   |  ██      ██  Você está na primeira sala do segundo andar andar.
+            ██   |  ██      ██  Você está na primeira sala do 9º andar.
             ██  / \ ██      ██
             ██████████████████
             ██      ██      ██
@@ -1950,7 +1954,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██      ██ \●/  ██
-            ██      ██  |   ██  Você está na segunda sala do segundo andar.
+            ██      ██  |   ██  Você está na segunda sala do 9º andar.
             ██      ██ / \  ██
             ██████████████████
             ██      ██      ██
@@ -2005,7 +2009,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██  \●/ ██      ██
-            ██   |  ██      ██  Você está na primeira sala do terceiro andar.
+            ██   |  ██      ██  Você está na primeira sala do 8º andar.
             ██  / \ ██      ██
             ██████████████████
             ██      ██      ██
@@ -2056,7 +2060,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██      ██ \●/  ██
-            ██      ██  |   ██  Você está na segunda sala do terceiro andar.
+            ██      ██  |   ██  Você está na segunda sala do 8º andar.
             ██      ██ / \  ██
             ██████████████████
             ██      ██      ██
@@ -2111,7 +2115,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██  \●/ ██      ██
-            ██   |  ██      ██  Voce está na primeira sala do quarto andar.
+            ██   |  ██      ██  Voce está na primeira sala do 7º andar.
             ██  / \ ██      ██
             ██████████████████
             ██      ██      ██
@@ -2162,7 +2166,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██      ██ \●/  ██
-            ██      ██  |   ██  Voce está na segunda sala do quarto andar.
+            ██      ██  |   ██  Voce está na segunda sala do 7º andar.
             ██      ██ / \  ██
             ██████████████████
             ██      ██      ██
@@ -2217,7 +2221,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██  \●/ ██      ██
-            ██   |  ██      ██  Voce está na primeira sala do quinto andar.
+            ██   |  ██      ██  Voce está na primeira sala do 6º andar.
             ██  / \ ██      ██
             ██████████████████
             ██      ██      ██
@@ -2268,7 +2272,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██      ██ \●/  ██
-            ██      ██  |   ██  Voce está na segunda sala do quinto andar.
+            ██      ██  |   ██  Voce está na segunda sala do 6º andar.
             ██      ██ / \  ██
             ██████████████████
             ██      ██      ██
@@ -2323,7 +2327,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██  \●/ ██      ██
-            ██   |  ██      ██  Voce está na primeira sala do sexto andar.
+            ██   |  ██      ██  Voce está na primeira sala do 5º andar.
             ██  / \ ██      ██
             ██████████████████
             ██      ██      ██
@@ -2374,7 +2378,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██      ██ \●/  ██
-            ██      ██  |   ██  Voce está na segunda sala do sexto andar.
+            ██      ██  |   ██  Voce está na segunda sala do 5º andar.
             ██      ██ / \  ██
             ██████████████████
             ██      ██      ██
@@ -2429,7 +2433,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██  \●/ ██      ██
-            ██   |  ██      ██  Voce está na primeira sala do setimo andar.
+            ██   |  ██      ██  Voce está na primeira sala do 4º andar.
             ██  / \ ██      ██
             ██████████████████
             ██      ██      ██
@@ -2480,7 +2484,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██      ██ \●/  ██
-            ██      ██  |   ██  Voce está na segunda sala do setimo andar.
+            ██      ██  |   ██  Voce está na segunda sala do 4º andar.
             ██      ██ / \  ██
             ██████████████████
             ██      ██      ██
@@ -2526,17 +2530,17 @@ def mostrar_mapa():
             ██      ██      ██
             ██      ██      ██
             ██████████████████
-            ██      ██      ██
-            ██      ██      ██
-            ██      ██      ██
-            ██████████████████
-            ██      ██      ██
-            ██      ██      ██
-            ██      ██      ██
-            ██████████████████
             ██  \●/ ██      ██
-            ██   |  ██      ██  Voce está na primeira sala do oitavo andar.
+            ██   |  ██      ██   Voce está na primeira sala do 3º andar.
             ██  / \ ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
             ██████████████████
               ''')
     elif meu_jogador.local == 'h2':
@@ -2578,7 +2582,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██      ██ \●/  ██
-            ██      ██  |   ██  Voce está na segunda sala do oitavo andar.
+            ██      ██  |   ██  Voce está na segunda sala do 3º andar.
             ██      ██ / \  ██
             ██████████████████
             ██      ██      ██
@@ -2633,7 +2637,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██  \●/ ██      ██
-            ██   |  ██      ██  Voce está na primeira sala do nono andar.
+            ██   |  ██      ██  Voce está na primeira sala do 2º andar.
             ██  / \ ██      ██
             ██████████████████
             ██      ██      ██
@@ -2684,7 +2688,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██      ██ \●/  ██
-            ██      ██  |   ██  Voce está na segunda sala do nono andar.
+            ██      ██  |   ██  Voce está na segunda sala do 2º andar.
             ██      ██ / \  ██
             ██████████████████
             ██      ██      ██
@@ -2739,7 +2743,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██  \●/ ██      ██
-            ██   |  ██      ██  Voce está na primeira sala do décimo andar.
+            ██   |  ██      ██  Voce está na primeira sala do 1º andar.
             ██  / \ ██      ██
             ██████████████████
               ''')
@@ -2790,7 +2794,7 @@ def mostrar_mapa():
             ██      ██      ██
             ██████████████████
             ██      ██ \●/  ██
-            ██      ██  |   ██  Voce está na segunda sala do décimo andar.
+            ██      ██  |   ██  Voce está na segunda sala do 1º andar.
             ██      ██ / \  ██
             ██████████████████
 ''')
@@ -2832,6 +2836,16 @@ def prompt():
         jogador_mover()
     elif acao == 'teleportar':
         meu_jogador.local = 'j2'
+        arma_bolada = lista_arma_ik[0]
+        meu_jogador.add_item(Item(
+            arma_bolada['nome'], 
+            arma_bolada['atk'], 
+            arma_bolada['desc'], 
+            False, 
+            arma_bolada['consumivel'], 
+            arma_bolada['preco'], 
+            arma_bolada['especial']
+        ))
         print_local()
         main_game_loop()
     elif acao == 'ajuda':
@@ -4308,11 +4322,20 @@ def luta(monstro, meu_jogador):
             # verifica ataque especial
             if monstro.atk_turnos >= 3:
                 dano_especial = monstro.atk * 2
-                fala = f'\nO {monstro.nome} te ataca ferozmente causando '+Fore.RED+f'{dano_especial} de dano!'+Style.RESET_ALL
-                for caractere in fala:
-                    sys.stdout.write(caractere)
-                    sys.stdout.flush()
-                    time.sleep(0.02)
+                if monstro.nome == 'A Forjadora' or monstro.nome == 'Krothar, o Espectro da Carnificina':
+                    dano_especial += monstro.atk
+                    print(f'{monstro.nome} desfere um golpe avassalador te causando {dano_especial} de dano!')
+                elif monstro.nome == 'Nyxthar, o Devorador de Almas':
+                    vida_recuperada = meu_jogador.atk_final/2
+                    monstro.vida += vida_recuperada
+                    print(f'O {monstro.nome} te ataca ferozmente causando {dano_especial} de dano!')
+                    print(f'{monstro.nome} reupera {vida_recuperada} de vida')
+                else:
+                    fala = f'\nO {monstro.nome} te ataca ferozmente causando '+Fore.RED+f'{dano_especial} de dano!'+Style.RESET_ALL
+                    for caractere in fala:
+                        sys.stdout.write(caractere)
+                        sys.stdout.flush()
+                        time.sleep(0.02)
                 
                 # Aplica redução de dano especial
                 if meu_jogador.armadura and meu_jogador.armadura_resistencia > 0:
@@ -4466,11 +4489,21 @@ def luta(monstro, meu_jogador):
                     # verifica ataque especial
                     if monstro.atk_turnos >= 3:
                         dano_especial = monstro.atk * 2
-                        ataque4 = f'\nO {monstro.nome} te ataca ferozmente causando '+Fore.RED+f'{dano_especial} de dano!'+Style.RESET_ALL
-                        for caractere in ataque4:
-                            sys.stdout.write(caractere)
-                            sys.stdout.flush()
-                            time.sleep(0.02)
+                        if monstro.nome == 'A Forjadora':
+                            dano_especial = monstro.atk * 2
+                            dano_especial += monstro.atk
+                            print(f'{monstro.nome} desfere um golpe avassalador te causando {dano_especial} de dano!')
+                        elif monstro.nome == 'Nyxthar, o Devorador de Almas':
+                            vida_recuperada = meu_jogador.atk_final/2
+                            monstro.vida += vida_recuperada
+                            print(f'O {monstro.nome} te ataca ferozmente causando {dano_especial} de dano!')
+                            print(f'{monstro.nome} reupera {vida_recuperada} de vida')
+                        else:
+                            ataque4 = f'\nO {monstro.nome} te ataca ferozmente causando '+Fore.RED+f'{dano_especial} de dano!'+Style.RESET_ALL
+                            for caractere in ataque4:
+                                sys.stdout.write(caractere)
+                                sys.stdout.flush()
+                                time.sleep(0.02)
                         
                         if meu_jogador.armadura and meu_jogador.armadura_resistencia > 0:
                             dano_especial = max(1, int(dano_especial * (1 - (meu_jogador.armadura_resistencia / 100))))
@@ -4693,6 +4726,8 @@ def luta(monstro, meu_jogador):
 
     # Monstro morre
     elif monstro.vida <= 0:
+        if meu_jogador.efeitos_status:
+            meu_jogador.efeitos_status.clear()
         if meu_jogador.local == 'c2' and mapa['c2']['contador2'] == 0:
             mapa['c2']['contador2'] += 1
             limpar_tela()
@@ -5031,12 +5066,31 @@ def fugir():
         meu_jogador.local = 'e2'
     elif meu_jogador.local == 'f2':
         meu_jogador.local = 'f1'
+    elif meu_jogador.local == 'g1':
+        meu_jogador.local = 'f2'
+    elif meu_jogador.local == 'g2':
+        meu_jogador.local = 'g1'
+    elif meu_jogador.local == 'h1':
+        meu_jogador.local = 'g2'
+    elif meu_jogador.local == 'h2':
+        meu_jogador.local = 'h1'
+    elif meu_jogador.local == 'i1':
+        meu_jogador.local = 'h2'
+    elif meu_jogador.local == 'i2':
+        meu_jogador.local = 'i1'
+    elif meu_jogador.local == 'j1':
+        meu_jogador.local = 'i2'
+    elif meu_jogador.local == 'j2':
+        meu_jogador.local = 'j1'
     fala = 'você voltou para a sala anterior'
     for falas in fala:
         sys.stdout.write(falas)
         sys.stdout.flush()
         time.sleep(0.02)
     print_local()
+    
+
+    print('você voltou para a sala anterior')
     main_game_loop()
 
 def mostrar_status(self):
@@ -5219,44 +5273,9 @@ Avançar ou subir à sala anterior? (escreva: avançar ou subir)\n>>"""
         print(Fore.RED+"Direção inválida."+Style.RESET_ALL)
 
 def movimento_manipulado(destino):
-    if destino == 'a2':
-        meu_jogador.local = destino
-        if mapa['a1']['contador'] == 0:  
-            mapa['a1']['contador'] += 1  
-            passagem = '''
-Ao Abrir o portão, Uma nuvem de poeira antiga Cobre o Local. Uma voz, baixa e arrastada, sussurra em sua mente:
-"O herdeiro da ruína caminha outra vez... mas será que lembrará antes de se perder?"
-
-.....
-Ao Atravessar Para o Proximo comodo, 
-a cada passo a dentro o ambiente é iluminado por tochas azuis que você sente que não deviam acender.
-'''
-            for passagens in passagem:
-                sys.stdout.write(passagens)
-                sys.stdout.flush()
-                time.sleep(0.01)
-            time.sleep(1)
-            input(Fore.YELLOW+'\n[Press Enter]'+Style.RESET_ALL)
-        print_local()
-
-    elif destino == 'b1':
-        meu_jogador.local = destino 
-        if mapa['a2']['contador'] == 0:
-            mapa['a2']['contador'] += 1
-            passagem2 = '''
-Ao entrar, o som desaparece. Nenhum eco. Nenhuma respiração. No lugar, apenas sussurros em sua mente — 
-vozes que carregam seu nome, mas ditas por pessoas que você não lembra.
-As paredes são cobertas por máscaras penduradas, cada uma diferente — raiva, medo, alegria, loucura.
-Quando você se aproxima, uma delas vira lentamente... te observando.'''
-            for passagens in passagem2:
-                sys.stdout.write(passagens)
-                sys.stdout.flush()
-                time.sleep(0.01)
-            time.sleep(2)
-            input(Fore.YELLOW+'\n[Press Enter]'+Style.RESET_ALL)
-            print_local()
     meu_jogador.local = destino
-    print(f"\nVocê se moveu para {destino}.")
+    print(f"\nVocê se moveu para {mapa[destino]['NOME_LOCAL']}.")
+    input(Fore.YELLOW+'[Press Enter]')
     limpar_tela()
     print_local()
 
@@ -5362,6 +5381,22 @@ def main_game_loop():
       
               
               ''')
+
+    game_over = '''
+Você cai de joelhos, exausto. O frio da pedra contra sua pele é a única certeza que resta. 
+A cada passo nesta descida, fragmentos de memória voltaram — rostos, batalhas, promessas esquecidas. 
+E então, tudo retorna: o duelo contra o Lorde da Torre, a vitória amarga, a maldição lançada com seu último suspiro.
+Ele apagou quem você era. Enfraqueceu sua alma. E agora, no fim da jornada, o corpo cede antes da libertação.
+
+Você sorri, amargo. Lembrou... tarde demais.
+
+Seus olhos se fecham. A torre, sentinela silenciosa, guarda mais uma história que ninguém ouvirá. 
+Mas por um instante, apenas um... você foi inteiro outra vez
+'''
+    for caractere in game_over:
+        sys.stdout.write(caractere)
+        sys.stdout.flush()
+        time.sleep(0.001)
     sys.exit()
 
 def fim_de_jogo():
