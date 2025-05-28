@@ -1003,7 +1003,7 @@ lista_itens_bosses = [
 ]
 
 lista_magias = [
-    {'nome': 'Bola de fogo', 'dano': 2000, 'desc':'A magia mais forte de um mago', 'mana_gasta': 30},
+    {'nome': 'Bola de fogo', 'dano': 20, 'desc':'A magia mais forte de um mago', 'mana_gasta': 30},
     {'nome': 'Rajada de Gelo', 'dano': 10, 'desc':'Esfrio né', 'mana_gasta': 35},
 ]
 
@@ -3040,126 +3040,154 @@ def semi_boss_cavaleiro():
         main_game_loop()
 
 def robo():
+    """
+    Função que lida com a interação com o robô no local 'c2'.
+    """
+    # Verificação inicial da mochila
+    if not hasattr(meu_jogador, 'mochila') or not isinstance(meu_jogador.mochila, list):
+        print(Fore.RED + "Erro: Mochila inválida!" + Style.RESET_ALL)
+        time.sleep(1)
+        return
+
     nucleo_no_inventario = None
-    # Procura pelo núcleo no inventário
-    for item in meu_jogador.mochila:
-        if item.nome == 'Núcleo de Robo':
-            nucleo_no_inventario = item
-            break
     
+    # Procura pelo núcleo no inventário de forma segura
+    for item in meu_jogador.mochila:
+        try:
+            # Comparação case-insensitive e removendo espaços extras
+            if hasattr(item, 'nome') and item.nome.lower().strip() == 'núcleo de robo':
+                nucleo_no_inventario = item
+                break
+        except Exception:
+            continue  # Ignora itens problemáticos
+
     if nucleo_no_inventario:
-        mapa['c2']['SOLVED'] = True
-        fala = 'Você usa o Núcleo de Robo para tentar restaurar o robô.'
-        for fala in fala:
-            sys.stdout.write(fala)
-            sys.stdout.flush()
-            time.sleep(0.02)
-        # Remove o núcleo do inventário
-        meu_jogador.mochila.remove(nucleo_no_inventario)
-        
-        aleatorio = random.randint(1, 100)
-        if aleatorio >= 0:
-            fala2 ='O robô se restaura com um brilho azul nos olhos.'
-            for fala in fala2:
-                sys.stdout.write(fala)
+        try:
+            mapa['c2']['SOLVED'] = True
+            
+            # Animação de texto
+            fala = 'Você usa o Núcleo de Robo para tentar restaurar o robô.'
+            for char in fala:
+                sys.stdout.write(char)
                 sys.stdout.flush()
                 time.sleep(0.02)
-            time.sleep(1.5)
-            fala3 = 'Ele emite sons mecânicos e abre um compartimento, oferecendo um item.'
-            for fala in fala3:
-                sys.stdout.write(fala)
-                sys.stdout.flush()
-                time.sleep(0.02)
-            time.sleep(1.5)
             
-            # Lista de possíveis itens que o robô pode dar
-            itens_robo = [
-                lista_armaduras[1],  # Armadura média
-                lista_consumiveis[3],  # Poção de mana
-                lista_itens_especiais[5],  # Núcleo de Robô (para reparar outro)
-                lista_armas[1]  # Espada longa
-            ]
+            # Remove o núcleo do inventário
+            meu_jogador.mochila.remove(nucleo_no_inventario)
             
-            # Escolhe um item aleatório
-            item_data = random.choice(itens_robo)
-            
-            # Cria o objeto apropriado
-            if 'defesa' in item_data:  # Se for armadura
-                item = Armadura(
-                    item_data['nome'], 
-                    item_data['defesa'],
-                    item_data['vida_max'],
-                    item_data['resistencia'],
-                    item_data['desc'],
-                    False,  # Não equipado automaticamente
-                    item_data['consumivel'],
-                    item_data['preco'],
-                    item_data['especial']
-                )
-            else:  # Se for item normal
-                item = Item(
-                    item_data['nome'],
-                    item_data.get('atk', 0),  # Usa get() para evitar erro se não existir
-                    item_data['desc'],
-                    False,  # Não equipado
-                    item_data['consumivel'],
-                    item_data['preco'],
-                    item_data['especial']
-                )
-            
-            print(f'\nO robô te dá: {Fore.YELLOW}{item.nome}{Style.RESET_ALL}!')
-            print(f'Descrição: {item.desc}')
-            
-            # Adiciona o item à mochila
-            meu_jogador.add_item(item)
-            
-            print('\n[equipar | guardar]')
-            escolha = input(Fore.YELLOW+'>> '+Style.RESET_ALL).lower()
-            
-            if escolha == 'equipar':
-                if isinstance(item, Armadura):
-                    # Desequipa armadura atual se houver
-                    if meu_jogador.armadura:
-                        meu_jogador.armadura.equipado = False
-                    # Equipa a nova
-                    meu_jogador.armadura = item
-                    item.equipado = True
-                    print(f'Você equipou a armadura {item.nome}!')
-                elif hasattr(item, 'atk'):  # Se for arma
-                    # Desequipa arma atual se houver
-                    if meu_jogador.item_equipado:
-                        meu_jogador.item_equipado.equipado = False
-                    # Equipa a nova
-                    meu_jogador.item_equipado = item
-                    item.equipado = True
-                    print(f'Você equipou {item.nome}!')
-                else:
-                    print('Este item não pode ser equipado.')
-            
-            time.sleep(1.5)
-            limpar_tela()
-            print_local()
-            main_game_loop()
-        else:
-            fala4 = 'O robô se restaura, mas com olhos vermelhos!'
-            for fala in fala4:
-                sys.stdout.write(fala)
-                sys.stdout.flush()
-                time.sleep(0.02)
-            time.sleep(1.5)
-            fala5 = Fore.RED+'Sinais de alerta piscam e ele te ataca!'+Style.RESET_ALL
-            for fala in fala5:
-                sys.stdout.write(fala)
-                sys.stdout.flush()
-                time.sleep(0.02)
-            input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
-            luta(robot, meu_jogador)
+            aleatorio = random.randint(1, 100)
+            if aleatorio >= 0:  # Sucesso na restauração
+                # Animação de texto
+                fala2 = '\nO robô se restaura com um brilho azul nos olhos.'
+                for char in fala2:
+                    sys.stdout.write(char)
+                    sys.stdout.flush()
+                    time.sleep(0.02)
+                
+                time.sleep(1.5)
+                
+                fala3 = '\nEle emite sons mecânicos e abre um compartimento, oferecendo um item.'
+                for char in fala3:
+                    sys.stdout.write(char)
+                    sys.stdout.flush()
+                    time.sleep(0.02)
+                
+                time.sleep(1.5)
+                
+                # Lista de possíveis itens que o robô pode dar
+                itens_robo = [
+                    lista_armaduras[1],  # Armadura média
+                    lista_consumiveis[3],  # Poção de mana
+                    lista_itens_especiais[5],  # Núcleo de Robô (para reparar outro)
+                    lista_armas[1]  # Espada longa
+                ]
+                
+                # Escolhe um item aleatório
+                item_data = random.choice(itens_robo)
+                
+                # Cria o objeto apropriado
+                if 'defesa' in item_data:  # Se for armadura
+                    item = Armadura(
+                        item_data['nome'], 
+                        item_data['defesa'],
+                        item_data['vida_max'],
+                        item_data['resistencia'],
+                        item_data['desc'],
+                        False,  # Não equipado automaticamente
+                        item_data['consumivel'],
+                        item_data['preco'],
+                        item_data['especial']
+                    )
+                else:  # Se for item normal
+                    item = Item(
+                        item_data['nome'],
+                        item_data.get('atk', 0),
+                        item_data['desc'],
+                        False,  # Não equipado
+                        item_data['consumivel'],
+                        item_data['preco'],
+                        item_data['especial']
+                    )
+                
+                print(f'\n\nO robô te dá: {Fore.YELLOW}{item.nome}{Style.RESET_ALL}!')
+                print(f'Descrição: {item.desc}')
+                
+                # Adiciona o item à mochila
+                meu_jogador.add_item(item)
+                
+                print('\n[equipar | guardar]')
+                escolha = input(Fore.YELLOW+'>> '+Style.RESET_ALL).lower()
+                
+                if escolha == 'equipar':
+                    if isinstance(item, Armadura):
+                        # Desequipa armadura atual se houver
+                        if meu_jogador.armadura:
+                            meu_jogador.armadura.equipado = False
+                        # Equipa a nova
+                        meu_jogador.armadura = item
+                        item.equipado = True
+                        print(f'Você equipou a armadura {item.nome}!')
+                    elif hasattr(item, 'atk'):  # Se for arma
+                        # Desequipa arma atual se houver
+                        if meu_jogador.item_equipado:
+                            meu_jogador.item_equipado.equipado = False
+                        # Equipa a nova
+                        meu_jogador.item_equipado = item
+                        item.equipado = True
+                        print(f'Você equipou {item.nome}!')
+                    else:
+                        print('Este item não pode ser equipado.')
+                
+                time.sleep(1.5)
+                
+            else:  # Falha na restauração
+                fala4 = '\nO robô se restaura, mas com olhos vermelhos!'
+                for char in fala4:
+                    sys.stdout.write(char)
+                    sys.stdout.flush()
+                    time.sleep(0.02)
+                
+                time.sleep(1.5)
+                
+                fala5 = Fore.RED+'\nSinais de alerta piscam e ele te ataca!'+Style.RESET_ALL
+                for char in fala5:
+                    sys.stdout.write(char)
+                    sys.stdout.flush()
+                    time.sleep(0.02)
+                
+                input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
+                luta(robot, meu_jogador)
+                
+        except Exception as e:
+            print(Fore.RED + f"\nErro ao interagir com o robô: {e}" + Style.RESET_ALL)
+            time.sleep(2)
     else:
-        print(Fore.RED+'Você não tem o Núcleo de Robo no inventário.'+Style.RESET_ALL)
-        time.sleep(1.5)
-        limpar_tela()
-        print_local()
-        main_game_loop()
+        print(Fore.RED + '\nVocê não tem o Núcleo de Robo no inventário.' + Style.RESET_ALL)
+    
+    time.sleep(1.5)
+    limpar_tela()
+    print_local()
+    main_game_loop()
     
 def corredor():
     if meu_jogador.local == 'c2':
@@ -3230,7 +3258,7 @@ def pegar():
         if meu_jogador.classe == 'monge':
             meu_jogador.add_item(Item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'], item['preco'], item['especial']))
             mapa['b2']['contador2'] += 1
-            fala_monge = "Você se lembra da arma que usava antes, colocando a mão dentro do poço você a pega e agora ela está na sua mao.\n"+Fore.YELLOW+f"\n{item['nome']} Adicionado ao seu inventário."+Style.RESET_ALL
+            fala_monge = "Você se lembra da arma que usava antes, colocando a mão dentro do poço você a pega e agora ela está na sua mao.\n"+Fore.YELLOW+f"\n{item['nome']} Adicionado ao seu inventário.\n"+Style.RESET_ALL
             for fala in fala_monge:
                 sys.stdout.write(fala)
                 sys.stdout.flush()
@@ -3645,13 +3673,19 @@ def descansar_a1():
         locais()
 
 def ultimo_boss():
-    if meu_jogador.local == 'j2' and mapa['j2']['boss_final'] == False:
+    if meu_jogador.local == 'j2' and not mapa['j2']['boss_final']:
         mapa['j2']['contador2'] = 1
-        # Verifica se o jogador tem alguma máscara no inventário
-        mascaras_no_inventario = [item for item in meu_jogador.mochila 
-                                if item.nome in ["Máscara da Raiva", "Máscara do Medo", 
-                                               "Máscara da Alegria", "Máscara da Loucura"]]
         
+        # Verifica se o jogador tem alguma máscara no inventário de forma segura
+        mascaras_no_inventario = []
+        for item in meu_jogador.mochila:
+            try:
+                if hasattr(item, 'nome') and item.nome in ["Máscara da Raiva", "Máscara do Medo", 
+                                                        "Máscara da Alegria", "Máscara da Loucura"]:
+                    mascaras_no_inventario.append(item)
+            except AttributeError:
+                continue  # Ignora itens que não têm o atributo 'nome'
+
         if not mascaras_no_inventario:
             fala = "Você não possui nenhuma máscara para encaixar."
             for caractere in fala:
@@ -3664,15 +3698,18 @@ def ultimo_boss():
             main_game_loop()
             return
             
+        # Mostra as máscaras disponíveis
         fala2 = "Qual máscara você deseja encaixar?"
         for caractere in fala2:
             sys.stdout.write(caractere)
             sys.stdout.flush()
             time.sleep(0.02)
+            
         for i, mascara in enumerate(mascaras_no_inventario, 1):
-            print(Fore.YELLOW+"[{i}]"+Style.RESET_ALL+f" {mascara.nome}")
+            print(Fore.YELLOW+f"[{i}]"+Style.RESET_ALL+f" {mascara.nome}")
             
         escolha = input(Fore.YELLOW+"\n>> "+Style.RESET_ALL)
+        
         try:
             escolha = int(escolha) - 1
             if escolha < 0 or escolha >= len(mascaras_no_inventario):
@@ -3680,43 +3717,51 @@ def ultimo_boss():
                 
             mascara_escolhida = mascaras_no_inventario[escolha]
             
-            # Remove a máscara do inventário
-            meu_jogador.mochila.remove(mascara_escolhida)
+            # Remove a máscara do inventário com verificação
+            try:
+                meu_jogador.mochila.remove(mascara_escolhida)
+            except ValueError:
+                print("Erro: Máscara não encontrada na mochila!")
+                time.sleep(1)
+                limpar_tela()
+                print_local()
+                main_game_loop()
+                return
             
             # Determina qual boss enfrentar baseado na máscara
-            boss = mapa_mascaras_bosses.get(mascara_escolhida.nome)
+            if mascara_escolhida.nome == "Máscara da Raiva":
+                monstro = Raiva
+            elif mascara_escolhida.nome == "Máscara do Medo":
+                monstro = Medo
+            elif mascara_escolhida.nome == "Máscara da Alegria":
+                monstro = Alegria
+            else:  # Máscara da Loucura
+                monstro = Loucura
             
-            if boss:
-                fala3 = f"\nVocê encaixa a {mascara_escolhida.nome} na estátua..."
-                for caractere in fala3:
-                    sys.stdout.write(caractere)
-                    sys.stdout.flush()
-                    time.sleep(0.02)
-                time.sleep(1.5)
-                fala4 = "A estátua começa a tremer e se transforma em uma criatura horrível!"
-                for caractere in fala4:
-                    sys.stdout.write(caractere)
-                    sys.stdout.flush()
-                    time.sleep(0.02)
-                input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
-                limpar_tela()
-                
-                # Cria uma instância do monstro correspondente
-                if mascara_escolhida.nome == "Máscara da Raiva":
-                    monstro = Raiva
-                elif mascara_escolhida.nome == "Máscara do Medo":
-                    monstro = Medo
-                elif mascara_escolhida.nome == "Máscara da Alegria":
-                    monstro = Alegria
-                else:  # Máscara da Loucura
-                    monstro = Loucura
-                
-                # Inicia a batalha
-                luta(monstro, meu_jogador)
-                
-                # Marca como resolvido se o jogador vencer
-                mapa['j2']['boss_final'] = True
-                
+            # Animação de ativação
+            fala3 = f"\nVocê encaixa a {mascara_escolhida.nome} na estátua..."
+            for caractere in fala3:
+                sys.stdout.write(caractere)
+                sys.stdout.flush()
+                time.sleep(0.02)
+            
+            time.sleep(1.5)
+            
+            fala4 = "A estátua começa a tremer e se transforma em uma criatura horrível!"
+            for caractere in fala4:
+                sys.stdout.write(caractere)
+                sys.stdout.flush()
+                time.sleep(0.02)
+            
+            input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
+            limpar_tela()
+            
+            # Inicia a batalha
+            luta(monstro, meu_jogador)
+            
+            # Marca como resolvido se o jogador vencer
+            mapa['j2']['boss_final'] = True
+            
         except (ValueError, IndexError):
             print("Escolha inválida.")
             time.sleep(1)
@@ -3724,7 +3769,7 @@ def ultimo_boss():
             print_local()
             main_game_loop()
             
-    elif meu_jogador.local == 'j2' and mapa['j2']['boss_final'] == True:
+    elif meu_jogador.local == 'j2' and mapa['j2']['boss_final']:
         print("A estátua está inerte, você já enfrentou o desafio aqui.")
         time.sleep(1.5)
         limpar_tela()
@@ -3733,7 +3778,6 @@ def ultimo_boss():
     else:
         print(Fore.RED + 'Comando inválido.' + Style.RESET_ALL)
         locais()
-
 
 
 ########################################
@@ -5279,7 +5323,7 @@ Avançar ou subir à sala anterior? (escreva: avançar ou subir)\n>>"""
 def movimento_manipulado(destino):
     meu_jogador.local = destino
     print(f"\nVocê se moveu para {mapa[destino]['NOME_LOCAL']}.")
-    input(Fore.YELLOW+'[Press Enter]')
+    input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
     limpar_tela()
     print_local()
 
@@ -5679,7 +5723,7 @@ E por que o mundo parecia ter parado de girar no exato momento em que você caiu
             sys.stdout.flush()
             time.sleep(0.001)
     time.sleep(1)
-    input(Fore.YELLOW+'\n[Press Enter]'+Style.RESET_ALL)
+    input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
 
     os.system('clear' if os.name != 'nt' else 'cls')
     print ("▬"*100)
