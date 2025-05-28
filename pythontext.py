@@ -138,6 +138,10 @@ class Player:
         self.game_over = False
         self.pular_turno = False
         self.combate = False
+        self.dano_magico_final = 0
+        self.armadura_vida_max = 0
+        self.armadura_vida = 0
+        self.armadura_resistencia = 0
     
     def add_item(self, item):
         self.mochila.append(item)
@@ -158,9 +162,13 @@ def calcular_atributos(jogador):
     jogador.mana = jogador.mana_max
     jogador.atk = jogador.atk_base + (jogador.forca * 2)
     jogador.atk_final = jogador.atk
-    if jogador.item_equipado:
-        jogador.atk_final += jogador.item_equipado.atk
     jogador.dano_magico = jogador.inteligencia * 2
+    jogador.dano_magico_final = jogador.dano_magico
+    if jogador.item_equipado:
+        if jogador.item_equipado.dano_magico:
+            jogador.dano_magico_final += jogador.item_equipado.dano_magico
+        else:
+            jogador.atk_final += jogador.item_equipado.atk
     if jogador.armadura:
         jogador.armadura_vida_max = jogador.armadura.vida_max
         jogador.armadura_vida = jogador.armadura_vida_max
@@ -175,9 +183,21 @@ def atualizar_atributos(jogador):
     jogador.mana_max = jogador.mana_base + (jogador.inteligencia * 8)
     jogador.atk = jogador.atk_base + (jogador.forca * 2)
     jogador.atk_final = jogador.atk
-    if jogador.item_equipado:
-        jogador.atk_final += jogador.item_equipado.atk
     jogador.dano_magico = jogador.inteligencia * 2
+    jogador.dano_magico_final = jogador.dano_magico
+    if jogador.item_equipado:
+        if jogador.item_equipado.dano_magico:
+            jogador.dano_magico_final += jogador.item_equipado.dano_magico
+        else:
+            jogador.atk_final += jogador.item_equipado.atk
+    if jogador.armadura:
+        jogador.armadura_vida_max = jogador.armadura.vida_max
+        jogador.armadura_vida = jogador.armadura_vida_max
+        jogador.armadura_resistencia = jogador.armadura.resistencia
+    else:
+        jogador.armadura_vida_max = 0
+        jogador.armadura_vida = 0
+        jogador.armadura_resistencia = 0
 
 def subi_nivel(jogador):
     pontos = 0
@@ -219,12 +239,8 @@ def exibir_status(jogador):
         │╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚══════╝│
         └───────────────────────────────────────────────────┘   
 '''.upper())
-    dano_magico_arma = 0
-    if meu_jogador.item_equipado:
-        if meu_jogador.item_equipado.dano_magico:
-            dano_magico_arma = meu_jogador.item_equipado.dano_magico
     print(f'Nome:{jogador.nome} LVL: {jogador.nivel}'+Style.RESET_ALL+f' XP: {jogador.xp}/{jogador.xp_max}')
-    print('vida:'+Fore.RED+f' {jogador.vida}/{jogador.vida_max}'+Style.RESET_ALL+ ' / MANA: '+Fore.BLUE+f'{jogador.mana}/{jogador.mana_max}'+Style.RESET_ALL+' / ATK: '+Fore.YELLOW+f'{jogador.atk}'+Style.RESET_ALL+' / MAG.ATK: '+Fore.LIGHTBLUE_EX+f'{jogador.dano_magico+dano_magico_arma}'+Style.RESET_ALL)
+    print('vida:'+Fore.RED+f' {jogador.vida}/{jogador.vida_max}'+Style.RESET_ALL+ ' / MANA: '+Fore.BLUE+f'{jogador.mana}/{jogador.mana_max}'+Style.RESET_ALL+' / ATK: '+Fore.YELLOW+f'{jogador.atk}'+Style.RESET_ALL+' / MAG.ATK: '+Fore.LIGHTBLUE_EX+f'{jogador.dano_magico}'+Style.RESET_ALL)
     if jogador.item_equipado:
         if jogador.item_equipado.dano_magico:
             print(f'arma: {jogador.item_equipado.nome} DANO MÁGICO: {jogador.item_equipado.dano_magico}')
@@ -312,7 +328,7 @@ class Item:
         self.consumivel = consumivel
         self.preco = preco
         self.especial = especial
-        self.dano_magico = 0
+        self.dano_magico = None
     
 class Armadura(Item):
     def __init__(self, nome, defesa, vida_max, resistencia, desc, equipado, consumivel, preco, especial):
@@ -3681,7 +3697,7 @@ def abrir_mochila():
             if acao == "voltar":
                 abrir_mochila()
             
-            elif acao == "equipar":
+            elif acao == "equipar" and (not item_selecionado.consumivel and not item_selecionado.especial):
                 if isinstance(item_selecionado, Armadura):
                     # Desequipa armadura atual se houver
                     if meu_jogador.armadura:
@@ -3708,11 +3724,15 @@ def abrir_mochila():
                 
                 abrir_mochila()
             
-            elif acao == "desequipar":
+            elif acao == "desequipar" and (not item_selecionado.consumivel or not item_selecionado.especial) and (meu_jogador.item_equipado or meu_jogador.armadura):
                 if isinstance(item_selecionado, Armadura):
-                    meu_jogador.armadura = None
+                    if meu_jogador.armadura and (item_selecionado.nome == meu_jogador.armadura.nome):
+                        meu_jogador.armadura = None
+                elif isinstance(item_selecionado, Item):
+                    if meu_jogador.item_equipado and (item_selecionado.nome == meu_jogador.item_equipado.nome):
+                        meu_jogador.item_equipado = None
                 else:
-                    meu_jogador.item_equipado = None
+                    print('ação inválida')
                 
                 item_selecionado.equipado = False
                 atualizar_atributos(meu_jogador)
@@ -4015,6 +4035,9 @@ def luta(monstro, meu_jogador):
     if meu_jogador.efeitos_status:
         aplicar_efeito(meu_jogador)
         print('')
+        if meu_jogador.vida <= 0:
+            meu_jogador.game_over = True
+            main_game_loop()
     
     mostrar_status(meu_jogador)
     print('          '+'▃'*36)
@@ -4045,6 +4068,39 @@ def luta(monstro, meu_jogador):
             if monstro.efeitos_status:
                 aplicar_efeito(monstro)
             if monstro.pular_turno:
+                luta(monstro, meu_jogador)
+
+            # verifica ataque especial
+            if monstro.atk_turnos >= 3:
+                dano_especial = monstro.atk * 2
+                print(f'O {monstro.nome} te ataca ferozmente causando {dano_especial} de dano!')
+                
+                # Aplica redução de dano especial
+                if meu_jogador.armadura and meu_jogador.armadura_resistencia > 0:
+                    dano_especial = max(1, int(dano_especial * (1 - (meu_jogador.armadura_resistencia / 100))))
+                    print(f"Dano especial reduzido para: {dano_especial}")
+                
+                # Aplica dano especial
+                if meu_jogador.armadura and meu_jogador.armadura_vida > 0:
+                    vida_armadura_antes = meu_jogador.armadura_vida
+                    meu_jogador.armadura_vida -= dano_especial
+                    
+                    if meu_jogador.armadura_vida < 0:
+                        dano_excedente = -meu_jogador.armadura_vida
+                        meu_jogador.vida -= dano_excedente
+                        meu_jogador.armadura_vida = 0
+                        print(f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)")
+                    else:
+                        print(f"Sua armadura absorveu {dano_especial} de dano especial")
+                else:
+                    meu_jogador.vida -= dano_especial
+                
+                monstro.atk_turnos = 0
+                if monstro.atk_efeito:
+                    meu_jogador.add_efeito(monstro.atk_efeito)
+                time.sleep(1.5)
+                input("Pressione qualquer tecla para continuar...")
+                limpar_tela()
                 luta(monstro, meu_jogador)
             
             # Cálculo do dano recebido com sistema de armadura
@@ -4086,36 +4142,7 @@ def luta(monstro, meu_jogador):
                 meu_jogador.vida -= dano
             
             # Ataque especial do monstro a cada 3 turnos
-            if monstro.atk_turnos >= 3:
-                dano_especial = monstro.atk * 2
-                print(f'O {monstro.nome} te ataca ferozmente causando {dano_especial} de dano!')
-                
-                # Aplica redução de dano especial
-                if meu_jogador.armadura and meu_jogador.armadura_resistencia > 0:
-                    dano_especial = max(1, int(dano_especial * (1 - (meu_jogador.armadura_resistencia / 100))))
-                    print(f"Dano especial reduzido para: {dano_especial}")
-                
-                # Aplica dano especial
-                if meu_jogador.armadura and meu_jogador.armadura_vida > 0:
-                    vida_armadura_antes = meu_jogador.armadura_vida
-                    meu_jogador.armadura_vida -= dano_especial
-                    
-                    if meu_jogador.armadura_vida < 0:
-                        dano_excedente = -meu_jogador.armadura_vida
-                        meu_jogador.vida -= dano_excedente
-                        meu_jogador.armadura_vida = 0
-                        print(f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)")
-                    else:
-                        print(f"Sua armadura absorveu {dano_especial} de dano especial")
-                else:
-                    meu_jogador.vida -= dano_especial
-                
-                monstro.atk_turnos = 0
-                if monstro.atk_efeito:
-                    meu_jogador.add_efeito(monstro.atk_efeito)
-                time.sleep(1.5)
-                limpar_tela()
-                luta(monstro, meu_jogador)
+            
             
             # Ataque normal do monstro
             ataque2 = f'\no {monstro.nome} te ataca causando {dano} de dano\n'
@@ -4132,13 +4159,9 @@ def luta(monstro, meu_jogador):
     # Ação: Magia (mantido igual ao original)
     elif acao == 'magia':
         if meu_jogador.magias:
-            dano_magico_arma = 0
-            if meu_jogador.item_equipado:
-                if meu_jogador.item_equipado.dano_magico:
-                    dano_magico_arma = meu_jogador.item_equipado.dano_magico
             for i in range(len(meu_jogador.magias)):
                 magia = meu_jogador.magias[i]
-                print(f'{i+1}. {magia.nome} | DANO: {magia.dano} + DANO ADICIONAL: {meu_jogador.dano_magico+dano_magico_arma} | custo de mana: {magia.mana_gasta} | desc: {magia.desc}')
+                print(f'{i+1}. {magia.nome} | DANO: {magia.dano} + DANO ADICIONAL: {meu_jogador.dano_magico_final} | custo de mana: {magia.mana_gasta} | desc: {magia.desc}')
             print("Use números para escolher as magias")
             escolha = input(">>")
             try:
@@ -4154,7 +4177,7 @@ def luta(monstro, meu_jogador):
                     time.sleep(1.5)
                     limpar_tela()
                     luta(monstro, meu_jogador)
-                dano_magia = (meu_jogador.magias[escolha].dano + meu_jogador.dano_magico + dano_magico_arma)
+                dano_magia = (meu_jogador.magias[escolha].dano + meu_jogador.dano_magico_final)
                 monstro.vida -= dano_magia
                 meu_jogador.mana -= meu_jogador.magias[escolha].mana_gasta
                 monstro.add_efeito(meu_jogador.magias[escolha].efeito)
@@ -4173,27 +4196,8 @@ def luta(monstro, meu_jogador):
                     if monstro.pular_turno:
                         limpar_tela()
                         luta(monstro, meu_jogador)
-                    
-                    # Cálculo do dano recebido após magia (com sistema de armadura)
-                    dano = monstro.atk
-                    
-                    if meu_jogador.armadura and meu_jogador.armadura_resistencia > 0:
-                        dano = max(1, int(dano * (1 - (meu_jogador.armadura_resistencia / 100))))
-                    
-                    if meu_jogador.armadura and meu_jogador.armadura_vida > 0:
-                        vida_armadura_antes = meu_jogador.armadura_vida
-                        meu_jogador.armadura_vida -= dano
-                        
-                        if meu_jogador.armadura_vida < 0:
-                            dano_excedente = -meu_jogador.armadura_vida
-                            meu_jogador.vida -= dano_excedente
-                            meu_jogador.armadura_vida = 0
-                            print(f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)")
-                        else:
-                            print(f"Sua armadura absorveu {dano} de dano")
-                    else:
-                        meu_jogador.vida -= dano
-                    
+
+                    # verifica ataque especial
                     if monstro.atk_turnos >= 3:
                         dano_especial = monstro.atk * 2
                         print(f'\nO {monstro.nome} te ataca ferozmente causando {dano_especial} de dano!')
@@ -4219,10 +4223,32 @@ def luta(monstro, meu_jogador):
                         monstro.atk_turnos = 0
                         if monstro.atk_efeito:
                             meu_jogador.add_efeito(monstro.atk_efeito)
+                        input("Pressione qualquer tecla para continuar...")
                         limpar_tela()
                         luta(monstro, meu_jogador)
-
-                    ataque_monstro = Fore.RED+f'\no {monstro.nome} te ataca\n'+Style.RESET_ALL
+                    
+                    # Cálculo do dano recebido após magia (com sistema de armadura)
+                    dano = monstro.atk
+                    
+                    if meu_jogador.armadura and meu_jogador.armadura_resistencia > 0:
+                        dano = max(1, int(dano * (1 - (meu_jogador.armadura_resistencia / 100))))
+                    
+                    if meu_jogador.armadura and meu_jogador.armadura_vida > 0:
+                        vida_armadura_antes = meu_jogador.armadura_vida
+                        meu_jogador.armadura_vida -= dano
+                        
+                        if meu_jogador.armadura_vida < 0:
+                            dano_excedente = -meu_jogador.armadura_vida
+                            meu_jogador.vida -= dano_excedente
+                            meu_jogador.armadura_vida = 0
+                            print(f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)")
+                        else:
+                            print(f"Sua armadura absorveu {dano} de dano")
+                    else:
+                        meu_jogador.vida -= dano
+                    
+                    
+                    ataque_monstro = Fore.RED+f'\no {monstro.nome} te ataca causando {dano} de dano\n'+Style.RESET_ALL
                     for caractere in ataque_monstro:
                         sys.stdout.write(caractere)
                         sys.stdout.flush()
@@ -4265,7 +4291,7 @@ def luta(monstro, meu_jogador):
     
     # Ação: Mochila (mantido igual ao original)
     elif acao == 'mochila':
-        consumiveis = [item for item in meu_jogador.mochila if item.consumivel]
+        consumiveis = [item for item in meu_jogador.mochila if (item.consumivel and not item.especial)]
         if not consumiveis:
             print(Fore.RED+'Nenhum item para ser usado'+Style.RESET_ALL)
             time.sleep(1.5)
@@ -4358,21 +4384,21 @@ def luta(monstro, meu_jogador):
             time.sleep(1)
             if monstro.boss == True:
                 mapa[meu_jogador.local]['SOLVED'] = True
-            drop(monstro)
+            drop_monstro(monstro)
             corredor()
         if meu_jogador.local == 'j2' and mapa['j2']['contador2'] == 1:
             limpar_tela()
             fim_de_jogo()
             if monstro.boss == True:
                 mapa[meu_jogador.local]['SOLVED'] = True
-            drop(monstro)
+            drop_monstro(monstro)
         limpar_tela()
         print(f'VOCÊ DERROTOU {monstro.nome}')
         experiencia(monstro)
         time.sleep(1)
         if monstro.boss == True:
             mapa[meu_jogador.local]['SOLVED'] = True
-        drop(monstro)
+        drop_monstro(monstro)
         print_local()
         main_game_loop()
         
@@ -4537,7 +4563,7 @@ def luta(monstro, meu_jogador):
             time.sleep(1)
             if monstro.boss == True:
                 mapa[meu_jogador.local]['SOLVED'] = True
-            drop(monstro)
+            drop_monstro(monstro)
             corredor()
         limpar_tela()
         if meu_jogador.local == 'j2' and mapa['j2']['contador2'] == 1:
@@ -4545,7 +4571,7 @@ def luta(monstro, meu_jogador):
             fim_de_jogo()
         if monstro.boss == True:
             mapa[meu_jogador.local]['SOLVED'] = True
-        drop(monstro)
+        drop_monstro(monstro)
         print_local()
         main_game_loop()
 
@@ -4553,7 +4579,7 @@ def aplicar_efeito(alvo):
     for i, efeito in enumerate(alvo.efeitos_status):
         if efeito.tipo == 'dano':
             alvo.vida -= efeito.dano
-            print(f'{alvo.nome} sofreu {efeito.nome} e sofreu {efeito.dano} de dano')
+            print(f'{alvo.nome} está com {efeito.nome} e sofreu {efeito.dano} de dano')
             alvo.efeitos_status[i].tempo -= 1
             if alvo.efeitos_status[i].tempo == 0:
                 alvo.efeitos_status.pop(i)
@@ -4563,11 +4589,12 @@ def aplicar_efeito(alvo):
                 alvo.pular_turno = False
                 alvo.efeitos_status.pop(i)
                 continue
-            congelado = Fore.LIGHTBLUE_EX+f'{alvo.nome} está conglado e não pode atacar'+Style.RESET_ALL
+            congelado = Fore.LIGHTBLUE_EX+f'{alvo.nome} está conglado e não pode atacar\n'+Style.RESET_ALL
             for congelados in congelado:
                 sys.stdout.write(congelados)
                 sys.stdout.flush()
                 time.sleep(0.001)
+            input(Fore.LIGHTYELLOW_EX + "\n[Pressione Enter]" + Style.RESET_ALL)
 
         elif efeito.tipo == 'skip':
             alvo.pular_turno = True
@@ -4596,7 +4623,7 @@ def aplicar_efeito(alvo):
             input(Fore.LIGHTYELLOW_EX + "\n[Pressione Enter]" + Style.RESET_ALL)
                 
 
-def drop(monstro):
+def drop_monstro(monstro):
     print('Você ganhou '+Fore.YELLOW+f'{monstro.ouro}'+Style.RESET_ALL+' de ouro!')
     meu_jogador.ouro += monstro.ouro
     
@@ -4629,7 +4656,7 @@ def drop(monstro):
     
     if acao not in ['pegar', 'ignorar']:
         print(Fore.RED+'\nComando inválido!'+Style.RESET_ALL)
-        return drop(monstro)
+        drop_monstro(monstro)
     
     if acao == 'pegar':
         mapa[meu_jogador.local]['MONSTRO'] = ''
@@ -4670,14 +4697,10 @@ def fugir():
     main_game_loop()
 
 def mostrar_status(self):
-    dano_magico_arma = 0
-    if meu_jogador.item_equipado:
-        if meu_jogador.item_equipado.dano_magico:
-            dano_magico_arma = meu_jogador.item_equipado.dano_magico
     print('\n'+'█'+'▀'*50+'█')
     print(f'█             Nome: {self.nome} LVL:{self.nivel} XP: {self.xp}/{self.xp_max}            \n█')
     print('''█         Vida: '''+Fore.RED+f'''{self.vida}'''+Style.RESET_ALL+'''/'''+Fore.RED+f'''{self.vida_max}'''+Style.RESET_ALL+'''        ATK: '''+Fore.GREEN+f'''{self.atk}'''+Style.RESET_ALL+''' 
-█         Mana: '''+Fore.BLUE+f'''{self.mana}/{self.mana_max}'''+Style.RESET_ALL+'''      MAG.ATK: '''+Fore.LIGHTBLUE_EX+f'''{self.dano_magico+dano_magico_arma}\n'''+Style.RESET_ALL+'█')
+█         Mana: '''+Fore.BLUE+f'''{self.mana}/{self.mana_max}'''+Style.RESET_ALL+'''      MAG.ATK: '''+Fore.LIGHTBLUE_EX+f'''{self.dano_magico}\n'''+Style.RESET_ALL+'█')
     
     # Adiciona informações da armadura
     if self.armadura:
