@@ -795,7 +795,7 @@ lista_consumiveis = [
 ]
 
 lista_arma_ik = [
-    {'nome': 'Devoradora de estrelas', 'atk': 10000, 'preco': 999999, 'desc': 'Você não deveria ter acesso a isso.', 'equipado:': False, 'consumivel': False, 'especial': False}
+    {'nome': 'Devoradora de estrelas', 'atk': 10000, 'preco': 999999, 'desc': 'Você não deveria ter acesso a isso.', 'equipado':: False, 'consumivel': False, 'especial': False}
 ]
 
 lista_armas = [
@@ -1351,7 +1351,7 @@ Uma ampla e suntuosa sala se estende sob um teto alto ornamentado, onde lustres 
         Porem voce nota um brilho fraco vindo de frente de um trono destruido.
  Você tambem nota que consegue dormir naquele chão, não parece tão desconfortável assim.
 
-(Para examinar o trono digite "trono". Digite "dormir" para recuperar vida e mana. Para sair de perto do trono digite "sair").
+(Para examinar o trono digite "trono". Digite "dormir" para recuperar vida e mana. Para sair de perto do trono digite "sair". digite dormir para descansar).
                     \n''',
         'SOLVED': False,
         'SUBIR': '',
