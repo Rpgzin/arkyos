@@ -595,6 +595,46 @@ lista_itens_loja = [
         'consumivel': True, 
         'especial': True
     }
+    ]
+lista_itens_loja_temmie = [
+    { 
+        'nome': 'Flocos de TEM', 
+        'atk': 0,
+        'preco': 200, 
+        'desc': 'Um cereal crocante e misterioso. Cura 200 HP.', 
+        'equipado': False, 
+        'consumivel': True, 
+        'especial': False
+    },
+    { 
+        'nome': 'Erva de Mana.', 
+        'atk': 0,
+        'preco': 200, 
+        'desc': 'Plantada e colhida por Temmie. Restaura 200 pontos de mana.', 
+        'equipado': False, 
+        'consumivel': True, 
+        'especial': False
+    },
+    { 
+        'nome': 'Espada TEM', 
+        'atk': 100, 
+        'preco': 999, 
+        'desc': 'Uma estranha espada que parece um gato. Quando usada para atacar faz sons de miados.', 
+        'equipado': False, 
+        'consumivel': False, 
+        'especial': False
+    },
+    { 
+        'nome': 'Armadura TEM', 
+        'defesa': 30, 
+        'vida_max': 100, 
+        'resistencia': 60, 
+        'preco': 999, 
+        'desc': 'Uma armadura super fofa e poderosa!', 
+        'equipado': False, 
+        'consumivel': False,
+        'especial': False
+    },
 ]
 
 lista_itens_loja_g1 = [
@@ -764,7 +804,7 @@ lista_armaduras = [
 lista_itens_especiais = [
     {'nome': 'Anel Desconhecido', 'atk': 0, 'preco': 00, 'desc': 'Um anel feito de ouro. Sua origem é desconhecida.', 'equipado': False, 'consumivel': False, 'especial': True},
     {'nome': 'Máscara da Raiva', 'atk': 0, 'preco': 00, 'desc': 'Máscara pega no Salão das Vozes Vazias. O uso da mesma é desconhecido.', 'equipado': False, 'consumivel': False, 'especial': True},
-    {'nome': 'Máscara da Medo', 'atk': 0, 'preco': 00, 'desc': 'Máscara pega no Salão das Vozes Vazias. O uso da mesma é desconhecido.', 'equipado': False, 'consumivel': False, 'especial': True},
+    {'nome': 'Máscara do Medo', 'atk': 0, 'preco': 00, 'desc': 'Máscara pega no Salão das Vozes Vazias. O uso da mesma é desconhecido.', 'equipado': False, 'consumivel': False, 'especial': True},
     {'nome': 'Máscara da Alegria', 'atk': 0, 'preco': 00, 'desc': 'Máscara pega no Salão das Vozes Vazias. O uso da mesma é desconhecido.', 'equipado': False, 'consumivel': False, 'especial': True},
     {'nome': 'Máscara da Loucura', 'atk': 0, 'preco': 00, 'desc': 'Máscara pega no Salão das Vozes Vazias. O uso da mesma é desconhecido.', 'equipado': False, 'consumivel': False, 'especial': True},
     {'nome': 'Núcleo de Robo', 'atk': 0, 'preco': 00, 'desc': 'Pode ser usado para dar vida a um robo', 'equipado': False, 'consumivel': False, 'especial': True},
@@ -953,6 +993,19 @@ lista_monstros_semi_boss = [
     {'nome': 'Mímico', 'vida': 40, 'nivel': 40, 'atk': 35, 'xp': 3500, 'ouro': 700, 'boss': True},
     {'nome': 'Crow Mauler', 'vida': 30, 'nivel': 40, 'atk': 40, 'xp': 3500, 'ouro': 700, 'boss': True},
 ]
+lista_monstros_mascara = [
+    {'nome': 'Krothar, o Espectro da Carnificina', 'vida': 30, 'nivel': 50, 'atk': 60, 'xp': 4500, 'ouro': 700, 'boss': True},#1
+    {'nome': 'Nyxthar, o Devorador de Almas', 'vida': 50, 'nivel': 50, 'atk': 35, 'xp': 4500, 'ouro': 700, 'boss': True},#2
+    {'nome': 'Maelis, o Cômico Macabro', 'vida': 40, 'nivel': 50, 'atk': 40, 'xp': 4500, 'ouro': 700, 'boss': True},#3
+    {'nome': 'Zalgoth, o Abismo Sem Rumo', 'vida': 50, 'nivel': 50, 'atk': 60, 'xp': 4500, 'ouro': 700, 'boss': True},#4
+                        ]
+
+mapa_mascaras_bosses = {
+    "Máscara da Raiva": lista_monstros_mascara[0],
+    "Máscara do Medo": lista_monstros_mascara[1],
+    "Máscara da Alegria": lista_monstros_mascara[2],
+    "Máscara da Loucura": lista_monstros_mascara[3],
+}
 
 def raiva():
     if meu_jogador.local == 'b1' and mapa[meu_jogador.local]['SOLVED'] == False:
@@ -1034,6 +1087,11 @@ cavaleiro = lista_monstros_semi_boss[0]
 estatua_ossuario = lista_monstros_normais[9]
 monstro_mimico = lista_monstros_semi_boss[1]
 corvo = lista_monstros_semi_boss[2]
+boss_raiva = lista_monstros_mascara[0]
+boss_medo = lista_monstros_mascara[1]
+boss_alegria = lista_monstros_mascara[2]
+boss_loucura = lista_monstros_mascara[3]
+
 efeito_boss = Efeito(lista_efeitos[1]['nome'], lista_efeitos[1]['tipo'], lista_efeitos[1]['tempo'], lista_efeitos[1]['dano'])
 
 #######################################################
@@ -1057,6 +1115,10 @@ Crow_Mauler = Monstro(corvo['nome'], corvo['vida'], corvo['nivel'], corvo['atk']
 forjadora_de_ossos = Monstro(forjadora['nome'], forjadora['vida'], forjadora['nivel'], forjadora['atk'], forjadora['xp'], forjadora['ouro'], forjadora['boss'])
 guardiao_enraizado = Monstro(monstro['nome'], monstro['vida'], monstro['nivel'], monstro['atk'], monstro['xp'], monstro['ouro'], monstro['boss'], efeito_boss)
 homunculo = Monstro(monstro1['nome'], monstro1['vida'], monstro1['nivel'], monstro1['atk'], monstro1['xp'], monstro1['ouro'], monstro1['boss'], efeito_boss)
+Raiva = Monstro(boss_raiva['nome'], boss_raiva['vida'], boss_raiva['nivel'], boss_raiva['atk'], boss_raiva['xp'], boss_raiva['ouro'], boss_raiva['boss'], efeito_boss)
+Medo = Monstro(boss_medo['nome'], boss_medo['vida'], boss_medo['nivel'], boss_medo['atk'], boss_medo['xp'], boss_medo['ouro'], boss_medo['boss'], efeito_boss)
+Alegria = Monstro(boss_alegria['nome'], boss_alegria['vida'], boss_alegria['nivel'], boss_alegria['atk'], boss_alegria['xp'], boss_alegria['ouro'], boss_alegria['boss'], efeito_boss)
+Loucura = Monstro(boss_loucura['nome'], boss_loucura['vida'], boss_loucura['nivel'], boss_loucura['atk'], boss_loucura['xp'], boss_loucura['ouro'], boss_loucura['boss'], efeito_boss)
 
 ########################################################
 
@@ -1177,7 +1239,7 @@ estatua.drops = [
 
 ########################################################
 
-######### Tela de título #########
+######### navegção da Tela de título #########
 def navegação_tela_titulo():
     opção = input(">>").lower()
     while opção not in ['jogar', 'ajuda', 'sair']:
@@ -1189,7 +1251,6 @@ def navegação_tela_titulo():
         ajuda_menu()
     elif opção == "sair":
         sair()
-
 
 
 #### Funções do jogo ####
@@ -1574,11 +1635,16 @@ Os móveis são convidativos: poltronas e sofás macios, quase como nuvens, esto
         'descansar' : False
     },
     'j1': {
-        'NOME_LOCAL': "Loja do Temmie",
+        'NOME_LOCAL': "Whaterfall",
         'DESCRICAO': '''
 Uma caverna feita de pedras negras e pequenas pedras brancas sintilantes, essa combinação faz com que o teto da caverna pareça uma noite estrelada.''',
         'EXAMINAR': '''
-Olhando a sala você vê que ao funto tem uma placa branca escrito "Lojinha da TEMMIE"''',
+                                    hOI!
+                               boas-vinds a...
+                                LOJA TEM!!!
+
+                    (Digite "loja" pa comprar com TEM!!!)
+"''',
 
         'SOLVED': False,
         'SUBIR': 'i2',
@@ -1590,9 +1656,19 @@ Olhando a sala você vê que ao funto tem uma placa branca escrito "Lojinha da T
         'contador' : 0
     },
     'j2': {
-        'NOME_LOCAL': "",
-        'DESCRICAO': ''' ''',
-        'EXAMINAR': ''' ''',
+        'NOME_LOCAL': "O Começo",
+        'DESCRICAO': '''
+        O primeiro andar é uma sala ampla de pedra negra, iluminada apenas por raios de luz fraca que atravessam frestas nas paredes.
+                  O ar é pesado, com cheiro de mofo e metal enferrujado. Marcas de garras profundas riscam as paredes, 
+                             e fragmentos de uma armadura quebrada estão espalhados pelo chão.''',
+
+        'EXAMINAR': ''' 
+        No centro, uma imponente estátua de pedra ergue-se, com um semblante enigmático.
+             No rosto dela, há um encaixe perfeitamente moldado para uma máscara.
+                    Ao se aproximar, uma voz sussurra na sua mente:
+                         "Você deseja encaixar a máscara?"
+
+            (Para encaixar a máscara digite encaixar, para sair digite sair)\n''',
 
         'SOLVED': False,
         'SUBIR': '',
@@ -1600,8 +1676,10 @@ Olhando a sala você vê que ao funto tem uma placa branca escrito "Lojinha da T
         'AVANÇAR': '',
         'RETORNAR': 'j1',
         'MONSTRO': '',
-        'LOCAIS': 'loja',
-        'contador' : 0
+        'LOCAIS': 'encaixar',
+        'contador' : 0,
+        'contador2': 0,
+        'boss_final' : False
     },
 }
 
@@ -1620,6 +1698,14 @@ def mostrar_mapa():
             ██  \●/ ██      ██
             ██   |  ██      ██  Você está na primeira sala do primeiro andar.
             ██  / \ ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
             ██████████████████
             ██      ██      ██
             ██      ██      ██
@@ -1692,6 +1778,14 @@ def mostrar_mapa():
             ██      ██      ██
             ██      ██      ██
             ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
 ''')
     elif meu_jogador.local == 'b1':
         limpar_tela()
@@ -1710,6 +1804,14 @@ def mostrar_mapa():
             ██  \●/ ██      ██
             ██   |  ██      ██  Você está na primeira sala do segundo andar andar.
             ██  / \ ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
             ██████████████████
             ██      ██      ██
             ██      ██      ██
@@ -1778,6 +1880,14 @@ def mostrar_mapa():
             ██      ██      ██
             ██      ██      ██
             ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
 ''')
     elif meu_jogador.local == 'c1':
         limpar_tela()
@@ -1800,6 +1910,14 @@ def mostrar_mapa():
             ██  \●/ ██      ██
             ██   |  ██      ██  Você está na primeira sala do terceiro andar.
             ██  / \ ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
             ██████████████████
             ██      ██      ██
             ██      ██      ██
@@ -1864,6 +1982,14 @@ def mostrar_mapa():
             ██      ██      ██
             ██      ██      ██
             ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
 ''')
     elif meu_jogador.local == 'd1':
         limpar_tela()
@@ -1890,6 +2016,14 @@ def mostrar_mapa():
             ██  \●/ ██      ██
             ██   |  ██      ██  Voce está na primeira sala do quarto andar.
             ██  / \ ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
             ██████████████████
             ██      ██      ██
             ██      ██      ██
@@ -1950,6 +2084,14 @@ def mostrar_mapa():
             ██      ██      ██
             ██      ██      ██
             ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
 ''')
     elif meu_jogador.local == 'e1':
         limpar_tela()
@@ -1980,6 +2122,14 @@ def mostrar_mapa():
             ██  \●/ ██      ██
             ██   |  ██      ██  Voce está na primeira sala do quinto andar.
             ██  / \ ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
             ██████████████████
             ██      ██      ██
             ██      ██      ██
@@ -2036,6 +2186,14 @@ def mostrar_mapa():
             ██      ██      ██
             ██      ██      ██
             ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
 ''')
     elif meu_jogador.local == 'f1':
         limpar_tela()
@@ -2070,6 +2228,14 @@ def mostrar_mapa():
             ██  \●/ ██      ██
             ██   |  ██      ██  Voce está na primeira sala do sexto andar.
             ██  / \ ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
             ██████████████████
             ██      ██      ██
             ██      ██      ██
@@ -2122,6 +2288,414 @@ def mostrar_mapa():
             ██      ██      ██
             ██      ██      ██
             ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+''')
+    elif meu_jogador.local == 'g1':
+        limpar_tela()
+        print('Mapa:')
+        print(r''' 
+                    ██
+                  ██████
+                ████  ████
+              ████      ████
+            ████          ████
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██  \●/ ██      ██
+            ██   |  ██      ██  Voce está na primeira sala do setimo andar.
+            ██  / \ ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+              ''')
+    elif meu_jogador.local == 'g2':
+        limpar_tela()
+        print('Mapa:')
+        print(r''' 
+                    ██
+                  ██████
+                ████  ████
+              ████      ████
+            ████          ████
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██ \●/  ██
+            ██      ██  |   ██  Voce está na segunda sala do setimo andar.
+            ██      ██ / \  ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+''')
+    elif meu_jogador.local == 'h1':
+        limpar_tela()
+        print('Mapa:')
+        print(r''' 
+                    ██
+                  ██████
+                ████  ████
+              ████      ████
+            ████          ████
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██  \●/ ██      ██
+            ██   |  ██      ██  Voce está na primeira sala do oitavo andar.
+            ██  / \ ██      ██
+            ██████████████████
+              ''')
+    elif meu_jogador.local == 'h2':
+        limpar_tela()
+        print('Mapa:')
+        print(r''' 
+                    ██
+                  ██████
+                ████  ████
+              ████      ████
+            ████          ████
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██ \●/  ██
+            ██      ██  |   ██  Voce está na segunda sala do oitavo andar.
+            ██      ██ / \  ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+''')
+    elif meu_jogador.local == 'i1':
+        limpar_tela()
+        print('Mapa:')
+        print(r''' 
+                    ██
+                  ██████
+                ████  ████
+              ████      ████
+            ████          ████
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██  \●/ ██      ██
+            ██   |  ██      ██  Voce está na primeira sala do nono andar.
+            ██  / \ ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+              ''')
+    elif meu_jogador.local == 'i2':
+        limpar_tela()
+        print('Mapa:')
+        print(r''' 
+                    ██
+                  ██████
+                ████  ████
+              ████      ████
+            ████          ████
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██ \●/  ██
+            ██      ██  |   ██  Voce está na segunda sala do nono andar.
+            ██      ██ / \  ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+''')
+    elif meu_jogador.local == 'j1':
+        limpar_tela()
+        print('Mapa:')
+        print(r''' 
+                    ██
+                  ██████
+                ████  ████
+              ████      ████
+            ████          ████
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██  \●/ ██      ██
+            ██   |  ██      ██  Voce está na primeira sala do décimo andar.
+            ██  / \ ██      ██
+            ██████████████████
+              ''')
+    elif meu_jogador.local == 'j2':
+        limpar_tela()
+        print('Mapa:')
+        print(r''' 
+                    ██
+                  ██████
+                ████  ████
+              ████      ████
+            ████          ████
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██      ██
+            ██      ██      ██
+            ██      ██      ██
+            ██████████████████
+            ██      ██ \●/  ██
+            ██      ██  |   ██  Voce está na segunda sala do décimo andar.
+            ██      ██ / \  ██
+            ██████████████████
 ''')
 
 ##### Interações em jogo #####
@@ -2159,7 +2733,7 @@ def prompt():
     if acao == 'mover':
         jogador_mover()
     elif acao == 'teleportar':
-        meu_jogador.local = 'i2'
+        meu_jogador.local = 'j2'
         print_local()
         main_game_loop()
     elif acao == 'ajuda':
@@ -2181,7 +2755,7 @@ def prompt():
 def locais():
     print(Fore.LIGHTYELLOW_EX + 'O que deseja fazer?' + Style.RESET_ALL)
     acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
-    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'], 'derramar','raiva','medo','alegria','loucura', 'sair', 'pegar', 'invocar', 'robo', 'corredor', 'completar', 'atacar', 'loja', 'sim', 'lutar', 'ouvir', 'abrir', 'descansar',
+    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'],'encaixar', 'derramar','raiva','medo','alegria','loucura', 'sair', 'pegar', 'invocar', 'robo', 'corredor', 'completar', 'atacar', 'loja', 'sim', 'lutar', 'ouvir', 'abrir', 'descansar', 'encaixar'
     
     while acao not in acoes_aceitas:
         print(Fore.RED + 'Acao inválida, tente novamente. (caso não tenha mais opções, digite sair)'+Style.RESET_ALL)
@@ -2231,6 +2805,8 @@ def locais():
         mimico_monstro()
     elif acao == 'descansar':
         descansar()
+    elif acao == 'encaixar':
+        ultimo_boss()
     else:
         print('Acao inválida, tente novamente.')
         locais()
@@ -2818,6 +3394,82 @@ def descansar():
         print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
         locais()
 
+def ultimo_boss():
+    if meu_jogador.local == 'j2' and mapa['j2']['boss_final'] == False:
+        mapa['j2']['contador2'] = 1
+        # Verifica se o jogador tem alguma máscara no inventário
+        mascaras_no_inventario = [item for item in meu_jogador.mochila 
+                                if item.nome in ["Máscara da Raiva", "Máscara do Medo", 
+                                               "Máscara da Alegria", "Máscara da Loucura"]]
+        
+        if not mascaras_no_inventario:
+            print("Você não possui nenhuma máscara para encaixar.")
+            time.sleep(1.5)
+            limpar_tela()
+            print_local()
+            main_game_loop()
+            return
+            
+        print("Qual máscara você deseja encaixar?")
+        for i, mascara in enumerate(mascaras_no_inventario, 1):
+            print(f"{i}. {mascara.nome}")
+            
+        escolha = input(">> ")
+        try:
+            escolha = int(escolha) - 1
+            if escolha < 0 or escolha >= len(mascaras_no_inventario):
+                raise ValueError
+                
+            mascara_escolhida = mascaras_no_inventario[escolha]
+            
+            # Remove a máscara do inventário
+            meu_jogador.mochila.remove(mascara_escolhida)
+            
+            # Determina qual boss enfrentar baseado na máscara
+            boss = mapa_mascaras_bosses.get(mascara_escolhida.nome)
+            
+            if boss:
+                print(f"\nVocê encaixa a {mascara_escolhida.nome} na estátua...")
+                time.sleep(1.5)
+                print("A estátua começa a tremer e se transforma em uma criatura horrível!")
+                time.sleep(1.5)
+                limpar_tela()
+                
+                # Cria uma instância do monstro correspondente
+                if mascara_escolhida.nome == "Máscara da Raiva":
+                    monstro = Raiva
+                elif mascara_escolhida.nome == "Máscara do Medo":
+                    monstro = Medo
+                elif mascara_escolhida.nome == "Máscara da Alegria":
+                    monstro = Alegria
+                else:  # Máscara da Loucura
+                    monstro = Loucura
+                
+                # Inicia a batalha
+                luta(monstro, meu_jogador)
+                
+                # Marca como resolvido se o jogador vencer
+                mapa['j2']['boss_final'] = True
+                
+        except (ValueError, IndexError):
+            print("Escolha inválida.")
+            time.sleep(1)
+            limpar_tela()
+            print_local()
+            main_game_loop()
+            
+    elif meu_jogador.local == 'j2' and mapa['j2']['boss_final'] == True:
+        print("A estátua está inerte, você já enfrentou o desafio aqui.")
+        time.sleep(1.5)
+        limpar_tela()
+        print_local()
+        main_game_loop()
+    else:
+        print(Fore.RED + 'Comando inválido.' + Style.RESET_ALL)
+        locais()
+
+
+
 ########################################
 def comprar(escolha):
         lista_itens_loja[escolha]['comprado'] = True
@@ -3226,7 +3878,7 @@ def vender_item():
             vender_item()
 
 def loja_e2():
-    if meu_jogador.local not in ['e2', 'g1']:
+    if meu_jogador.local not in ['e2', 'g1', 'j1']:
         print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
         return
     lista = None
@@ -3238,6 +3890,9 @@ def loja_e2():
     elif meu_jogador.local == 'g1':
         print(Fore.YELLOW + '          LOJA DOS MERCENÁRIOS' + Style.RESET_ALL)
         lista = lista_itens_loja_g1
+    elif meu_jogador.local == 'j1':
+        print(Fore.YELLOW + '          !!!!!LOJA TEM!!!!!' + Style.RESET_ALL)
+        lista = lista_itens_loja_temmie
     print('▬'*50)
     print('"Tudo tem um preço... até mesmo a salvação."\n')
     
@@ -3648,7 +4303,11 @@ def luta(monstro, meu_jogador):
                         break
                         
                 # Aplica o efeito do item
-                if item_selecionado.nome == 'Pocao de vida baixa':
+                if item_selecionado.nome == 'Poção de Vida Lendária':
+                    pocao_vida_lendaria()
+                elif item_selecionado.nome == 'Poção de Mana Lendária':
+                    pocao_mana_lendaria()
+                elif item_selecionado.nome == 'Pocao de vida baixa':
                     pocao_vida()
                 elif item_selecionado.nome == 'Pocao de vida media':
                     pocao_vida_media()
@@ -3662,6 +4321,7 @@ def luta(monstro, meu_jogador):
                     pocao_mana_alta()
                 elif item_selecionado.nome == 'Carne de Homunculo':
                     carne_homunculo()
+
                     
                 limpar_tela()
                 luta(monstro, meu_jogador)
@@ -3700,6 +4360,12 @@ def luta(monstro, meu_jogador):
                 mapa[meu_jogador.local]['SOLVED'] = True
             drop(monstro)
             corredor()
+        if meu_jogador.local == 'j2' and mapa['j2']['contador2'] == 1:
+            limpar_tela()
+            fim_de_jogo()
+            if monstro.boss == True:
+                mapa[meu_jogador.local]['SOLVED'] = True
+            drop(monstro)
         limpar_tela()
         print(f'VOCÊ DERROTOU {monstro.nome}')
         experiencia(monstro)
@@ -3827,6 +4493,11 @@ def luta(monstro, meu_jogador):
                     pocao_mana_alta()
                 elif meu_jogador.mochila[escolha].nome == 'Carne de Homunculo':
                     carne_homunculo()
+                elif meu_jogador.mochila[escolha].nome == 'Poção de Vida Lendária':
+                    pocao_vida_lendaria()
+                elif meu_jogador.mochila[escolha].nome == 'Poção de Mana Lendária':
+                    pocao_mana_lendaria()
+                
                 for i, item in enumerate(meu_jogador.mochila):
                     if item.nome == consumiveis[escolha].nome:
                         meu_jogador.mochila.pop(i)
@@ -3869,9 +4540,9 @@ def luta(monstro, meu_jogador):
             drop(monstro)
             corredor()
         limpar_tela()
-        print(f'VOCÊ DERROTOU {monstro.nome}')
-        experiencia(monstro)
-        time.sleep(1)
+        if meu_jogador.local == 'j2' and mapa['j2']['contador2'] == 1:
+            limpar_tela()
+            fim_de_jogo()
         if monstro.boss == True:
             mapa[meu_jogador.local]['SOLVED'] = True
         drop(monstro)
@@ -4276,6 +4947,38 @@ def main_game_loop():
               ''')
     sys.exit()
 
+def fim_de_jogo():
+    fala = '''
+            O último golpe atravessa a carne etérea daquela criatura, que solta um grito abafado e cai de joelhos, 
+           antes de finalmente se desfazer em poeira e silêncio. A torre inteira parece estremecer… mas não desaba. 
+              Pelo contrário: o ar torna-se mais leve, como se uma antiga maldição tivesse sido, enfim, quebrada.
+                                                Então… o silêncio absoluto.
+
+    É nesse vazio que a verdade começa a emergir, lenta, inexorável, como a luz que penetra pelas frestas de uma porta esquecida. 
+ Imagens invadem sua mente: o brilho de uma espada outrora empunhada com destreza; a lembrança de vitórias gravadas em sangue e suor; 
+                         os rostos das criaturas que derrotou uma vez… e, sem saber, derrotou de novo.
+                               E então, como um sussurro carregado pelo vento, você entende.
+                                               Você era o herói. Sempre foi.
+
+           O mesmo que, há muito tempo, escalou a torre, movido por coragem e destino. O mesmo que, no confronto final, 
+     foi traído pelo último suspiro do Lorde, condenado a esquecer quem era, despido de sua força, de seu nome, de sua história.
+           E agora… após cada degrau descido, cada monstro enfrentado, cada medo revivido… você reconstruiu a si mesmo.
+                    A torre, que parecia um cárcere, revelou-se um caminho, não para escapar, mas para lembrar. 
+                 Cada criatura que tombou não era apenas um obstáculo, mas um fragmento perdido de sua identidade, 
+                            um pedaço da alma que o Lorde da torre de Arkyos tentou apagar... e falhou.
+
+                     De pé, entre os escombros, você contempla os campos verdes através da porta agora aberta.
+  Agora, com a memória restaurada e a essência resgatada, o caminho está livre. Não há mais monstros, não há mais medos… apenas você.
+                      E enquanto os primeiros raios de um sol antigo atravessam os vitrais partidos da torre, 
+                       você dá o primeiro passo… não como um prisioneiro, nem como uma sombra do que foi...
+                                        mas como o herói que sempre foi destinado a ser.
+
+Obrigado por jogar!!!'''
+    for caractere in fala:
+        sys.stdout.write(caractere)
+        sys.stdout.flush()
+        time.sleep(0.001)
+    sys.exit()
 def setup_jogo():
     os.system('clear' if os.name != 'nt' else 'cls')
 
