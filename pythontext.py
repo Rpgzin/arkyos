@@ -14,10 +14,7 @@ from utilitarios import(
 
 colorama.init()
 
-#TO-DO:
-'''
-Drop de itens especificos de boss
-'''
+
 ######## Titulo e afins ########
 def tela_titulo():
     limpar_tela()
@@ -211,19 +208,37 @@ def subi_nivel(jogador):
     while pontos > 0:
         print(f'Pontos restantes: '+Fore.YELLOW+f'{pontos}')
         escolha = input(Fore.GREEN+"Aumentar Forca (for)"+Style.RESET_ALL+", "+Fore.RED+"Fortitude (fort)"+Style.RESET_ALL+" ou "+Fore.BLUE+"Inteligência (int)"+Style.RESET_ALL+": ").lower()
+        
         if escolha == 'for':
-            jogador.forca += 1
+            escolha1 = int(input('Quantos pontos em força deseja colocar?\n>>'))             
+            if escolha1 > pontos:
+                print(Fore.RED+'Pontos insuficientes'+Style.RESET_ALL)
+                continue
+            jogador.forca += escolha1
+            pontos -= escolha1
             print(f'for: {jogador.forca}')
+
         elif escolha == 'fort':
-            jogador.fortitude += 1
+            escolha2 = int(input('Quantos pontos em fortitude deseja colocar?\n>>'))
+            if escolha2 > pontos:
+                print(Fore.RED+'Pontos insuficientes'+Style.RESET_ALL)
+                continue
+            jogador.fortitude += escolha2
+            pontos -= escolha2
             print(f'fortitude: {jogador.fortitude}')
+
         elif escolha == 'int':
-            jogador.inteligencia += 1
+            escolha3 = int(input('Quantos pontos em inteligência deseja colocar?\n>>'))
+            if escolha3 > pontos:
+                print(Fore.RED+'Pontos insuficientes'+Style.RESET_ALL)
+                continue
+            jogador.inteligencia += escolha3
+            pontos -= escolha3
             print(f'inteligência: {jogador.inteligencia}')
+
         else:
             print(Fore.RED+'Comando invádido'+Style.RESET_ALL)
             continue
-        pontos -= 1
     atualizar_atributos(meu_jogador)
 
 def exibir_status(jogador):
@@ -254,6 +269,10 @@ def exibir_status(jogador):
         print('vida da armadura: '+Fore.CYAN+f'{jogador.armadura_vida}'+Style.RESET_ALL+'/'+Fore.CYAN+f'{jogador.armadura_vida_max}'+Style.RESET_ALL)
     else:
         print('armadura: Nenhuma armadura equipada')
+    input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
+    limpar_tela()
+    print_local()
+    main_game_loop()
 
 
 def experiencia(monstro):
@@ -298,6 +317,11 @@ def encontro_aleatorio():
         luta(robo_aleatorio(), meu_jogador)
     elif meu_jogador.local == 'h1':
         fala = 'Você encosta na estátua e sente os espiritos se movendo em volta de você, logo eles entram na estátua que cria vida e te ataca.'
+        for caractere in fala:
+            sys.stdout.write(caractere)
+            sys.stdout.flush()
+            time.sleep(0.02)
+        input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)  
         luta(estatua, meu_jogador)
 
 def robo_aleatorio():
@@ -306,11 +330,15 @@ def robo_aleatorio():
 
 def invocacao():
     if meu_jogador.local != 'e1':
-        print('Você não está em um circulo de invocação!')
+        print(Fore.RED+'Comando inválido!'+Style.RESET_ALL)
         limpar_tela()
         print_local()
         main_game_loop()
-    print('Um monstro apareceu!')
+    fala = 'Um monstro apareceu!'
+    for caractere in fala:
+        sys.stdout.write(caractere)
+        sys.stdout.flush()
+        time.sleep(0.02)
     luta(invocacao_aleatoria(), meu_jogador)
 
 def invocacao_aleatoria():
@@ -359,8 +387,8 @@ class Efeito:
 def mostrar_loja():
         if meu_jogador.game_over:
             main_game_loop() 
-        if meu_jogador.local != 'b2':
-            print('NãO HÁ LOJAS POR AQUI')
+        if meu_jogador.local != '':
+            print(Fore.RED+'Comando inválido!'+Style.RESET_ALL)
             main_game_loop()
         print('Itens para venda:')
         for i in range(len(lista_itens_loja)):
@@ -472,6 +500,19 @@ def pocao_mana_lendaria():
     print(Fore.LIGHTBLUE_EX + "\nVocê bebeu a Poção de Mana Lendária e recuperou 100 de mana!" + Style.RESET_ALL)
     time.sleep(1.5)
 
+def pocao_erva_de_mana():
+    meu_jogador.mana += 200
+    if meu_jogador.mana > meu_jogador.mana_max:
+        meu_jogador.mana = meu_jogador.mana_max
+    print(Fore.LIGHTBLUE_EX + "\nVocê fez um chá de ervas e recuperou 200 de mana!" + Style.RESET_ALL)
+    time.sleep(1.5)
+
+def flocos_de_tem():
+    meu_jogador.vida += 200
+    if meu_jogador.vida > meu_jogador.vida_max:
+        meu_jogador.vida = meu_jogador.vida_max
+    print (Fore.LIGHTGREEN_EX+" Vocé comeu os flocos de tem!!! Tem um gosto meio estranho..."+Style.RESET_ALL)
+
 def usar_pergaminho_apocalipse():
     magia_apocalipse = Magia(
         nome="Apocalipse",
@@ -491,7 +532,7 @@ def usar_pergaminho_apocalipse():
     
     print(Fore.MAGENTA + "\nAo usar o pergaminho, conhecimento ancestral invade sua mente!" + Style.RESET_ALL)
     print(Fore.LIGHTBLUE_EX + "Você aprendeu a magia: APOCALIPSE!" + Style.RESET_ALL)
-    time.sleep(2)
+    input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
 
 def usar_pergaminho_estilhaço_sismico():
     magia_estilhaço = Magia(
@@ -509,7 +550,7 @@ def usar_pergaminho_estilhaço_sismico():
     
     print(Fore.MAGENTA + "\nAo usar o pergaminho, conhecimento ancestral invade sua mente!" + Style.RESET_ALL)
     print(Fore.LIGHTBLUE_EX + "Você aprendeu a magia: Estilhaço Sísmico!" + Style.RESET_ALL)
-    time.sleep(2)
+    input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
 
 def usar_pergaminho_cometa_pedrilhante():
     magia_cometa = Magia(
@@ -522,7 +563,7 @@ def usar_pergaminho_cometa_pedrilhante():
     
     print(Fore.MAGENTA + "\nAo usar o pergaminho, conhecimento ancestral invade sua mente!" + Style.RESET_ALL)
     print(Fore.LIGHTBLUE_EX + "Você aprendeu a magia: Cometa Pedrilhante!" + Style.RESET_ALL)
-    time.sleep(2)
+    input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
     
 def usar_pergaminho_raizes():
  
@@ -541,7 +582,7 @@ def usar_pergaminho_raizes():
     
     print(Fore.MAGENTA + "\nAo usar o pergaminho, conhecimento ancestral invade sua mente!" + Style.RESET_ALL)
     print(Fore.LIGHTBLUE_EX + "Você aprendeu a magia: Raizes da Morte!" + Style.RESET_ALL)
-    time.sleep(2)
+    input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
 
 def usar_pergaminho_absorcao():
     magia_absorção = Magia(
@@ -561,7 +602,7 @@ def usar_pergaminho_absorcao():
     
     print(Fore.MAGENTA + "\nAo usar o pergaminho, conhecimento ancestral invade sua mente!" + Style.RESET_ALL)
     print(Fore.LIGHTBLUE_EX + "Você aprendeu a magia: Absorção de Sangue!" + Style.RESET_ALL)
-    time.sleep(2)
+    input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
 
 lista_itens_loja = [
     { 
@@ -979,35 +1020,35 @@ lista_monstros_normais = [
     {'nome': 'aranha venenosa', 'vida': 22, 'nivel': 2, 'atk': 7, 'xp': 14, 'ouro': 100, 'boss': False}, #6
     {'nome': 'orc', 'vida': 40, 'nivel': 5, 'atk': 8, 'xp': 25, 'ouro': 200, 'boss': False}, #7
     {'nome': 'troll da caverna', 'vida': 50, 'nivel': 6, 'atk': 10, 'xp': 30, 'ouro': 300, 'boss': False}, #8
-    {'nome': 'estatua', 'vida': 25, 'nivel': 35, 'atk': 20, 'xp': 150, 'ouro': 100, 'boss': False}, #9
-    {'nome': 'Robô Gigante', 'vida': 25, 'nivel': 7, 'atk': 15, 'xp': 100, 'ouro': 70, 'boss': True}, #10
+    {'nome': 'estatua', 'vida': 25, 'nivel': 35, 'atk': 20, 'xp': 2000, 'ouro': 100, 'boss': False}, #9
+    {'nome': 'Robô Gigante', 'vida': 25, 'nivel': 7, 'atk': 10, 'xp': 200, 'ouro': 70, 'boss': True}, #10
 ]
 
 lista_monstros_robo = [
     {'nome': 'Autômato', 'vida': 20, 'nivel': 1, 'atk': 5, 'xp': 50, 'ouro': 2, 'boss': False},
     {'nome': 'Autômato', 'vida': 20, 'nivel': 2, 'atk': 6, 'xp': 60, 'ouro': 4, 'boss': False},
-    {'nome': 'Autômato', 'vida': 20, 'nivel': 3, 'atk': 7, 'xp': 70, 'ouro': 6, 'boss': False},
-    {'nome': 'Autômato', 'vida': 20, 'nivel': 4, 'atk': 8, 'xp': 80, 'ouro': 8, 'boss': False},
-    {'nome': 'Autômato', 'vida': 20, 'nivel': 5, 'atk': 9, 'xp': 90, 'ouro': 10,'boss': False},
+    {'nome': 'Autômato', 'vida': 20, 'nivel': 3, 'atk': 7, 'xp': 80, 'ouro': 6, 'boss': False},
+    {'nome': 'Autômato', 'vida': 20, 'nivel': 4, 'atk': 8, 'xp': 100, 'ouro': 8, 'boss': False},
+    {'nome': 'Autômato', 'vida': 20, 'nivel': 5, 'atk': 9, 'xp': 130, 'ouro': 10,'boss': False},
 ]
 
 lista_monstros_invocacoes = [
-    {'nome': 'Tieflíngs', 'vida': 30, 'nivel': 3, 'atk': 8, 'xp': 70, 'ouro': 10, 'boss': False},
-    {'nome': 'Tieflíngs', 'vida': 30, 'nivel': 4, 'atk': 9, 'xp': 80, 'ouro': 15, 'boss': False},
-    {'nome': 'Demônio Inferior', 'vida': 30, 'nivel': 10, 'atk': 7, 'xp': 90, 'ouro': 20, 'boss': False},
-    {'nome': 'Demônio Inferior', 'vida': 30, 'nivel': 11, 'atk': 8, 'xp': 100, 'ouro': 25, 'boss': False},
-    {'nome': 'Demoníaco', 'vida': 30, 'nivel': 7, 'atk': 12, 'xp': 110, 'ouro': 30, 'boss': False},
-    {'nome': 'Demoníaco', 'vida': 30, 'nivel': 8, 'atk': 13, 'xp': 120, 'ouro': 35, 'boss': False},
+    {'nome': 'Tieflíngs', 'vida': 15, 'nivel': 8, 'atk': 8, 'xp': 100, 'ouro': 10, 'boss': False},
+    {'nome': 'Tieflíngs', 'vida': 15, 'nivel': 9, 'atk': 9, 'xp': 150, 'ouro': 15, 'boss': False},
+    {'nome': 'Demônio Inferior', 'vida': 15, 'nivel': 10, 'atk': 7, 'xp': 170, 'ouro': 20, 'boss': False},
+    {'nome': 'Demônio Inferior', 'vida': 15, 'nivel': 11, 'atk': 8, 'xp': 190, 'ouro': 25, 'boss': False},
+    {'nome': 'Demoníaco', 'vida': 15, 'nivel': 7, 'atk': 12, 'xp': 210, 'ouro': 30, 'boss': False},
+    {'nome': 'Demoníaco', 'vida': 15, 'nivel': 8, 'atk': 13, 'xp': 230, 'ouro': 35, 'boss': False},
 ]
 lista_monstros_fixos = [
-    {'nome': 'Guardião Enraizado', 'vida': 100, 'nivel': 1, 'atk': 7, 'xp': 100, 'ouro': 100, 'boss': True},
-    {'nome': 'Homunculo Grotesco', 'vida': 50, 'nivel': 10, 'atk': 14, 'xp': 200, 'ouro': 200, 'boss': True},
+    {'nome': 'Guardião Enraizado', 'vida': 25, 'nivel': 4, 'atk': 7, 'xp': 150, 'ouro': 100, 'boss': True},
+    {'nome': 'Homunculo Grotesco', 'vida': 50, 'nivel': 10, 'atk': 14, 'xp': 350, 'ouro': 200, 'boss': True},
     {'nome': 'A Forjadora', 'vida': 50, 'nivel': 30, 'atk': 30, 'xp': 3000, 'ouro': 600, 'boss': True},
 ]
 lista_monstros_semi_boss = [
-    {'nome': 'Cavaleiro Caido', 'vida': 25, 'nivel': 20, 'atk': 10, 'xp': 400, 'ouro': 150, 'boss': True},
+    {'nome': 'Cavaleiro Caido', 'vida': 25, 'nivel': 20, 'atk': 10, 'xp': 1000, 'ouro': 150, 'boss': True},
     {'nome': 'Mímico', 'vida': 40, 'nivel': 40, 'atk': 35, 'xp': 3500, 'ouro': 700, 'boss': True},
-    {'nome': 'Crow Mauler', 'vida': 30, 'nivel': 40, 'atk': 40, 'xp': 3500, 'ouro': 700, 'boss': True},
+    {'nome': 'Crow Mauler', 'vida': 30, 'nivel': 40, 'atk': 40, 'xp': 4000, 'ouro': 700, 'boss': True},
 ]
 lista_monstros_mascara = [
     {'nome': 'Krothar, o Espectro da Carnificina', 'vida': 30, 'nivel': 50, 'atk': 60, 'xp': 4500, 'ouro': 700, 'boss': True},#1
@@ -1029,8 +1070,8 @@ def raiva():
         for falas in fala1:
             sys.stdout.write(falas)
             sys.stdout.flush()
-            time.sleep(0.01)
-        time.sleep(1.5)
+            time.sleep(0.02)
+        input(Fore.YELLOW+'\n[Pressione Enter]\n'+Style.RESET_ALL)
         item1 = lista_itens_especiais[1]
         meu_jogador.add_item(Item(item1['nome'], item1['atk'], item1['desc'], item1['equipado'], item1['consumivel'], item1['preco'], item1['especial']))
         mapa[meu_jogador.local]['SOLVED'] = True  # Marca a sala como resolvida
@@ -1046,8 +1087,8 @@ def medo():
         for falas in fala2:
             sys.stdout.write(falas)
             sys.stdout.flush()
-            time.sleep(0.01)
-        time.sleep(1.5)
+            time.sleep(0.02)
+        input(Fore.YELLOW+'\n[Pressione Enter]\n'+Style.RESET_ALL)
         item2 = lista_itens_especiais[2]
         meu_jogador.add_item(Item(item2['nome'], item2['atk'], item2['desc'], item2['equipado'], item2['consumivel'], item2['preco'], item2['especial']))
         mapa[meu_jogador.local]['SOLVED'] = True
@@ -1063,8 +1104,8 @@ def alegria():
         for falas in fala3:
             sys.stdout.write(falas)
             sys.stdout.flush()
-            time.sleep(0.01)
-        time.sleep(1.5)
+            time.sleep(0.02)
+        input(Fore.YELLOW+'\n[Pressione Enter]\n'+Style.RESET_ALL)
         item3 = lista_itens_especiais[3]
         meu_jogador.add_item(Item(item3['nome'], item3['atk'], item3['desc'], item3['equipado'], item3['consumivel'], item3['preco'], item3['especial']))
         mapa[meu_jogador.local]['SOLVED'] = True
@@ -1081,8 +1122,8 @@ def loucura():
         for falas in fala3:
             sys.stdout.write(falas)
             sys.stdout.flush()
-            time.sleep(0.01)
-        time.sleep(1.5)
+            time.sleep(0.02)
+        input(Fore.YELLOW+'\n[Pressione Enter]\n'+Style.RESET_ALL)
         item4 = lista_itens_especiais[4]
         meu_jogador.add_item(Item(item4['nome'], item4['atk'], item4['desc'], item4['equipado'], item4['consumivel'], item4['preco'], item4['especial']))
         mapa[meu_jogador.local]['SOLVED'] = True
@@ -1296,9 +1337,18 @@ lugares_resolvidos = {
 
 mapa = {
     'a1': {
-        'NOME_LOCAL': 'Ossuário dos Silenciosos',
-        'DESCRICAO': '''Uma sala grande e luxuosa, com uma grande mesa em frente ao trono.''',
-        'EXAMINAR': '\nTudo ao seu redor parece morto.\nPorem voce nota um brilho fraco vindo de frente de um trono destruido.\nDigite trono para examinar o trono.\n',
+        'NOME_LOCAL': 'Sala do Trono ',
+        'DESCRICAO': '''
+Uma ampla e suntuosa sala se estende sob um teto alto ornamentado, onde lustres de cristal lançam brilhos dourados pelas paredes de mármore. 
+      Ao centro, uma imponente mesa de ébano se ergue, polida como espelho, ladeada por cadeiras esculpidas com riqueza de detalhes. 
+       Dominando o ambiente, um trono majestoso repousa ao fundo, elevado sobre degraus, símbolo absoluto de poder e autoridade..''',
+        'EXAMINAR': '''
+                          Tudo ao seu redor parece morto.
+        Porem voce nota um brilho fraco vindo de frente de um trono destruido.
+ Você tambem nota que consegue dormir naquele chão, não parece tão desconfortável assim.
+
+(Para examinar o trono digite "trono". Digite "dormir" para recuperar vida e mana. Para sair de perto do trono digite "sair").
+                    \n''',
         'SOLVED': False,
         'SUBIR': '',
         'DESCER': '',
@@ -1306,19 +1356,22 @@ mapa = {
         'RETORNAR': '',
         'MONSTRO': '',
         'LOCAIS': 'trono',
-        'contador' : 0
+        'contador' : 0,
+        'descansar': False
     },
     'a2': {
-        'NOME_LOCAL': "Sala do Guardião Enraizado",
+        'NOME_LOCAL': "Salão das Raízes Eternas",
         'DESCRICAO': '''
-         Um odor de terra úmida e carne podre invade seus sentidos. A sala adiante parece
-         uma antiga estufa esquecida, onde raízes negras tomaram os pilares de pedra...''',
+                            Um odor de terra úmida e carne podre invade seus sentidos. A sala adiante parece
+                             uma antiga estufa esquecida, onde raízes negras tomaram os pilares de pedra...''',
         'EXAMINAR': '''
-                      No centro do local, uma árvore retorcida cresce a partir de um altar quebrado. 
-                      Seus galhos têm formas humanoides penduradas, como se absorvessem ecos de vida.
-                                                        .....
-        Uma criatura — metade carne, metade madeira — jaz ajoelhada, presa por correntes de prata, seus olhos fechados.
-                       (para enfrentar o guardião Enraizado, digite 'enfrentar', para retornar digite sair)\n''',
+        No centro do local, uma árvore retorcida cresce a partir de um altar quebrado. 
+        Seus galhos têm formas humanoides penduradas, como se absorvessem ecos de vida.
+             Uma criatura feita de metade carne e metade madeira jaz ajoelhada, 
+                    presa por correntes de prata, seus olhos fechados.
+
+(para enfrentar o Guardião Enraizado, digite "enfrentar". Para sair de perto do Guardião digite "sair").
+        \n''',
         'SOLVED': False,
         'SUBIR': '',
         'DESCER': 'b1',
@@ -1331,13 +1384,15 @@ mapa = {
     'b1': { 
         'NOME_LOCAL': "O Salão das Vozes Vazias",
         'DESCRICAO': '''
-Ao entrar, o som desaparece. Nenhum eco. Nenhuma respiração. No lugar, apenas sussurros em sua mente — 
-vozes que carregam seu nome, mas ditas por pessoas que você não lembra.
+                    Ao entrar, o som desaparece. Nenhum eco. Nenhuma respiração. No lugar, apenas sussurros em sua mente
+                                 vozes que carregam seu nome, mas ditas por pessoas que você não lembra.
 ''',
         'EXAMINAR': '''
-As paredes são cobertas por máscaras penduradas, cada uma com uma representação diferente sendo elas raiva, medo, alegria, loucura.
-Quando você se aproxima, elas viram lentamente... te observando. '
-(Digite raiva, medo, alegria ou loucura para ir até a máscara correspondente.)\n''',
+                     As paredes são cobertas por máscaras penduradas, 
+        cada uma com uma representação diferente sendo elas raiva, medo, alegria, loucura.
+             Quando você se aproxima, elas viram lentamente... te observando.
+
+(Digite raiva, medo, alegria ou loucura para ir até a máscara correspondente. Para sair de perto das máscaras digite "sair")\n''',
         'SOLVED': False,
         'SUBIR': 'a2',
         'DESCER': '',
@@ -1350,15 +1405,17 @@ Quando você se aproxima, elas viram lentamente... te observando. '
     'b2': {
         'NOME_LOCAL': "O Poço das Memórias Afundadas",
         'DESCRICAO': '''
-Um poço escuro sussurra memórias esquecidas. Símbolos antigos cobrem as paredes úmidas, e o ar é carregado de nostalgia.
+                                            Um poço escuro sussurra memórias esquecidas. 
+                            Símbolos antigos cobrem as paredes úmidas, e o ar é carregado de nostalgia.
 ''',
         'EXAMINAR': '''
-                No centro de um salão de pedra úmida, há um poço negro como breu. 
-Correntes quebradas o rodeiam, e marcas de garras riscam o chão como se algo tivesse sido arrastado para fora.
-              Ao se aproximar, imagens distorcidas começam a surgir na água parada
-                são lembranças suas, mas... distorcidas, erradas, talvez falsas.
-                      No fundo do poço você vê uma arma, deseja pegar? 
-                  (Para pegar digite 'pegar', para ignorar digite 'sair')\n''',
+                        No centro de um salão de pedra úmida, há um poço negro como breu. 
+        Correntes quebradas o rodeiam, e marcas de garras riscam o chão como se algo tivesse sido arrastado para fora.
+                      Ao se aproximar, imagens distorcidas começam a surgir na água parada
+                        são lembranças suas, mas... distorcidas, erradas, talvez falsas.
+                                       No fundo do poço você vê um item. 
+
+(Para pegar o item digite "pegar". Para sair de perto do poço digite "sair")\n''',
         'SOLVED': True,
         'SUBIR': '',
         'DESCER': 'c1',
@@ -1371,12 +1428,17 @@ Correntes quebradas o rodeiam, e marcas de garras riscam o chão como se algo ti
     },
     'c1': {
         'NOME_LOCAL': "O Corredor dos Autômatos Esquecidos",
-        'DESCRICAO': 'O ar é pesado com poeira e o som distante de engrenagens esquecidas.',
+        'DESCRICAO': '''
+                                    O ar é denso, impregnado de poeira antiga que paira imóvel sob a penumbra. 
+                    Ao longe, o rangido sutil de engrenagens abandonadas ressoa, como um sussurro mecânico perdido no tempo. 
+                       Cada som parece ecoar na vastidão silenciosa, acentuando a sensação de desolação e esquecimento.
+        \n''',
         'EXAMINAR': '''
-     Um corredor estreito com paredes de ferro corroído abriga autômatos enferrujados e imóveis. 
-                  O ambiente é marcado por um enorme símbolo de uma engrenagem.
-Uma mensagem é escrita na parede "Derrame sangue no símbolo e acorde aqueles que não deveriam ser acordados."
-                          Deseja invocar um autômato? (Digite invocar)\n''',
+                 Um corredor estreito com paredes de ferro corroído abriga autômatos enferrujados e imóveis. 
+                              O ambiente é marcado por um enorme símbolo de uma engrenagem.
+        Uma mensagem é escrita na parede "Derrame sangue no símbolo e acorde aqueles que não deveriam ser acordados."
+                                    Deseja acordar um autômato? (Digite invocar)
+                                    \n''',
         'SOLVED': True,
         'SUBIR': 'b2',
         'DESCER': '',
@@ -1388,14 +1450,18 @@ Uma mensagem é escrita na parede "Derrame sangue no símbolo e acorde aqueles q
     },
     'c2': {
         'NOME_LOCAL': "Oficina do Relógio Parado",
-        'DESCRICAO': 'Uma vasta oficina abandonada,tomada por engrenagens enferrujadas que ainda giram lentamente.',
+        'DESCRICAO': '''
+                   Uma oficina vasta e esquecida se estende sob a penumbra, onde o metal frio domina cada canto. 
+        Engrenagens enferrujadas, teimosas em sua função, ainda giram lentamente, rangendo como ecos de um passado industrial. 
+                                O ar é espesso, saturado pelo odor de óleo velho e ferrugem.''',
         'EXAMINAR': '''
-  Pêndulos partidos oscilam no teto, e no centro da sala há uma grande máquina quebrada com um rosto esculpido nela. 
-        O som das engrenagens forma palavras quase humanas. Um relógio gigante ao fundo gira ao contrário.
-          Um constructo quase completo permanesce a sua frente, apenas o seu núcleo está faltando.
-Ao olhar para a sua direita, há um corredor com paredes de ferro corroído e autômatos enferrujados, aparentemente desligados.
-                     Ao final deste corredor aparenta ter um báu de madeira.
-                    Deseja ir ao corredor ou Robo? (Digite corredor ou robo)\n''',
+            Pêndulos partidos oscilam no teto, e no centro da sala há uma grande máquina quebrada com um rosto esculpido nela. 
+                 O som das engrenagens forma palavras quase humanas. Um relógio gigante ao fundo gira ao contrário.
+                     Um constructo quase completo permanesce a sua frente, apenas o seu núcleo está faltando.
+        Ao olhar para a sua direita, há um corredor com paredes de ferro corroído e autômatos enferrujados, aparentemente desligados.
+                                    Ao final deste corredor aparenta ter um báu de madeira.
+                                    Deseja ir ao corredor ou Robo? (Digite corredor ou robo)
+                                    \n''',
         'SOLVED': False,
         'SUBIR': '',
         'DESCER': 'd1',
@@ -1408,8 +1474,11 @@ Ao olhar para a sua direita, há um corredor com paredes de ferro corroído e au
         'passagem' : True
     },
     'd1': {
-        'NOME_LOCAL': "Câmara do Nascimento Invertido",
-        'DESCRICAO': 'A sala emana uma energia estranha, como se a vida seguisse seu curso ao contrário.',
+        'NOME_LOCAL': "Câmara do Berço ao Abismo",
+        'DESCRICAO': '''
+           A sala pulsa com uma energia inquietante, como se o tempo ali fluísse ao contrário, desfazendo cada instante. 
+        O ar vibra com uma força antinatural, dando a impressão de que algo invisível regressa incessantemente ao seu início. 
+             Cada detalhe parece distorcido, como reflexo de uma realidade que se desfaz e se recompõe sem cessar.''',
         'EXAMINAR': '''
                          Uma gigantesca placenta fossilizada ocupa o centro. 
            Cordões umbilicais petrificados se ligam a pequenos altares dispostos em círculo.
@@ -1427,13 +1496,16 @@ Um círculo de sangue fresco é visível no chão, como se alguém tivesse reali
     },
     'd2': {
         'NOME_LOCAL': "Laboratório dos Deformados",
-        'DESCRICAO': 'O odor de carne podre e sangue cerca o ambiente.',
+        'DESCRICAO': '''
+        Um fétido odor de carne putrefata e sangue seco impregna o ambiente, tornando o ar quase irrespirável. 
+                  Cada respiração carrega consigo a promessa de decadência e morte iminente. 
+              As paredes parecem absorver esse cheiro, como cicatrizes vivas de horrores passados.''',
         'EXAMINAR': '''
                             Frascos, fórmulas e instrumentos cirúrgicos cobrem as mesas. 
             No fundo da sala, tanques de vidro contêm corpos em decomposição. Alguns... ainda se movem.
              Um dos tanques de vidro é destruido e o cadaver dentro dele começa a se regenerar, é como 
                 se a torre o tivesse despertado — um Homúnculo grotesco parado ao centro da sala.
-                                Digite atacar para atacar o Homúnculo.\n''',
+                                    Digite atacar para atacar o Homúnculo.\n''',
         'SOLVED': False,
         'SUBIR': '',
         'DESCER': 'e1',
@@ -1444,8 +1516,11 @@ Um círculo de sangue fresco é visível no chão, como se alguém tivesse reali
         'contador' : 0
     },
     'e1': {
-        'NOME_LOCAL': "O Tumor Lúcido",
-        'DESCRICAO': 'O ambiente vivo sussurra, quente e úmido, como se estivesse consciente.',
+        'NOME_LOCAL': "O Nódulo Desperto",
+        'DESCRICAO': '''
+         O ambiente pulsa, quente e úmido, enquanto sussurros quase imperceptíveis serpenteiam pelo ar denso. 
+        Cada parede parece respirar lentamente, transmitindo a inquietante sensação de uma consciência oculta. 
+                       Tudo ali vibra com uma vida própria, desconcertante e silenciosa.''',
         'EXAMINAR': '''
 Um globo carnoso e pulsante, acorrentado ao teto por ganchos de prata. Ele murmura em uma voz múltiplàs vezes sussurrando, às vezes gritando.
                                                         "Você não devia ter voltado."
@@ -1463,8 +1538,8 @@ Um globo carnoso e pulsante, acorrentado ao teto por ganchos de prata. Ele murmu
     'e2': {
         'NOME_LOCAL': "Loja dos Esquecidos",
         'DESCRICAO': '''
-Uma pequena loja escondida no fundo da torre. O vendedor, uma figura encapuzada, parece não se surpreender com sua presença.
-                           Nas prateleiras, itens estranhos brilham com energia mágica.
+        Uma pequena loja escondida no fundo da torre. O vendedor, uma figura encapuzada, parece não se surpreender com sua presença.
+                                   Nas prateleiras, itens estranhos brilham com energia mágica.
 ''',
         'EXAMINAR': '''
 O vendedor sussurra: "Encontrei alguns tesouros nos corpos dos que falharam... interesse em algum?"
@@ -1480,7 +1555,10 @@ O vendedor sussurra: "Encontrei alguns tesouros nos corpos dos que falharam... i
     },
     'f1': {
         'NOME_LOCAL': "Galeria dos Pactos Perdidos",
-        'DESCRICAO': 'Corredor amplo com três quadros no final dele. Cada quadro emite uma sombra pulsante que parece observar quem passa.',
+        'DESCRICAO': '''
+            Um corredor amplo se estende em silêncio, conduzindo até três quadros dispostos ao fundo como sentinelas silenciosas. 
+        De cada moldura emana uma sombra pulsante, densa e irregular, que parece acompanhar com um olhar invisível quem ousa atravessar. 
+                        A atmosfera é opressiva, como se o próprio espaço estivesse atento aos passos dados.''',
         'EXAMINAR': '''
                    Você se aproxima dos quadros, sentindo as sombras pulsantes intensificarem seus sussurros. Cada quadro exala uma presença distinta:
              O quadro da esquerda retrata uma figura musculosa, coberta de cicatrizes e erguendo uma espada quebrada. A sombra ao redor pulsa forte e agressiva.
@@ -1526,8 +1604,8 @@ Quando seus olhos se fixam na fenda do elmo, percebe um brilho espectral pulsand
     'g1': {
         'NOME_LOCAL': "Loja dos mercenários",
         'DESCRICAO': '''
-Uma pequena loja escondida no fundo da torre. O vendedor, uma figura encapuzada, parece não se surpreender com sua presença.
-                        Nas prateleiras, itens estranhos, espolios de guerras e dentre outros itens.
+            Uma pequena loja escondida no fundo da torre. O vendedor, uma figura encapuzada, parece não se surpreender com sua presença.
+                                    Nas prateleiras, itens estranhos, espolios de guerras e dentre outros itens.
 ''',
         'EXAMINAR': '''
         O vendedor sussurra: "Encontrei alguns tesouros nos corpos dos que falharam... interesse em algum?"
@@ -1544,9 +1622,9 @@ Uma pequena loja escondida no fundo da torre. O vendedor, uma figura encapuzada,
     'g2': {
         'NOME_LOCAL': "O Coliseu dos Ecos Caídos",
         'DESCRICAO': '''
-        Um coliseu em ruínas, com pilares estilhaçados e o chão enegrecido por cinzas, ossos e aço corroído.
-Cada pedra carrega o peso de batalhas esquecidas, enquanto o ar denso sussurra a memória de uma guerra que nunca terminou.
-                            O silêncio opressivo torna-se o prelúdio para o próximo massacre.
+                Um coliseu em ruínas, com pilares estilhaçados e o chão enegrecido por cinzas, ossos e aço corroído.
+        Cada pedra carrega o peso de batalhas esquecidas, enquanto o ar denso sussurra a memória de uma guerra que nunca terminou.
+                                    O silêncio opressivo torna-se o prelúdio para o próximo massacre.
 ''',
         'EXAMINAR': '''
  Das sombras surge A Forjadora de Ossos, uma imensa guerreira vestida com a armadura dos mortos, erguendo sua marreta grotesca feita de ferro e ossos.
@@ -1564,10 +1642,10 @@ Cada pedra carrega o peso de batalhas esquecidas, enquanto o ar denso sussurra a
         'contador' : 0
     },
     'h1': {
-        'NOME_LOCAL': "Ossuário dos Silenciosos",
+        'NOME_LOCAL': "Ossuário",
         'DESCRICAO': '''
-Um salão onde milhares de ossos estão cuidadosamente empilhados, formando paredes e esculturas grotescas. 
-                     O silêncio aqui não é natural; abafa até os pensamentos. \n''',
+        Um salão onde milhares de ossos estão cuidadosamente empilhados, formando paredes e esculturas grotescas. 
+                             O silêncio aqui não é natural; abafa até os pensamentos. \n''',
         'EXAMINAR': '''
     Ao seguir pelo Ossuário você vê uma estátua feita inteiramente de crânios parece segui-lo com o olhar.
              (Digite "invocar" para despertar o espírito do ossuário ou "sair" para recuar.) \n''',
@@ -1583,8 +1661,8 @@ Um salão onde milhares de ossos estão cuidadosamente empilhados, formando pare
     'h2': {
         'NOME_LOCAL': "Câmara do Arquivista",
         'DESCRICAO': '''
-               Uma enorme biblioteca afundada, com livros podres e pergaminhos fossilizados. 
-No centro, uma figura esquelética presa a uma cadeira, seus olhos ainda vivos, lendo um livro interminável. ''',
+                       Uma enorme biblioteca afundada, com livros podres e pergaminhos fossilizados. 
+        No centro, uma figura esquelética presa a uma cadeira, seus olhos ainda vivos, lendo um livro interminável. ''',
         'EXAMINAR': '''
 Olhando a sala você vê muitos livros empoerados e velhos, ao centro da sala jas um homem esquelético presa a uma cadeira.
                            Seus olhos ainda vivos, lendo um livro interminável.
@@ -1629,9 +1707,9 @@ No centro da sala tem um baú com marcas de arranhões e algumas lascas de madei
     'i2': {
         'NOME_LOCAL': "Salão do Descanso",
         'DESCRICAO': ''' 
-Um refúgio acolhedor, onde o tempo parece desacelerar e a atmosfera respira tranquilidade. 
-     O salão é amplo, mas intimista, com luzes suaves que emitem um brilho âmbar, 
-         como se fossem velas tremulantes refletidas em cristais antigos.''',
+        Um refúgio acolhedor, onde o tempo parece desacelerar e a atmosfera respira tranquilidade. 
+             O salão é amplo, mas intimista, com luzes suaves que emitem um brilho âmbar, 
+                 como se fossem velas tremulantes refletidas em cristais antigos.''',
         'EXAMINAR': ''' 
 Os móveis são convidativos: poltronas e sofás macios, quase como nuvens, estofados em tecidos que variam entre veludo e linho, 
                               em cores que lembram café com leite e pêssegos maduros. 
@@ -1653,7 +1731,10 @@ Os móveis são convidativos: poltronas e sofás macios, quase como nuvens, esto
     'j1': {
         'NOME_LOCAL': "Whaterfall",
         'DESCRICAO': '''
-Uma caverna feita de pedras negras e pequenas pedras brancas sintilantes, essa combinação faz com que o teto da caverna pareça uma noite estrelada.''',
+                     Uma caverna imponente se abre em meio às trevas, formada por pedras negras que absorvem a luz e 
+                    pequenas gemas brancas cintilantes incrustadas nas paredes. A combinação cria um espetáculo etéreo, 
+        fazendo com que o teto da caverna se assemelhe a um céu noturno salpicado de estrelas. Cada passo ecoa sob essa abóbada silenciosa, 
+                                            como se caminhando sob um firmamento subterrâneo.''',
         'EXAMINAR': '''
                                     hOI!
                                boas-vinds a...
@@ -1662,7 +1743,7 @@ Uma caverna feita de pedras negras e pequenas pedras brancas sintilantes, essa c
                     (Digite "loja" pa comprar com TEM!!!)
 "''',
 
-        'SOLVED': False,
+        'SOLVED': True,
         'SUBIR': 'i2',
         'DESCER': '',
         'AVANÇAR': 'j2',
@@ -2716,22 +2797,23 @@ def mostrar_mapa():
 
 ##### Interações em jogo #####
 def print_local():
-    if meu_jogador.local != 'a1':
-        limpar_tela()
+    limpar_tela()
     local_nome = mapa[meu_jogador.local]['NOME_LOCAL']
     local_desc = mapa[meu_jogador.local]['DESCRICAO']
     print('\n' + '▄'*130 + Fore.MAGENTA + f''' 
                        
                                                         {local_nome.upper()}
 
-                                {local_desc}'''+ '\n' + Style.RESET_ALL)   
+                                {local_desc}'''+ '\n' + Style.RESET_ALL+ Fore.CYAN+'''
+Principais Comandos: [mover / olhar / mochila / status / mapa]\n'''+Style.RESET_ALL)
+
     print('▄' * 130)
 
     mostrar_status(meu_jogador)
     if mapa[meu_jogador.local]['MONSTRO'] != '':
-        print(f"há um" + Fore.RED + f" {mapa[meu_jogador.local]['MONSTRO'].nome}" + Style.RESET_ALL + " na sala. O que deseja fazer?" + Fore.YELLOW + "\n[lutar / fugir / falar]")
+        print(f"há um" + Fore.RED + f" {mapa[meu_jogador.local]['MONSTRO'].nome}" + Style.RESET_ALL + " na sala. O que deseja fazer?" + Fore.YELLOW + "\n[lutar / fugir]")
         escolha = input(Fore.YELLOW + ">>"+Style.RESET_ALL).lower()
-        if escolha not in ['lutar', 'fugir', 'falar']:
+        if escolha not in ['lutar', 'fugir']:
             print_local()
         acao_luta(escolha, mapa[meu_jogador.local]['MONSTRO'])
     main_game_loop()
@@ -2771,7 +2853,7 @@ def prompt():
 def locais():
     print(Fore.LIGHTYELLOW_EX + 'O que deseja fazer?' + Style.RESET_ALL)
     acao = input(Fore.LIGHTYELLOW_EX +'>>'+Style.RESET_ALL).lower()
-    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'],'encaixar', 'derramar','raiva','medo','alegria','loucura', 'sair', 'pegar', 'invocar', 'robo', 'corredor', 'completar', 'atacar', 'loja', 'sim', 'lutar', 'ouvir', 'abrir', 'descansar', 'encaixar'
+    acoes_aceitas = mapa[meu_jogador.local]['LOCAIS'],'encaixar','dormir', 'derramar','raiva','medo','alegria','loucura', 'sair', 'pegar', 'invocar', 'robo', 'corredor', 'completar', 'atacar', 'loja', 'sim', 'lutar', 'ouvir', 'abrir', 'descansar', 'encaixar'
     
     while acao not in acoes_aceitas:
         print(Fore.RED + 'Acao inválida, tente novamente. (caso não tenha mais opções, digite sair)'+Style.RESET_ALL)
@@ -2821,6 +2903,8 @@ def locais():
         mimico_monstro()
     elif acao == 'descansar':
         descansar()
+    elif acao == 'dormir':
+        descansar_a1()
     elif acao == 'encaixar':
         ultimo_boss()
     else:
@@ -2834,22 +2918,24 @@ def locais():
 def trono():
     print('▬'*100)
     if meu_jogador.local == 'a1' and mapa[meu_jogador.local]['SOLVED'] == False:
-        fala1 ='Você vai até o brilho e vê um anel dourado.\nao toca-lo um frio intenso percorre seu braço.\nSeu dedo o aceita sem resistência, como se ele sentisse que voce era o seu Dono.\n'
+        fala1 ='''
+                            Você vai até o brilho e vê um anel dourado.
+                           ao toca-lo um frio intenso percorre seu braço.
+        Seu dedo o aceita sem resistência, como se ele sentisse que voce era o seu Dono.\n'''
         for fala in fala1:
             sys.stdout.write(fala)
             sys.stdout.flush()
             time.sleep(0.01)
         item = lista_itens_especiais[0]
         meu_jogador.add_item(Item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'], item['preco'], item['especial']))
-        fala2 = Fore.YELLOW + '\nAnel desconhecido adicionado ao seu inventario!' + Style.RESET_ALL
+        fala2 = Fore.YELLOW + '\nAnel desconhecido adicionado ao seu inventario!\n' + Style.RESET_ALL
         for fala in fala2:
             sys.stdout.write(fala)
             sys.stdout.flush()
             time.sleep(0.01)
-        input(Fore.YELLOW+'[Press Enter]'+Style.RESET_ALL)
+        input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
         print('\n', '▬'*100)
         mapa[meu_jogador.local]['SOLVED'] = True
-        time.sleep(1.5)
         limpar_tela()
         print_local()
         main_game_loop()
@@ -2870,21 +2956,21 @@ def trono():
 def boss_enraizado():
     if meu_jogador.local == 'a2':
         if mapa[meu_jogador.local]['SOLVED'] == False:
-            lutar = 'Quando você se aproxima…'+Fore.RED+' ela desperta.'+Style.RESET_ALL
+            lutar = 'Quando você se aproxima…'+Fore.RED+' ela desperta.\n'+Style.RESET_ALL
             for fala in lutar:
                 sys.stdout.write(fala)
                 sys.stdout.flush()
                 time.sleep(0.01)
-            time.sleep(1)
+            input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
             limpar_tela()
             luta(guardiao_enraizado, meu_jogador)        
     elif meu_jogador.local == 'a2' and mapa[meu_jogador.local]['SOLVED'] == True:
-        fala1 = Fore.LIGHTYELLOW_EX+'O monstro está caido morto bem a sua frente.'+Style.RESET_ALL
+        fala1 = Fore.LIGHTYELLOW_EX+'O monstro está caido morto bem a sua frente.\n'+Style.RESET_ALL
         for fala in fala1:
             sys.stdout.write(fala)
             sys.stdout.flush()
             time.sleep(0.01)
-        time.sleep(1.5)
+        input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
         limpar_tela()
         main_game_loop()
     else:
@@ -2899,7 +2985,7 @@ def boss_homunculo():
                 sys.stdout.write(fala)
                 sys.stdout.flush()
                 time.sleep(0.01)
-            time.sleep(1)
+            input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
             limpar_tela()
             luta(homunculo, meu_jogador) 
     elif meu_jogador.local == 'd2' and mapa['d2']['SOLVED'] == True:
@@ -2908,7 +2994,7 @@ def boss_homunculo():
             sys.stdout.write(fala)
             sys.stdout.flush()
             time.sleep(0.01)
-        time.sleep(1.5)
+        input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
         limpar_tela()
         main_game_loop()
     else:
@@ -2923,7 +3009,7 @@ def semi_boss_cavaleiro():
                 sys.stdout.write(fala)
                 sys.stdout.flush()
                 time.sleep(0.01)
-            time.sleep(1)
+            input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
             limpar_tela()
             luta(cavaleiro_caido, meu_jogador)
     elif meu_jogador.local == 'f2' and mapa['f2']['SOLVED'] == True:
@@ -2932,7 +3018,7 @@ def semi_boss_cavaleiro():
             sys.stdout.write(fala)
             sys.stdout.flush()
             time.sleep(0.01)
-        time.sleep(1.5)
+        input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
         limpar_tela()
         main_game_loop()
     else:
@@ -2949,16 +3035,28 @@ def robo():
     
     if nucleo_no_inventario:
         mapa['c2']['SOLVED'] = True
-        print('Você usa o Núcleo de Robo para tentar restaurar o robô.')
+        fala = 'Você usa o Núcleo de Robo para tentar restaurar o robô.'
+        for fala in fala:
+            sys.stdout.write(fala)
+            sys.stdout.flush()
+            time.sleep(0.02)
         # Remove o núcleo do inventário
         meu_jogador.mochila.remove(nucleo_no_inventario)
         
         aleatorio = random.randint(1, 100)
-        if aleatorio >= 40:
-            print('O robô se restaura com um brilho azul nos olhos.')
-            time.sleep(1)
-            print('Ele emite sons mecânicos e abre um compartimento, oferecendo um item.')
-            time.sleep(1)
+        if aleatorio >= 0:
+            fala2 ='O robô se restaura com um brilho azul nos olhos.'
+            for fala in fala2:
+                sys.stdout.write(fala)
+                sys.stdout.flush()
+                time.sleep(0.02)
+            time.sleep(1.5)
+            fala3 = 'Ele emite sons mecânicos e abre um compartimento, oferecendo um item.'
+            for fala in fala3:
+                sys.stdout.write(fala)
+                sys.stdout.flush()
+                time.sleep(0.02)
+            time.sleep(1.5)
             
             # Lista de possíveis itens que o robô pode dar
             itens_robo = [
@@ -3002,7 +3100,7 @@ def robo():
             meu_jogador.add_item(item)
             
             print('\n[equipar | guardar]')
-            escolha = input('>> ').lower()
+            escolha = input(Fore.YELLOW+'>> '+Style.RESET_ALL).lower()
             
             if escolha == 'equipar':
                 if isinstance(item, Armadura):
@@ -3029,13 +3127,21 @@ def robo():
             print_local()
             main_game_loop()
         else:
-            print('O robô se restaura, mas com olhos vermelhos!')
-            time.sleep(1)
-            print('Sinais de alerta piscam e ele te ataca!')
+            fala4 = 'O robô se restaura, mas com olhos vermelhos!'
+            for fala in fala4:
+                sys.stdout.write(fala)
+                sys.stdout.flush()
+                time.sleep(0.02)
             time.sleep(1.5)
+            fala5 = Fore.RED+'Sinais de alerta piscam e ele te ataca!'+Style.RESET_ALL
+            for fala in fala5:
+                sys.stdout.write(fala)
+                sys.stdout.flush()
+                time.sleep(0.02)
+            input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
             luta(robot, meu_jogador)
     else:
-        print('Você não tem o Núcleo de Robo no inventário.')
+        print(Fore.RED+'Você não tem o Núcleo de Robo no inventário.'+Style.RESET_ALL)
         time.sleep(1.5)
         limpar_tela()
         print_local()
@@ -3046,31 +3152,51 @@ def corredor():
         item = lista_itens_especiais[5]
         if mapa['c2']['passagem'] == True:
             if mapa['c2']['contador2'] == 0:
-                print('Você adentra o corredor e passa por vários automatos desligados, porém um deles aparenta se mexer e te ataca.')
-                time.sleep(1.5)
-                input(Fore.YELLOW+'\n[Press Enter]'+Style.RESET_ALL)
+                fala1 = 'Você adentra o corredor e passa por vários automatos desligados, '+Fore.RED+'porém um deles aparenta se mexer e te ataca.'+Style.RESET_ALL
+                for fala in fala1:
+                    sys.stdout.write(fala)
+                    sys.stdout.flush()
+                    time.sleep(0.02)
+                input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
                 limpar_tela()
                 luta(robot, meu_jogador)
             elif meu_jogador.vida > 0:
-                print('''Você derrotou o automato e continua pelo corredor.
-        Você chega no final do corredor e encontra um baú.''')
+                fala2 = '''
+                Você derrotou o automato e continua pelo corredor.
+                Você chega no final do corredor e encontra um baú.'''
+                for fala in fala2:
+                    sys.stdout.write(fala)
+                    sys.stdout.flush()
+                    time.sleep(0.02)
                 escolha = input('Deseja abrir o baú? [s/n]\n>> ')
                 if escolha == 's':
-                    print('O baú abre e revela um item.')
+                    fala3 = 'O baú abre e revela um '+Fore.GREEN+'item.'+Style.RESET_ALL
+                    for fala in fala3:
+                        sys.stdout.write(fala)
+                        sys.stdout.flush()
+                        time.sleep(0.02)
                     mapa['c2']['passagem'] = False
                     meu_jogador.add_item(Item(item['nome'], item['atk'], item['desc'], item['equipado'], item['consumivel'], item['preco'], item['especial']))
-                    time.sleep(1.5)
+                    input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
                     limpar_tela()
                     print_local()
                     main_game_loop()          
                 if escolha == 'n':
-                    print('Você volta para o centro da sala.')
-                    time.sleep(1.5)
+                    fala4 = 'Você volta para o centro da sala.'
+                    for fala in fala4:
+                        sys.stdout.write(fala)
+                        sys.stdout.flush()
+                        time.sleep(0.02)
+                    input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
                     limpar_tela()
                     print_local()
                     main_game_loop()
         elif mapa['c2']['passagem'] == False:
-            print('Voce ja pegou o que estava no bau.')
+            fala5 ='Voce ja pegou o que estava no bau.'
+            for fala in fala5:
+                sys.stdout.write(fala)
+                sys.stdout.flush()
+                time.sleep(0.02)
             time.sleep(1.5)
             limpar_tela()
             print_local()
@@ -3095,8 +3221,7 @@ def pegar():
                 sys.stdout.write(fala)
                 sys.stdout.flush()
                 time.sleep(0.01)
-            time.sleep(1)
-            input(Fore.YELLOW+'\n[Press Enter]'+Style.RESET_ALL)
+            input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
             limpar_tela()
             print_local()
             main_game_loop()
@@ -3108,8 +3233,7 @@ def pegar():
                 sys.stdout.write(fala)
                 sys.stdout.flush()
                 time.sleep(0.01)
-            time.sleep(1)
-            input('\nPressione enter para continuar...')
+            input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
             limpar_tela()
             print_local()
             main_game_loop()
@@ -3121,8 +3245,7 @@ def pegar():
                 sys.stdout.write(fala)
                 sys.stdout.flush()
                 time.sleep(0.01)
-            time.sleep(1)
-            input('\nPressione enter para continuar...')
+            input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
             limpar_tela()
             print_local()
             main_game_loop()
@@ -3135,7 +3258,7 @@ def ritual():
         aleatorio = random.randint(1,3)
         if aleatorio == 1:
             mapa['d1']['contador2'] += 1
-            print('Você executa o ritual com sucesso e ganha 1 lvl')
+            fala1 = 'Você executa o ritual com sucesso e ganha '+Fore.GREEN+'1 lvl'+Style.RESET_ALL
             meu_jogador.xp += meu_jogador.xp_max
             subi_nivel(meu_jogador)
             time.sleep(1.5)
@@ -3144,15 +3267,25 @@ def ritual():
             main_game_loop()
         else:
             mapa['d1']['contador2'] += 1
-            print('O ritual falhou e você perdeu 10 de vida.')
+            fal2 = 'O ritual falhou e você perdeu '+Fore.RED+'10 de vida.'+Style.RESET_ALL
+            for fala in fal2:
+                sys.stdout.write(fala)
+                sys.stdout.flush()
+                time.sleep(0.02)
             meu_jogador.vida -= 10
-            time.sleep(1.5)
+            if meu_jogador.vida <= 0:
+                meu_jogador.game_over = True
+            input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
             limpar_tela()
             print_local()
             main_game_loop()
     elif meu_jogador.local == 'd1' and mapa['d1']['contador2'] >= 3:
-        print('Você exedeu o número de rituais que pode executar.')
-        time.sleep(1.5)
+        fala3 ='Você exedeu o número de rituais que pode executar.'
+        for fala in fala3:
+            sys.stdout.write(fala)
+            sys.stdout.flush()
+            time.sleep(0.02)
+        input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
         limpar_tela()
         print_local()
         main_game_loop()
@@ -3162,11 +3295,13 @@ def ritual():
 
 def quadros():
     if mapa[meu_jogador.local]['quadro'] == False and meu_jogador.local == 'f1':
-        escolha = input('''em qual quadro deseja tocar?
+        escolha = input('''
+                        Em qual quadro deseja tocar?
+
     [1] quadro da esquerda.
     [2] quadro do centro.
     [3] quadro da direita.
-    >>''')
+    '''+Fore.YELLOW+'''\n>>'''+Style.RESET_ALL)
         for caractere in escolha:
             sys.stdout.write(caractere)
             sys.stdout.flush()
@@ -3177,8 +3312,8 @@ def quadros():
             for caractere in forca:
                 sys.stdout.write(caractere)
                 sys.stdout.flush()
-                time.sleep(0.001)
-            time.sleep(1.5)
+                time.sleep(0.02)
+            input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
             mapa['f1']['quadro'] = True
             atualizar_atributos(meu_jogador)
             limpar_tela()
@@ -3190,8 +3325,8 @@ def quadros():
             for caractere in inteligencia:
                 sys.stdout.write(caractere)
                 sys.stdout.flush()
-                time.sleep(0.001)
-            time.sleep(1.5)
+                time.sleep(0.02)
+            input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
             mapa['f1']['quadro'] = True
             atualizar_atributos(meu_jogador)
             limpar_tela()
@@ -3203,8 +3338,8 @@ def quadros():
             for caractere in fortitude:
                 sys.stdout.write(caractere)
                 sys.stdout.flush()
-                time.sleep(0.001)
-            time.sleep(1.5)
+                time.sleep(0.02)
+            input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
             mapa['f1']['quadro'] = True
             atualizar_atributos(meu_jogador)
             limpar_tela()
@@ -3215,8 +3350,8 @@ def quadros():
         for caractere in quadro:
             sys.stdout.write(caractere)
             sys.stdout.flush()
-            time.sleep(0.001)
-        time.sleep(1.5)
+            time.sleep(0.02)
+        input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
         limpar_tela()
         print_local()
         main_game_loop()
@@ -3245,7 +3380,7 @@ def historia():
             sys.stdout.write(caractere)
             sys.stdout.flush()
             time.sleep(0.1)
-        input(Fore.YELLOW+'[Pressione Enter]'+Style.RESET_ALL)
+        input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
         limpar_tela()
         print_local()
         main_game_loop()
@@ -3254,8 +3389,8 @@ def historia():
         for caractere in fala:
             sys.stdout.write(caractere)
             sys.stdout.flush()
-            time.sleep(0.001)
-        time.sleep(1.5)
+            time.sleep(0.02)
+        input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
         limpar_tela()
         print_local()
         main_game_loop()
@@ -3266,12 +3401,12 @@ def historia():
 def mimico_monstro():
     if meu_jogador.local == 'i1' and mapa['i1']['mimico'] == False:
         mapa['i1']['mimico'] = True
-        fala = 'Você encosta no baú para abrilo e ele se revela sendo um mímico. A criatura de morde causando 20 de dano.'
+        fala = 'Você encosta no baú para abrilo e ele se revela sendo um mímico. A criatura de morde causando '+Fore.RED+'20 de dano.'+Style.RESET_ALL
         meu_jogador.vida -= 20
         for caractere in fala:
             sys.stdout.write(caractere)
             sys.stdout.flush()
-            time.sleep(0.001)
+            time.sleep(0.02)
         time.sleep(1.5)
         print(Fore.RED+r'''
 
@@ -3327,7 +3462,7 @@ def mimico_monstro():
 def descansar():
     if meu_jogador.local == 'i2' and mapa['i2']['descansar'] == False:
         aleatorio = random.randint(1, 100)
-        if aleatorio >= 20:
+        if aleatorio <= 20:
             fala2 = 'Enquanto você dormia, um homem com cabeça de corvo e uma arma no lugar de seu braço te ataca.'
             meu_jogador.vida -= 100
             for caractere in fala2:
@@ -3409,6 +3544,91 @@ def descansar():
     else:
         print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
         locais()
+def descansar_a1():
+    if meu_jogador.local == 'a1' and mapa['a1']['descansar'] == False:
+        aleatorio = random.randint(1, 100)
+        if aleatorio <= 3:
+            fala2 = 'Enquanto você descansava, um homem com cabeça de corvo e uma arma no lugar de seu braço te ataca.'
+            meu_jogador.vida -= 100
+            for caractere in fala2:
+                sys.stdout.write(caractere)
+                sys.stdout.flush()
+                time.sleep(0.01)
+            time.sleep(1.5)
+            print(r'''\n
+                ########        ########                                        
+               #######++++################                                      
+                  #########+++##############                                    
+                       #########+###+-+######                                   
+                          #################                                     
+                            #####+##########                                    
+                          ######++###########                                   
+                         ######++###########                                    
+                         ####+###############                                   
+                       #+######+-+##########++##                                
+                      #+#+##+++--##########+--+##                               
+                    ######+---++##########++-+++####                            
+                         +-------+++++++#--++----+-##                           
+                        #+---------------+-+++---++++#                          
+                        #++++------------++++++---+--+                          
+                        #-++-----------+++####+-+-+++#                          
+                        --+#+-----------++-++##++++--++                         
+                        --++#+----++--+-++++####------+                         
+                       ++-+++-----+++++-+++### #+---+-+#                        
+                      ##-++++-++--++++++-++#    #+--++++#                       
+                      #++#+------------++##      #+--+#+#                       
+                     #+--+--------++++++####      #+++++##                      
+                    ##+--+++++---+++++++###        ########                     
+                   +---++##+--+--++++-+#++###       #########                   
+                   ----+###+-----+++###++####       ######+##                   
+                  #----+###+++++++##++-+++####      #####+++##                  
+                  +--++###+-----+++---+++++###         #+#++####                
+                  +--+####+----------+++#######       #####++++#                
+                 #+-+####++-------++++##+++####          ###++##                
+                 #+++####+--------+###++++#####           ##+++#++#             
+                ##--+###+-----+-----+++++++###             ##+++###             
+               ##+---+##+--++-+++++++++++++###             ##++#+####           
+              #+--++-+#+++-++-++++++++++++++####           ####+#++###          
+              #+++##++#+++++++++++++++++++++###               #++#+#####        
+              ##++##+++++++++++++++++++++++++##              #++###+++#         
+              ##++##+++++++++++++++++##++++#####                ###++##         
+               ######+++++++++++#++++##+++++####                #+##+++##       
+                 ####+++++++++++#+++++##++++#####                ##++++##       
+                   ##+++++++++++##++++##+++++#####               #++++++###     
+                  ##++++++++++++##+++++#++++++####               ####+++++#     
+                  ##++++-+++-+++##+++++##++#+++#####               ##+++++#     
+                  #+++++-+++-+++##+++++##++##++######               #++#++###   
+                  #++++--+++++++#++++++##++##+++######            ##++##+++##   
+                 ##++++--++++++##+++++++#+++##+++######            ######+++##  
+                 ##++++-+++++++#++++++++++++##++++#####                #++####  
+                 ##++++-+++++++##+#+++++++++###+++#####                #+##+##  
+                 ##++#+-++++++++++#++++++++++###+++####                #######  
+                  #++#+++++++++++###+++++#+++####++++##                         
+                   +++++###++++++###+++++##+++####+++-+#                        
+                   #-+-++##++##+#####+++++########----+#                        
+                   #++--###          ##          #+----+#                       
+               #   #++++###         ######         +--++##                      
+                 ##++++##############################+-+####                    
+            +++++------++############################+---++######               
+          ###++--+++###+#############################+-+--+++#####              
+          ###############         #############################       ''')
+            input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
+            limpar_tela()
+            luta(Crow_Mauler, meu_jogador)
+        fala = 'Você se deitou no chão e descansou bastante, vida e mana recuperados.'
+        meu_jogador.vida = meu_jogador.vida_max
+        meu_jogador.mana = meu_jogador.mana_max
+        for caractere in fala:
+            sys.stdout.write(caractere)
+            sys.stdout.flush()
+            time.sleep(0.01)
+        input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
+        limpar_tela()
+        print_local()
+        main_game_loop()
+    else:
+        print(Fore.RED+'Comando inválido.'+Style.RESET_ALL)
+        locais()
 
 def ultimo_boss():
     if meu_jogador.local == 'j2' and mapa['j2']['boss_final'] == False:
@@ -3419,18 +3639,26 @@ def ultimo_boss():
                                                "Máscara da Alegria", "Máscara da Loucura"]]
         
         if not mascaras_no_inventario:
-            print("Você não possui nenhuma máscara para encaixar.")
-            time.sleep(1.5)
+            fala = "Você não possui nenhuma máscara para encaixar."
+            for caractere in fala:
+                sys.stdout.write(caractere)
+                sys.stdout.flush()
+                time.sleep(0.02)
+            input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
             limpar_tela()
             print_local()
             main_game_loop()
             return
             
-        print("Qual máscara você deseja encaixar?")
+        fala2 = "Qual máscara você deseja encaixar?"
+        for caractere in fala2:
+            sys.stdout.write(caractere)
+            sys.stdout.flush()
+            time.sleep(0.02)
         for i, mascara in enumerate(mascaras_no_inventario, 1):
-            print(f"{i}. {mascara.nome}")
+            print(Fore.YELLOW+"[{i}]"+Style.RESET_ALL+f" {mascara.nome}")
             
-        escolha = input(">> ")
+        escolha = input(Fore.YELLOW+"\n>> "+Style.RESET_ALL)
         try:
             escolha = int(escolha) - 1
             if escolha < 0 or escolha >= len(mascaras_no_inventario):
@@ -3445,10 +3673,18 @@ def ultimo_boss():
             boss = mapa_mascaras_bosses.get(mascara_escolhida.nome)
             
             if boss:
-                print(f"\nVocê encaixa a {mascara_escolhida.nome} na estátua...")
+                fala3 = f"\nVocê encaixa a {mascara_escolhida.nome} na estátua..."
+                for caractere in fala3:
+                    sys.stdout.write(caractere)
+                    sys.stdout.flush()
+                    time.sleep(0.02)
                 time.sleep(1.5)
-                print("A estátua começa a tremer e se transforma em uma criatura horrível!")
-                time.sleep(1.5)
+                fala4 = "A estátua começa a tremer e se transforma em uma criatura horrível!"
+                for caractere in fala4:
+                    sys.stdout.write(caractere)
+                    sys.stdout.flush()
+                    time.sleep(0.02)
+                input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
                 limpar_tela()
                 
                 # Cria uma instância do monstro correspondente
@@ -3487,6 +3723,7 @@ def ultimo_boss():
 
 
 ########################################
+
 def comprar(escolha):
         lista_itens_loja[escolha]['comprado'] = True
         item = lista_itens_loja[escolha]
@@ -3518,12 +3755,6 @@ def acao_luta(escolha, monstro):
         luta(monstro, meu_jogador)
     elif escolha == 'fugir':
         fugir()
-    elif escolha == 'falar':
-        loading()
-        print(Fore.RED + f'O {monstro.nome} não te entende e te ataca'+Style.RESET_ALL)
-        intervalo()
-        meu_jogador.vida -= monstro.atk
-        luta(monstro, meu_jogador)
 
 def abrir_mochila():
     if meu_jogador.game_over:
@@ -3760,6 +3991,10 @@ def abrir_mochila():
                     pocao_mana_alta()
                 elif item_selecionado.nome == 'Carne de Homunculo':
                     carne_homunculo()
+                elif item_selecionado.nome == 'Flocos de TEM':
+                    flocos_de_tem()
+                elif item_selecionado.nome == 'Erva de Mana':
+                    pocao_erva_de_mana()
                 elif item_selecionado.nome == 'Pergaminho do Apocalipse':
                     usar_pergaminho_apocalipse()
                 elif item_selecionado.nome == 'Pergaminho do Estilhaço Sísmico':
@@ -4040,11 +4275,11 @@ def luta(monstro, meu_jogador):
             main_game_loop()
     
     mostrar_status(meu_jogador)
-    print('          '+'▃'*36)
-    print('          █' + Fore.LIGHTYELLOW_EX +' atacar'+Style.RESET_ALL+' █'+Fore.BLUE+' magia '+Style.RESET_ALL+'█ '+Fore.GREEN+'mochila '+Style.RESET_ALL+'█ '+Fore.RED+'fugir '+Style.RESET_ALL+'''█''')
-    print('          '+'▀'*36)
+    print('       '+'▃'*36)
+    print('       █' + Fore.LIGHTYELLOW_EX +' atacar'+Style.RESET_ALL+' █'+Fore.BLUE+' magia '+Style.RESET_ALL+'█ '+Fore.GREEN+'mochila '+Style.RESET_ALL+'█ '+Fore.RED+'fugir '+Style.RESET_ALL+'''█''')
+    print('       '+'▀'*36)
 
-    acao = input(">>").lower()
+    acao = input(Fore.YELLOW + ">>"+Style.RESET_ALL).lower()
     if acao not in ['atacar', 'magia', 'mochila', 'fugir']:
         limpar_tela()
         print(Fore.RED +"comando invádido".upper() + Style.RESET_ALL)
@@ -4059,7 +4294,7 @@ def luta(monstro, meu_jogador):
         for caractere in ataque:
             sys.stdout.write(caractere)
             sys.stdout.flush()
-            time.sleep(0.001)
+            time.sleep(0.02)
         loading()
         intervalo()
         
@@ -4073,7 +4308,11 @@ def luta(monstro, meu_jogador):
             # verifica ataque especial
             if monstro.atk_turnos >= 3:
                 dano_especial = monstro.atk * 2
-                print(f'O {monstro.nome} te ataca ferozmente causando {dano_especial} de dano!')
+                fala = f'\nO {monstro.nome} te ataca ferozmente causando '+Fore.RED+f'{dano_especial} de dano!'+Style.RESET_ALL
+                for caractere in fala:
+                    sys.stdout.write(caractere)
+                    sys.stdout.flush()
+                    time.sleep(0.02)
                 
                 # Aplica redução de dano especial
                 if meu_jogador.armadura and meu_jogador.armadura_resistencia > 0:
@@ -4089,17 +4328,24 @@ def luta(monstro, meu_jogador):
                         dano_excedente = -meu_jogador.armadura_vida
                         meu_jogador.vida -= dano_excedente
                         meu_jogador.armadura_vida = 0
-                        print(f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)")
+                        fala_armadura = f"\nSua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)"
+                        for caractere in fala_armadura:
+                            sys.stdout.write(caractere)
+                            sys.stdout.flush()
+                            time.sleep(0.02)
                     else:
-                        print(f"Sua armadura absorveu {dano_especial} de dano especial")
+                        fala_armadura2 = f"\nSua armadura absorveu {dano_especial} de dano especial"
+                        for caractere in fala_armadura2:
+                            sys.stdout.write(caractere)
+                            sys.stdout.flush()
+                            time.sleep(0.02)
                 else:
                     meu_jogador.vida -= dano_especial
                 
                 monstro.atk_turnos = 0
                 if monstro.atk_efeito:
                     meu_jogador.add_efeito(monstro.atk_efeito)
-                time.sleep(1.5)
-                input("Pressione qualquer tecla para continuar...")
+                input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
                 limpar_tela()
                 luta(monstro, meu_jogador)
             
@@ -4109,12 +4355,20 @@ def luta(monstro, meu_jogador):
             
             if meu_jogador.armadura:
                 dano = max(1, dano - meu_jogador.armadura.defesa)  # Redução fixa
-                print(f"Dano reduzido por DEF: {dano_original} -> {dano} (DEF: {meu_jogador.armadura.defesa})")
+                fala_dano = f"Dano reduzido por DEF: {dano_original} -> {dano} (DEF: {meu_jogador.armadura.defesa})"
+                for caractere in fala_dano:
+                    sys.stdout.write(caractere)
+                    sys.stdout.flush()
+                    time.sleep(0.02)
             
             # Aplica redução percentual depois
                 if meu_jogador.armadura_resistencia > 0:
                     dano_reduzido = max(1, int(dano * (1 - (meu_jogador.armadura_resistencia / 100))))
-                    print(f"Dano reduzido por RES: {dano} -> {dano_reduzido} ({meu_jogador.armadura_resistencia}% RES)")
+                    fala_dano2 = f"Dano reduzido por RES: {dano} -> {dano_reduzido} ({meu_jogador.armadura_resistencia}% RES)"
+                    for caractere in fala_dano2:
+                        sys.stdout.write(caractere)
+                        sys.stdout.flush()
+                        time.sleep(0.02)
                     dano = dano_reduzido
 
             # Aplica redução de dano da armadura se existir
@@ -4122,7 +4376,11 @@ def luta(monstro, meu_jogador):
                 dano = max(1, int(dano * (1 - (meu_jogador.armadura_resistencia / 100))))
                 
                 # Exibe informações de redução de dano
-                print(f"Dano original: {dano_original} | Reduzido para: {dano} ({meu_jogador.armadura_resistencia}% de resistência)")
+                fala_dano3 = f"Dano original: {dano_original} | Reduzido para: {dano} ({meu_jogador.armadura_resistencia}% de resistência)"
+                for caractere in fala_dano3:
+                    sys.stdout.write(caractere)
+                    sys.stdout.flush()
+                    time.sleep(0.02)
             
             # Aplica dano à armadura primeiro, se houver vida na armadura
             if meu_jogador.armadura and meu_jogador.armadura_vida > 0:
@@ -4134,9 +4392,17 @@ def luta(monstro, meu_jogador):
                     dano_excedente = -meu_jogador.armadura_vida
                     meu_jogador.vida -= dano_excedente
                     meu_jogador.armadura_vida = 0
-                    print(f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)")
+                    fala_armadura3 = f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)"
+                    for caractere in fala_armadura3:
+                        sys.stdout.write(caractere)
+                        sys.stdout.flush()
+                        time.sleep(0.02)
                 else:
-                    print(f"Sua armadura absorveu {dano} de dano")
+                    fala_armadura4 = f"Sua armadura absorveu {dano} de dano"
+                    for caractere in fala_armadura4:
+                        sys.stdout.write(caractere)
+                        sys.stdout.flush()
+                        time.sleep(0.02)
             else:
                 # Sem armadura ou armadura sem vida, todo dano vai para vida
                 meu_jogador.vida -= dano
@@ -4149,9 +4415,9 @@ def luta(monstro, meu_jogador):
             for caractere in ataque2:
                 sys.stdout.write(caractere)
                 sys.stdout.flush()
-                time.sleep(0.001)
+                time.sleep(0.02)
             loading()
-            input("Pressione qualquer tecla para continuar...")
+            input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
         
         intervalo()
         limpar_tela()
@@ -4163,7 +4429,7 @@ def luta(monstro, meu_jogador):
                 magia = meu_jogador.magias[i]
                 print(f'{i+1}. {magia.nome} | DANO: {magia.dano} + DANO ADICIONAL: {meu_jogador.dano_magico_final} | custo de mana: {magia.mana_gasta} | desc: {magia.desc}')
             print("Use números para escolher as magias")
-            escolha = input(">>")
+            escolha = input(Fore.YELLOW+"\n>>"+Style.RESET_ALL)
             try:
                 escolha = int(escolha)-1
                 if escolha not in range(0, len(meu_jogador.magias)):
@@ -4185,7 +4451,7 @@ def luta(monstro, meu_jogador):
                 for caractere in magias:
                     sys.stdout.write(caractere)
                     sys.stdout.flush()
-                    time.sleep(0.001)
+                    time.sleep(0.02)
                 loading()
                 intervalo()
 
@@ -4200,12 +4466,20 @@ def luta(monstro, meu_jogador):
                     # verifica ataque especial
                     if monstro.atk_turnos >= 3:
                         dano_especial = monstro.atk * 2
-                        print(f'\nO {monstro.nome} te ataca ferozmente causando {dano_especial} de dano!')
+                        ataque4 = f'\nO {monstro.nome} te ataca ferozmente causando '+Fore.RED+f'{dano_especial} de dano!'+Style.RESET_ALL
+                        for caractere in ataque4:
+                            sys.stdout.write(caractere)
+                            sys.stdout.flush()
+                            time.sleep(0.02)
                         
                         if meu_jogador.armadura and meu_jogador.armadura_resistencia > 0:
                             dano_especial = max(1, int(dano_especial * (1 - (meu_jogador.armadura_resistencia / 100))))
-                            print(f"Dano especial reduzido para: {dano_especial}")
-                        
+                            dano_reduzido2 = f"Dano especial reduzido para: {dano_especial}"
+                            for caractere in dano_reduzido2:
+                                sys.stdout.write(caractere)
+                                sys.stdout.flush()
+                                time.sleep(0.02)
+
                         if meu_jogador.armadura and meu_jogador.armadura_vida > 0:
                             vida_armadura_antes = meu_jogador.armadura_vida
                             meu_jogador.armadura_vida -= dano_especial
@@ -4214,16 +4488,24 @@ def luta(monstro, meu_jogador):
                                 dano_excedente = -meu_jogador.armadura_vida
                                 meu_jogador.vida -= dano_excedente
                                 meu_jogador.armadura_vida = 0
-                                print(f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)")
+                                fala_armadura5 = f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)"
+                                for caractere in fala_armadura5:
+                                    sys.stdout.write(caractere)
+                                    sys.stdout.flush()
+                                    time.sleep(0.02)
                             else:
-                                print(f"Sua armadura absorveu {dano_especial} de dano especial")
+                                fala_armadura6 = f"Sua armadura absorveu {dano_especial} de dano especial"
+                                for caractere in fala_armadura6:
+                                    sys.stdout.write(caractere)
+                                    sys.stdout.flush()
+                                    time.sleep(0.02)
                         else:
                             meu_jogador.vida -= dano_especial
                         
                         monstro.atk_turnos = 0
                         if monstro.atk_efeito:
                             meu_jogador.add_efeito(monstro.atk_efeito)
-                        input("Pressione qualquer tecla para continuar...")
+                        input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
                         limpar_tela()
                         luta(monstro, meu_jogador)
                     
@@ -4241,9 +4523,17 @@ def luta(monstro, meu_jogador):
                             dano_excedente = -meu_jogador.armadura_vida
                             meu_jogador.vida -= dano_excedente
                             meu_jogador.armadura_vida = 0
-                            print(f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)")
+                            fala_armadura7 = f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)"
+                            for caractere in fala_armadura7:
+                                sys.stdout.write(caractere)
+                                sys.stdout.flush()
+                                time.sleep(0.02)
                         else:
-                            print(f"Sua armadura absorveu {dano} de dano")
+                            fala_armadura8 = f"Sua armadura absorveu {dano} de dano"
+                            for caractere in fala_armadura8:
+                                sys.stdout.write(caractere)
+                                sys.stdout.flush()
+                                time.sleep(0.02)
                     else:
                         meu_jogador.vida -= dano
                     
@@ -4279,13 +4569,25 @@ def luta(monstro, meu_jogador):
                     dano_excedente = -meu_jogador.armadura_vida
                     meu_jogador.vida -= dano_excedente
                     meu_jogador.armadura_vida = 0
-                    print(f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)")
+                    fala_armadura9 = f"Sua armadura absorveu {vida_armadura_antes} de dano e quebrou! ({dano_excedente} de dano passou)"
+                    for caractere in fala_armadura9:
+                        sys.stdout.write(caractere)
+                        sys.stdout.flush()
+                        time.sleep(0.02)
                 else:
-                    print(f"Sua armadura absorveu {dano} de dano")
+                    fala_armadura10 = f"Sua armadura absorveu {dano} de dano"
+                    for caractere in fala_armadura10:
+                        sys.stdout.write(caractere)
+                        sys.stdout.flush()
+                        time.sleep(0.02)
             else:
                 meu_jogador.vida -= dano
             
-            print(f'o {monstro.nome} te ataca')
+            ataque5 = f'o {monstro.nome} te ataca'
+            for caractere in ataque5:
+                sys.stdout.write(caractere)
+                sys.stdout.flush()
+                time.sleep(0.02)
             intervalo()
             limpar_tela()
     
@@ -4347,6 +4649,10 @@ def luta(monstro, meu_jogador):
                     pocao_mana_alta()
                 elif item_selecionado.nome == 'Carne de Homunculo':
                     carne_homunculo()
+                elif item_selecionado.nome == 'Flocos de TEM':
+                    flocos_de_tem()
+                elif item_selecionado.nome == 'Erva de Mana':
+                    pocao_erva_de_mana()
 
                     
                 limpar_tela()
@@ -4362,7 +4668,18 @@ def luta(monstro, meu_jogador):
     
     # Ação: Fugir (mantido igual ao original)
     elif acao == 'fugir':
-        fugir()
+        aleatorio = random.randint(1, 100)
+        if aleatorio <= 60:
+            fugir()
+        else:
+            meu_jogador.vida -= monstro.atk
+            fala3 = f'O {monstro.nome} te impediu de fugir e ataca'
+            for caractere in fala3:
+                sys.stdout.write(caractere)
+                sys.stdout.flush()
+                time.sleep(0.02)
+            limpar_tela()
+            luta(monstro, meu_jogador)
     
     # Verifica condições de vitória/derrota
     if meu_jogador.vida > 0 and monstro.vida > 0:
@@ -4408,7 +4725,7 @@ def luta(monstro, meu_jogador):
                 magia = meu_jogador.magias[i]
                 print(f'{i+1}. {magia.nome} | DANO: {magia.dano} + DANO ADICIONAL: {meu_jogador.dano_magico} | custo de mana: {magia.mana_gasta} | desc: {magia.desc}')
             print("Use números para escolher as magias")
-            escolha = input(">>")
+            escolha = input(Fore.YELLOW + "\n>>"+Style.RESET_ALL)
             try:
                 escolha = int(escolha)-1
                 if escolha not in range(0, len(meu_jogador.magias)):
@@ -4430,7 +4747,7 @@ def luta(monstro, meu_jogador):
                 for caractere in magias:
                     sys.stdout.write(caractere)
                     sys.stdout.flush()
-                    time.sleep(0.001)
+                    time.sleep(0.02)
                 loading()
                 intervalo()
 
@@ -4448,8 +4765,8 @@ def luta(monstro, meu_jogador):
                         for caractere in ataque3:
                             sys.stdout.write(caractere)
                             sys.stdout.flush()
-                            time.sleep(0.001)
-                        time.sleep(1.5)
+                            time.sleep(0.02)
+                        input(Fore.YELLOW+'\n[Pressione Enter]'+Style.RESET_ALL)
                         monstro.atk_turnos = 0
                         if monstro.atk_efeito:
                             meu_jogador.add_efeito(monstro.atk_efeito)
@@ -4461,7 +4778,7 @@ def luta(monstro, meu_jogador):
                     for caractere in ataque_monstro:
                         sys.stdout.write(caractere)
                         sys.stdout.flush()
-                        time.sleep(0.001)
+                        time.sleep(0.02)
                     loading()
                 intervalo()
                 limpar_tela()
@@ -4474,7 +4791,11 @@ def luta(monstro, meu_jogador):
             print('Você ainda não aprendeu magias')
             loading()
             meu_jogador.vida -= monstro.atk
-            print(f'o {monstro.nome} te ataca')
+            fala3 = f'o {monstro.nome} te ataca'
+            for caractere in fala3:
+                sys.stdout.write(caractere)
+                sys.stdout.flush()
+                time.sleep(0.02)
             intervalo()
             limpar_tela()
     elif acao == 'mochila':
@@ -4490,7 +4811,7 @@ def luta(monstro, meu_jogador):
         for i, consumivel in enumerate(consumiveis):
             print(f'{i+1}. {consumivel.nome} | {consumivel.desc}')
         print('Use os números para selecionar os itens')
-        escolha = input('>>').lower()
+        escolha = input(Fore.YELLOW+'\n>>'+Style.RESET_ALL).lower()
         try:
             escolha = int(escolha)-1
             if escolha not in range(0, len(consumiveis)):
@@ -4499,7 +4820,7 @@ def luta(monstro, meu_jogador):
                 luta(monstro, meu_jogador)
             print(f'{consumiveis[escolha].nome} | {consumiveis[escolha].desc}')
             print('[usar | voltar]')
-            acao = input('>>').lower()
+            acao = input(Fore.YELLOW+'\n>>'+Style.RESET_ALL).lower()
             if acao not in ['usar', 'voltar']:
                 print(Fore.RED+'\nComando inválido'+Style.RESET_ALL)
                 limpar_tela()
@@ -4523,6 +4844,10 @@ def luta(monstro, meu_jogador):
                     pocao_vida_lendaria()
                 elif meu_jogador.mochila[escolha].nome == 'Poção de Mana Lendária':
                     pocao_mana_lendaria()
+                elif item_selecionado.nome == 'Flocos de TEM':
+                    flocos_de_tem()
+                elif item_selecionado.nome == 'Erva de Mana':
+                    pocao_erva_de_mana()
                 
                 for i, item in enumerate(meu_jogador.mochila):
                     if item.nome == consumiveis[escolha].nome:
@@ -4538,7 +4863,17 @@ def luta(monstro, meu_jogador):
             luta(monstro, meu_jogador)
     
     elif acao == 'fugir':
-        fugir()
+        if aleatorio <= 60:
+            fugir()
+        else:
+            meu_jogador.vida -= monstro.atk
+            fala3 = f'O {monstro.nome} te impediu de fugir e ataca'
+            for caractere in fala3:
+                sys.stdout.write(caractere)
+                sys.stdout.flush()
+                time.sleep(0.02)
+            limpar_tela()
+            luta(monstro, meu_jogador)
     
     # fim do turno
     if meu_jogador.vida > 0 and monstro.vida > 0:
@@ -4626,6 +4961,7 @@ def aplicar_efeito(alvo):
 def drop_monstro(monstro):
     print('Você ganhou '+Fore.YELLOW+f'{monstro.ouro}'+Style.RESET_ALL+' de ouro!')
     meu_jogador.ouro += monstro.ouro
+    input(Fore.LIGHTYELLOW_EX + "\n[Pressione Enter]" + Style.RESET_ALL)
     
     itens_que_droparam = []
     
@@ -4673,6 +5009,8 @@ def drop_monstro(monstro):
 def fugir():
     if meu_jogador.local == 'a2':
         meu_jogador.local = 'a1'
+    elif meu_jogador.local == 'a1':
+        meu_jogador.local = 'a1'
     elif meu_jogador.local == 'b1':
         meu_jogador.local = 'a2'
     elif meu_jogador.local == 'b2':
@@ -4693,7 +5031,12 @@ def fugir():
         meu_jogador.local = 'e2'
     elif meu_jogador.local == 'f2':
         meu_jogador.local = 'f1'
-    print('você voltou para a sala anterior')
+    fala = 'você voltou para a sala anterior'
+    for falas in fala:
+        sys.stdout.write(falas)
+        sys.stdout.flush()
+        time.sleep(0.02)
+    print_local()
     main_game_loop()
 
 def mostrar_status(self):
@@ -4772,6 +5115,24 @@ def jogador_mover():
                 time.sleep(0.01)
             time.sleep(1.5)
             main_game_loop()
+        elif meu_jogador.local == 'f2' and not mapa[meu_jogador.local]['SOLVED']:
+            fala4 = 'O cavaleiro impede a sua passagem...'
+            for falas in fala4:
+                sys.stdout.write(falas)
+                sys.stdout.flush()
+                time.sleep(0.01)
+            time.sleep(1.5)
+            main_game_loop()
+        elif meu_jogador.local == 'g2' and not mapa[meu_jogador.local]['SOLVED']:
+            fala5 = '''
+    A forjadora impede sua passagem, olha para você e diz:
+        "Ah seu covarde, tentando fugir sem uma luta?"'''
+            for falas in fala5:
+                sys.stdout.write(falas)
+                sys.stdout.flush()
+                time.sleep(0.01)
+            time.sleep(1.5)
+            main_game_loop()
     elif meu_jogador.local == 'a1':
         pergunta = "Avançar em direção ao portão negro? (escreva avançar)\n >>"
     elif meu_jogador.local == 'a2':
@@ -4788,22 +5149,45 @@ Deseja abrir a porta e avançar para a próxima sala ou subir a escada? (escreva
 A sua frente está uma escada feita de peças mecânicas, ela leva para o próximo andar, atrás de vocé, uma porta de madeira para retornar a sala anterior.
 Descer a escada ou retornar a sala anterior? (escreva: descer ou retornar)\n>>'''
     elif meu_jogador.local in 'c1':
-        pergunta = "Avançar ou subir a sala anterior? (escreva: avançar ou subir)\n>>"
+        pergunta = '''
+A sua frente ergue-se uma porta de metal envelhecido, marcada por engrenagens imóveis e ferrugem acumulada. 
+O tique-taque ausente paira como um silêncio opressivo, enquanto o enorme relógio acima da entrada permanece eternamente parado, congelado em um momento esquecido.
+Avançar pela porta ou retornar subindo à sala anterior? (escreva: avançar ou subir)\n>>'''
     elif meu_jogador.local in 'c2':
-        pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
+        pergunta = '''
+À sua frente, uma escadaria espiral desce lentamente, envolta em sombras densas que parecem sussurrar segredos esquecidos. 
+No fim do caminho, aguarda a Câmara do Berço do Abismo, onde o desconhecido pulsa silencioso.
+Descer as escadas ou retornar à sala anterior? (escreva: descer ou retornar)\n>>'''
     elif meu_jogador.local in 'd1':
-        pergunta = """A sua frente você vê uma porta feita de sangue e carne, você deseja abrir a porta para avançar ou subir as escadas e retornar a sala anterior? 
-        (escreva: avançar ou subir)\n>>"""
+        pergunta = """
+À sua frente, uma porta pulsante feita de carne e entrelaçada por veios de sangue bloqueia a passagem, exalando um calor úmido e doentio. 
+Do outro lado, aguarda o Laboratório dos Deformados, onde a anatomia foi corrompida e a ciência perdeu sua forma.
+Deseja avançar, atravessando a porta viva, ou subir as escadas para retornar à sala anterior? (escreva: avançar ou subir)\n>>"""
     elif meu_jogador.local in 'd2':
-        pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
+        pergunta = """
+À sua frente, uma escadaria sinuosa mergulha em direção às profundezas, onde pulsa silenciosamente o Nódulo Desperto. 
+O ar fica mais denso, carregado de antecipação e repulsa.
+Deseja descer as escadas ou retornar à sala anterior? (escreva: descer ou retornar)(escreva: descer ou retornar)\n>>"""
     elif meu_jogador.local in 'e1':
-        pergunta = "Avançar ou subir a sala anterior? (escreva: avançar ou subir)\n>>"
+        pergunta = """
+À sua frente, uma porta de madeira carcomida pelo tempo se entreabre, deixando escapar um aroma de poeira antiga e objetos esquecidos. 
+Do outro lado, repousa a enigmática Loja dos Esquecidos, onde memórias abandonadas aguardam silenciosas entre as prateleiras.
+Avançar ou subir à sala anterior? (escreva: avançar ou subir)\n>>"""
+
     elif meu_jogador.local in 'e2':
-        pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
+        pergunta = """
+À sua frente, uma escadaria de pedra gasta desce lentamente, conduzindo à sombria Galeria dos Pactos Perdidos, 
+onde antigos juramentos ecoam em silêncio entre os arcos desmoronados. A atmosfera pesa como o fardo de promessas quebradas.
+Descer as escadas ou retornar à sala anterior? (escreva: descer ou retornar)\n>>"""
+
     elif meu_jogador.local in 'f1':
-        pergunta = "Avançar ou subir a sala anterior? (escreva: avançar ou subir)\n>>"
+        pergunta = """
+À sua frente, imponentes portas entreabertas revelam o Salão da Coroa Quebrada, onde vestígios de glória esquecida jazem sob os escombros e a poeira. 
+O trono, vazio e partido, repousa no centro como um símbolo silencioso de ruína e poder perdido.
+Avançar ou subir à sala anterior? (escreva: avançar ou subir)\n>>"""
+
     elif meu_jogador.local in 'f2':
-        pergunta = "Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"
+        pergunta = """Descer as escadas ou retornar a sala anterior? (escreva: descer ou retornar)\n>>"""
     elif meu_jogador.local in 'g1':
         pergunta = "Avançar ou subir a sala anterior? (escreva: avançar ou subir)\n>>"
     elif meu_jogador.local in 'g2':
@@ -4879,19 +5263,29 @@ Quando você se aproxima, uma delas vira lentamente... te observando.'''
 
 def jogador_examinar():
     examinar = mapa[meu_jogador.local]['EXAMINAR']
-    if mapa[meu_jogador.local][SOLVED] == True and meu_jogador.local == 'a2':
+    if mapa[meu_jogador.local][SOLVED] == True and meu_jogador.local == 'a1':
         examinar2 = '''
 Atrás de você, o que restou do trono escurece ainda mais, como se a própria sombra tentasse fugir dali. 
 A energia maligna está morrendo... mas algo abaixo desperta.
 
 Você se vira, encarando a única saída: um Portão Negro, que leva a uma proxima sala nas profundezas da torre. 
-A estrutura range como um animal faminto, esperando que você se mova.
+A estrutura range como um animal faminto, esperando que você se mova. (Digite "sair" para sair de perto do trono)\n
 '''
         for examina in examinar2:
             sys.stdout.write(examina)
             sys.stdout.flush()
             time.sleep(0.01)
         time.sleep(2)
+
+    elif mapa[meu_jogador.local][SOLVED] == True and meu_jogador.local == 'a2':
+        examinar5 = """
+Você se volta aquela criatura caida no chão, as raizes que antes prendiam a porta se soltam e libera a passagem para você.
+(Para sair de perto da criatura digite "sair)\n
+"""
+        for examina in examinar5:
+            sys.stdout.write(examina)
+            sys.stdout.flush()
+            time.sleep(0.01)
 
     elif meu_jogador.local == 'b1' and mapa[meu_jogador.local]['SOLVED'] == True:
         examinar3 = '''
@@ -5113,6 +5507,10 @@ def setup_jogo():
         calcular_atributos(meu_jogador)
 
     elif meu_jogador.classe == 'mago':
+        pocao_vida_baixa = lista_consumiveis[0]
+        pocao_vida_media = lista_consumiveis[1]
+        pocao_mana_baixa = lista_consumiveis[3]
+        pocao_mana_media = lista_consumiveis[4]
         arma_basica = lista_armas_magicas[0]
         magia_basica = lista_magias[0]
         magia_basica1 = lista_magias[1]
@@ -5135,8 +5533,78 @@ def setup_jogo():
         meu_jogador.magias.append(Magia(magia_basica['nome'], magia_basica['dano'], magia_basica['desc'], magia_basica['mana_gasta'], efeito))
         meu_jogador.magias.append(Magia(magia_basica1['nome'], magia_basica1['dano'], magia_basica1['desc'], magia_basica1['mana_gasta'], efeito1))
         calcular_atributos(meu_jogador)
+        meu_jogador.add_item(meu_jogador.item_equipado)
+        meu_jogador.add_item(meu_jogador.armadura)
+        meu_jogador.add_item(Item(
+            pocao_vida_baixa['nome'], 
+            pocao_vida_baixa['atk'], 
+            pocao_vida_baixa['desc'], 
+            pocao_vida_baixa['equipado'], 
+            pocao_vida_baixa['consumivel'], 
+            pocao_vida_baixa['preco'], 
+            pocao_vida_baixa['especial']
+        ))
+        meu_jogador.add_item(Item(
+            pocao_vida_media['nome'], 
+            pocao_vida_media['atk'], 
+            pocao_vida_media['desc'], 
+            pocao_vida_media['equipado'], 
+            pocao_vida_media['consumivel'], 
+            pocao_vida_media['preco'], 
+            pocao_vida_media['especial']
+        ))
+        meu_jogador.add_item(Item(
+            pocao_mana_media['nome'], 
+            pocao_mana_media['atk'], 
+            pocao_mana_media['desc'], 
+            pocao_mana_media['equipado'], 
+            pocao_mana_media['consumivel'], 
+            pocao_mana_media['preco'], 
+            pocao_mana_media['especial']
+        ))
+        meu_jogador.add_item(Item(
+            pocao_mana_baixa['nome'], 
+            pocao_mana_baixa['atk'], 
+            pocao_mana_baixa['desc'], 
+            pocao_mana_baixa['equipado'], 
+            pocao_mana_baixa['consumivel'], 
+            pocao_mana_baixa['preco'], 
+            pocao_mana_baixa['especial']
+        ))
 
     elif meu_jogador.classe == 'monge':
+        pocao_vida_baixa = lista_consumiveis[0]
+        pocao_vida_media = lista_consumiveis[1]
+        pocao_vida_alta = lista_consumiveis[2]
+        meu_jogador.add_item(meu_jogador.item_equipado)
+        meu_jogador.add_item(meu_jogador.armadura)
+        meu_jogador.add_item(Item(
+            pocao_vida_baixa['nome'], 
+            pocao_vida_baixa['atk'], 
+            pocao_vida_baixa['desc'], 
+            pocao_vida_baixa['equipado'], 
+            pocao_vida_baixa['consumivel'], 
+            pocao_vida_baixa['preco'], 
+            pocao_vida_baixa['especial']
+        ))
+        meu_jogador.add_item(Item(
+            pocao_vida_media['nome'], 
+            pocao_vida_media['atk'], 
+            pocao_vida_media['desc'], 
+            pocao_vida_media['equipado'], 
+            pocao_vida_media['consumivel'], 
+            pocao_vida_media['preco'], 
+            pocao_vida_media['especial']
+        ))
+        meu_jogador.add_item(Item(
+            pocao_vida_alta['nome'], 
+            pocao_vida_alta['atk'], 
+            pocao_vida_alta['desc'], 
+            pocao_vida_alta['equipado'], 
+            pocao_vida_alta['consumivel'], 
+            pocao_vida_alta['preco'], 
+            pocao_vida_alta['especial']
+        ))
         meu_jogador.vida_base = 150
         meu_jogador.vida = meu_jogador.vida_base
         meu_jogador.vida_max = meu_jogador.vida
@@ -5186,11 +5654,6 @@ Você se senta com dificuldade. O corpo dói, fraco, como se tivesse atravessado
          Mas você não se lembra. Do Porque esta aqui ou o Que aconteceu nesse local.\n'''
     for introducao in introducao1:
         sys.stdout.write(introducao)
-        sys.stdout.flush()
-        time.sleep(0.001)
-    ajuda = 'principais comandos: [mover / olhar / mochila / status / mapa]\n'
-    for ajuda in ajuda:
-        sys.stdout.write(ajuda)
         sys.stdout.flush()
         time.sleep(0.001)
 
