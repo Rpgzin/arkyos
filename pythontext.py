@@ -795,7 +795,7 @@ lista_consumiveis = [
 ]
 
 lista_arma_ik = [
-    {'nome': 'Devoradora de estrelas', 'atk': 10000, 'preco': 999999, 'desc': 'Você não deveria ter acesso a isso.', 'equipado':: False, 'consumivel': False, 'especial': False}
+    {'nome': 'Devoradora de estrelas', 'atk': 10000, 'preco': 999999, 'desc': 'Você não deveria ter acesso a isso.', 'equipado': False, 'consumivel': False, 'especial': False}
 ]
 
 lista_armas = [
