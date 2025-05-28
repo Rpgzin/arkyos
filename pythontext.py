@@ -4714,7 +4714,7 @@ def luta(monstro, meu_jogador):
                 
             if acao_item == 'usar':
                 # Remove o item da mochila principal
-                for i, item in enumerate(meu_jogador.mochila):
+                for i, item in enumerate(consumiveis):
                     if item.nome == item_selecionado.nome:
                         meu_jogador.mochila.pop(i)
                         break
