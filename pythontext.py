@@ -3799,6 +3799,10 @@ def abrir_mochila():
     especiais = []
     
     for item in meu_jogador.mochila:
+        if not hasattr(item, 'consumivel') or not hasattr(item, 'especial'):
+            print(f"Item inválido na mochila: {item}")
+            continue  # Pula para o próximo item
+    
         if item.consumivel:
             consumiveis.append(item)
         elif item.especial:
@@ -4626,9 +4630,9 @@ def luta(monstro, meu_jogador):
     
     # Ação: Mochila (mantido igual ao original)
     elif acao == 'mochila':
-        consumiveis = [item for item in meu_jogador.mochila if (item.consumivel and not item.especial)]
+        consumiveis = [item for item in meu_jogador.mochila if (item.consumivel and not item.especial and not item.armas)]
         if not consumiveis:
-            print(Fore.RED+'Nenhum item para ser usado'+Style.RESET_ALL)
+            # print(Fore.RED+'Nenhum item para ser usado'+Style.RESET_ALL)
             time.sleep(1.5)
             limpar_tela()
             luta(monstro, meu_jogador)
@@ -5655,19 +5659,19 @@ def setup_jogo():
 
     fala1 = "Espero que se divirta nessa incrível aventura!\n"
     fala2 = f"""
-  No topo de uma torre esquecida pelos deuses, alguém desperta entre ruínas e cinzas.
-  Sem memória, e com o corpo à beira do colapso, essa figura solitária encontra-se cercada por vestígios de uma batalha 
+No topo de uma torre esquecida pelos deuses, alguém desperta entre ruínas e cinzas.
+Sem memória, e com o corpo à beira do colapso, essa figura solitária encontra-se cercada por vestígios de uma batalha 
 apocalíptica e por um silêncio que pesa como um túmulo.
-  Algo terrível aconteceu ali, mas não há ninguém para contar a história.
+Algo terrível aconteceu ali, mas não há ninguém para contar a história.
 
- Com apenas fragmentos de poder e ecos de um passado perdido, {meu_jogador.nome} precisa descer os andares de uma Torre Misteriosa colossal.
- A torre está repleta de criaturas corrompidas, armadilhas letais e segredos antigos.
+Com apenas fragmentos de poder e ecos de um passado perdido, {meu_jogador.nome} precisa descer os andares de uma Torre Misteriosa colossal.
+A torre está repleta de criaturas corrompidas, armadilhas letais e segredos antigos.
 
-  A cada passo, a torre muda. A cada inimigo derrotado, algo esquecido retorna.
-  Mas algumas verdades talvez devam permanecer enterradas.
+A cada passo, a torre muda. A cada inimigo derrotado, algo esquecido retorna.
+Mas algumas verdades talvez devam permanecer enterradas.
 
-  A jornada para escapar é também uma jornada para descobrir quem você é...
-  E por que o mundo parecia ter parado de girar no exato momento em que você caiu.\n"""
+A jornada para escapar é também uma jornada para descobrir quem você é...
+E por que o mundo parecia ter parado de girar no exato momento em que você caiu.\n"""
 
     for fala in [fala1, fala2]:
         for caractere in fala:
@@ -5679,18 +5683,6 @@ apocalíptica e por um silêncio que pesa como um túmulo.
 
     os.system('clear' if os.name != 'nt' else 'cls')
     print ("▬"*100)
-    introducao1 = '''
-                  O frio das pedras toca sua pele como agulhas. 
-  O ar está pesado, carregado de uma magia que pulsa devagar e como um coração moribundo.
-                   Ao abrir os olhos, tudo é cinza e vermelho: 
-cinza das cinzas no chão e vermelho do sangue seco pintado em padrões esquecidos no mármore.
-
-Você se senta com dificuldade. O corpo dói, fraco, como se tivesse atravessado mil batalhas e talvez tenha. 
-         Mas você não se lembra. Do Porque esta aqui ou o Que aconteceu nesse local.\n'''
-    for introducao in introducao1:
-        sys.stdout.write(introducao)
-        sys.stdout.flush()
-        time.sleep(0.001)
 
     start_game()
     print_local()
